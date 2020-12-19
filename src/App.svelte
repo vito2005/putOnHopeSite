@@ -1,29 +1,49 @@
 <script>
-import { afterUpdate, onMount } from 'svelte'
-
-export let name
+import Slider from './components/Slider.svelte'
+export let pages
 let containerWidth
+let current = 0
+let inVisibleBlocks = []
+
+function hover(index) {
+  inVisibleBlocks = []
+  inVisibleBlocks.push(index)
+  inVisibleBlocks.push(randomInteger(index, index + 5))
+  inVisibleBlocks.push(randomInteger(index, index - 5))
+  inVisibleBlocks = [...inVisibleBlocks]
+}
+
+function randomInteger(min, max) {
+  let rand = min + Math.random() * (max + 1 - min)
+  return Math.floor(rand)
+}
 </script>
 
 <main>
   <div class="container" bind:offsetWidth={containerWidth}>
     <div class="logo"><span class="logo_red">ОДЕТЬ</span> НАДЕЖДУ</div>
-    {#each [...Array(26)] as emptySquare}
-      <div class="empty-square" />
+    {#each [...Array(26)] as emptySquare, index}
+      <div
+        class="empty-square"
+        class:invisible={inVisibleBlocks.includes(index)}
+        on:mouseenter={() => hover(index)}
+      />
     {/each}
-    <div class="text">Стань диджитал добровольцем</div>
-    <div class="slider" />
+    <div class="text">{pages[current].header}</div>
+    <div class="slider-wrapper">
+      <Slider pages={pages.length} bind:current />
+    </div>
     <div class="social" />
     <div class="video-box">
       <video autoplay loop muted controls="" style="width: {containerWidth}px;">
-        <source src="/preview.mp4" type="video/mp4" />
+        <source src="./preview.mp4" type="video/mp4" />
       </video>
     </div>
   </div>
 </main>
 
 <style type="text/scss">
-@import url('/../styles/fonts/gilroy/stylesheet.css');
+@import url('./../styles/fonts/gilroy/stylesheet.css');
 
 main {
   width: 100%;
@@ -53,8 +73,8 @@ main {
   font-family: Gilroy;
   font-style: normal;
   font-weight: 800;
-  font-size: 26px;
-  line-height: 30px;
+  font-size: 1.7rem;
+  line-height: 1.8rem;
   text-transform: uppercase;
   &_red {
     color: #ee2424;
@@ -65,8 +85,9 @@ main {
   z-index: 2;
   border-top: 2px solid #3f3f3f;
   border-left: 2px solid #3f3f3f;
-  &:hover {
-    background: transparent;
+  transition: opacity 1.5s;
+  &.invisible {
+    opacity: 0;
   }
 }
 
@@ -83,8 +104,8 @@ main {
   white-space: nowrap;
   color: #ffffff;
   font-weight: 800;
-  font-size: 36px;
-  line-height: 36px;
+  font-size: 2rem;
+  line-height: 2rem;
   overflow: hidden;
   position: absolute;
   top: 50%;
@@ -97,7 +118,7 @@ main {
   }
 }
 
-.slider {
+.slider-wrapper {
   background-color: #2d3031;
   z-index: 2;
 

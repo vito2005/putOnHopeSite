@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vito2005/putOnHopeSite.git"
+    "url": "git+https://github.com/vito2005/putonhope.git"
   },
   "keywords": [
     "svelte",
@@ -20,9 +20,9 @@
   "author": "alexbuki",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/vito2005/putOnHopeSite/issues"
+    "url": "https://github.com/vito2005/putonhope/issues"
   },
-  "homepage": "https://github.com/vito2005/putOnHopeSite#readme",
+  "homepage": "https://vito2005.github.io/putonhope/",
   "dependencies": {
     "node-sass": "^5.0.0",
     "sass": "^1.30.0",

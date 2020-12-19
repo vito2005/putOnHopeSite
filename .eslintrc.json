@@ -11,5 +11,5 @@
   "rules": {
     "semi": ["error", "never"]
   },
-  "ignorePatterns": ["public/build/"]
+  "ignorePatterns": ["docs/build/"]
 }
