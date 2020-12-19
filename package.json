@@ -1,0 +1,49 @@
+{
+  "name": "package.json",
+  "version": "1.0.0",
+  "description": "Сайт проекта \"Одеть Надежду\"",
+  "main": "index.js",
+  "scripts": {
+    "build": "rollup -c",
+    "dev": "rollup -c -w",
+    "start": "sirv docs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vito2005/putOnHopeSite.git"
+  },
+  "keywords": [
+    "svelte",
+    "esbuild",
+    "animation"
+  ],
+  "author": "alexbuki",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vito2005/putOnHopeSite/issues"
+  },
+  "homepage": "https://github.com/vito2005/putOnHopeSite#readme",
+  "dependencies": {
+    "node-sass": "^5.0.0",
+    "sass": "^1.30.0",
+    "sirv-cli": "^1.0.10",
+    "svelte-preprocess": "^4.6.1"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^16.0.0",
+    "@rollup/plugin-node-resolve": "^10.0.0",
+    "eslint": "^7.10.0",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-config-prettier": "^6.12.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-prettier": "^3.1.4",
+    "prettier": "^2.1.2",
+    "prettier-plugin-svelte": "^1.4.2",
+    "rollup": "^2.3.4",
+    "rollup-plugin-css-only": "^3.0.0",
+    "rollup-plugin-livereload": "^2.0.0",
+    "rollup-plugin-svelte": "^7.0.0",
+    "rollup-plugin-terser": "^7.0.0",
+    "svelte": "^3.31.0"
+  }
+}
