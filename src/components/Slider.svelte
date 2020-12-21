@@ -1,6 +1,7 @@
 <script>
 export let pages = 6
 export let current = 0
+export let isMobile = false
 
 import Arrow from './Arrow.svelte'
 
@@ -13,7 +14,10 @@ function dec() {
 </script>
 
 <div class="slider">
-  <Arrow type="top" on:click={dec} disabled={!current} />
+  {#if !isMobile}
+    <Arrow type="top" on:click={dec} disabled={!current} />
+  {/if}
+
   <div class="pages">
     {#each [...Array(pages)] as page, index}
       <div
@@ -23,7 +27,9 @@ function dec() {
       />
     {/each}
   </div>
-  <Arrow type="bottom" on:click={inc} disabled={current >= pages - 1} />
+  {#if !isMobile}
+    <Arrow type="bottom" on:click={inc} disabled={current >= pages - 1} />
+  {/if}
 </div>
 
 <style lang="scss">
@@ -37,6 +43,10 @@ function dec() {
 .pages {
   display: flex;
   flex-direction: column;
+  @media (max-width: 800px) {
+    height: 60%;
+    justify-content: space-between;
+  }
 }
 .page-point {
   cursor: pointer;

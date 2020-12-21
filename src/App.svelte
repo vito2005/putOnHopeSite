@@ -1,9 +1,81 @@
 <script>
+import { onMount } from 'svelte'
+import Join from './assets/join.svg'
+import Logo from './assets/logo.svg'
+
+import Button from './components/Button.svelte'
 import Slider from './components/Slider.svelte'
+import Socials from './components/Socials/Socials.svelte'
+import BecomeVolunteer from './components/BecomeVolunteer.svelte'
+import { fly } from 'svelte/transition'
+
 export let pages
+let outerWidth
 let containerWidth
+let containerHeight
+let container
+let touchstart = 0
+let touchend = 0
 let current = 0
+let lastAnimation = 0
+let lastAnimationM = 0
 let inVisibleBlocks = []
+let showBecomeVolunterBlock = false
+const animationTime = 1000
+const animationTimeM = 1000
+
+let beta, gamma
+
+$: pagesLength = pages.length
+
+$: isMobile = outerWidth < 800
+
+onMount(() => {
+  window.addEventListener('touchstart', (e) => {
+    touchstart =
+      typeof e.pageY !== 'undefined' && (e.pageY || e.pageX)
+        ? e.pageY
+        : e.touches[0].pageY
+  })
+
+  window.addEventListener('touchmove', scroll)
+
+  window.addEventListener(
+    'deviceorientation',
+    function (event) {
+      let timeNowM = new Date().getTime(),
+        quietPeriodM = 300
+
+      // Cancel scroll if currently animating or within quiet period
+      if (timeNowM - lastAnimationM < quietPeriodM + animationTimeM) {
+        e.preventDefault()
+        return
+      }
+
+      if (event.beta < -15) {
+        hover(2)
+      }
+      if (event.beta > 15) {
+        hover(62)
+      }
+
+      if (event.gamma > 15) {
+        hover(34)
+      }
+
+      if (event.gamma < -15) {
+        hover(26)
+      }
+
+      beta = event.beta
+      gamma = event.gamma
+      hover(Math.floor((gamma + beta) / 4))
+
+      lastAnimationM = timeNowM
+    },
+    false
+  )
+})
 
 function hover(index) {
   inVisibleBlocks = []
@@ -17,77 +89,351 @@ function randomInteger(min, max) {
   let rand = min + Math.random() * (max + 1 - min)
   return Math.floor(rand)
 }
+
+function scroll(e) {
+  let delta
+
+  delta = e.wheelDelta || -e.detail
+
+  if (isMobile) {
+    touchend =
+      typeof e.pageY !== 'undefined' && (e.pageY || e.pageX)
+        ? e.pageY
+        : e.touches[0].pageY
+    delta = touchend - touchstart
+  }
+
+  var deltaOfInterest = delta,
+    timeNow = new Date().getTime(),
+    quietPeriod = isMobile ? 200 : 500
+
+  // Cancel scroll if currently animating or within quiet period
+  if (timeNow - lastAnimation < quietPeriod + animationTime) {
+    e.preventDefault()
+    return
+  }
+
+  if (deltaOfInterest < 0) {
+    current < pagesLength - 1 && current++
+  } else {
+    current > 0 && current--
+  }
+  lastAnimation = timeNow
+}
+
+function emptySquareBorder(i, p) {
+  const br = 'border-right: 2px solid #3f3f3f;'
+  const bb = 'border-bottom: 2px solid #3f3f3f;'
+
+  let borderMap = {
+    7: br,
+    15: p > 0 && p < 5 ? 'border-top-color: #2d3031' : '',
+    25: bb,
+    31: 'border-right: 2px solid #3f3f3f; border-bottom: 2px solid #3f3f3f;',
+  }
+
+  if (isMobile) {
+    borderMap = {
+      5: br,
+      11: br,
+      17: br,
+      53: br,
+      59: br,
+      62: bb,
+      63: bb,
+    }
+  }
+  return i > 25 && i < 31 ? borderMap[25] : borderMap[i]
+}
+function clickJoin(e) {
+  setTimeout(() => (showBecomeVolunterBlock = true))
+}
 </script>
 
+<svelte:window on:mousewheel={scroll} bind:outerWidth />
+
 <main>
-  <div class="container" bind:offsetWidth={containerWidth}>
-    <div class="logo"><span class="logo_red">ОДЕТЬ</span> НАДЕЖДУ</div>
-    {#each [...Array(26)] as emptySquare, index}
-      <div
-        class="empty-square"
-        class:invisible={inVisibleBlocks.includes(index)}
-        on:mouseenter={() => hover(index)}
-      />
-    {/each}
-    <div class="text">{pages[current].header}</div>
-    <div class="slider-wrapper">
-      <Slider pages={pages.length} bind:current />
+  {#if !isMobile}
+    <div
+      class="container"
+      bind:offsetWidth={containerWidth}
+      bind:offsetHeight={containerHeight}
+      bind:this={container}
+      style="transform: translate3d(0px, -{current * 100}%, 0px); transition: transform 1000ms ease 0s;"
+    >
+      {#each pages as page, index}
+        <section class:active={current === index}>
+          {#each [...Array(32)] as emptySquare, i}
+            <div
+              class="empty-square"
+              class:disabled={[15, 23, 24, 25, current > 0 && current < 5 ? 6 : 100].includes(i)}
+              class:invisible={inVisibleBlocks.includes(i)}
+              on:mouseenter={() => hover(i)}
+              style={emptySquareBorder(i, index)}
+            />
+          {/each}
+          <div class="text">
+            <div>{page.title}</div>
+            {#if page.subtitle}
+              <div class="text__subtitle">
+                {page.subtitle}
+                <span class="text__subtitle_red">{page.subtitle_red}</span>
+              </div>
+            {/if}
+          </div>
+          {#if page.info}
+            <div class="info">
+              {#each page.info as infoItem}
+                <p>
+                  {@html infoItem}
+                </p>
+              {/each}
+            </div>
+          {/if}
+        </section>
+      {/each}
     </div>
-    <div class="social" />
+
     <div class="video-box">
-      <video autoplay loop muted controls="" style="width: {containerWidth}px;">
-        <source src="./preview.mp4" type="video/mp4" />
+      <video
+        autoplay
+        loop
+        muted
+        controls=""
+        style="width: {containerWidth + 200}px;"
+      >
+        <source src="./previewcity.mp4" type="video/mp4" />
       </video>
     </div>
-  </div>
+
+    <div class="logo"><span class="logo_red">ОДЕТЬ</span> НАДЕЖДУ</div>
+
+    <div
+      class="slider-wrapper"
+      style="margin-top: {(current > 0 && current < 5 && '0px') || '2px'};"
+    >
+      <Slider pages={pagesLength} bind:current />
+    </div>
+    <div class="company">
+      <Socials />
+      <div class="company-data">
+        <div class="text_logo">Lisa Alert</div>
+        {@html Logo}
+      </div>
+    </div>
+    <div
+      class="buttons"
+      style="
+      margin-left: {current > 0 && current < 5 && '3px'};
+      background: {(current > 0 && current < 5 && '#2d3031') || ''};
+      top: {current === 0 || current === 5 ? 50 : 0}%;
+      left: {current === 0 ? 18.75 : current === 5 ? 62.5 : 75}%;
+      align-items: {(current > 0 && current < 5 && 'flex-start') || 'center'};
+      justify-content: {current === 0 ? 'flex-start' : current === 5 ? 'center' : 'flex-end'};"
+    >
+      <Button color="red" text="Стать добровольцем" />
+      {#if current === 0}
+        <Button
+          text="Как это работает"
+          arrow={true}
+          on:click={() => (current = 1)}
+        />
+      {/if}
+    </div>
+  {:else}
+    <div
+      class="container"
+      bind:offsetHeight={containerHeight}
+      style="transform: translate3d(0px, -{current * 100}%, 0px); transition: transform 500ms ease 0s;"
+    >
+      {#each pages as page, index}
+        <section class:active={current === index}>
+          {#each [...Array(66)] as emptySquare, i}
+            <div
+              class="empty-square"
+              class:disabled={[0, 1, 2, 23, 29, 35, 41, 46, 60, 61, 65, 64, current > 0 && current < 5 ? 6 : 100].includes(i)}
+              class:invisible={inVisibleBlocks.includes(i)}
+              style={emptySquareBorder(i, index)}
+            >
+              <!-- {i} -->
+            </div>
+          {/each}
+          <div class="text">
+            <div>{page.title}</div>
+          </div>
+          {#if page.subtitle}
+            <div class="text__subtitle">
+              {page.subtitle}
+              <span class="text__subtitle_red">{page.subtitle_red}</span>
+            </div>
+          {/if}
+          {#if page.info}
+            <div class="info">
+              {#each page.info as infoItem}
+                <span>
+                  {@html infoItem}
+                </span>
+              {/each}
+            </div>
+          {/if}
+        </section>
+      {/each}
+    </div>
+
+    <div class="video-box">
+      <video
+        autoplay
+        loop
+        muted
+        controls=""
+        style="height: {containerHeight}px;"
+      >
+        <source src="./previewcity.mp4" type="video/mp4" />
+      </video>
+    </div>
+
+    <div class="logo"><span class="logo_red">ОДЕТЬ</span> НАДЕЖДУ</div>
+    {#if current > 0 && current < 5}
+      <div class="join" on:click={clickJoin} transition:fly={{ y: -200 }}>
+        {@html Join}
+      </div>
+    {/if}
+
+    <div
+      class="slider-wrapper"
+      style="margin-top: {(current > 0 && current < 5 && '0px') || '2px'};"
+    >
+      <Slider pages={pagesLength} bind:current isMobile={isMobile} />
+    </div>
+    <div class="company">
+      <div class="company-data">
+        <div class="text_logo">Lisa Alert</div>
+        {@html Logo}
+      </div>
+    </div>
+    <div class="socials">
+      <Socials />
+    </div>
+    <div
+      class="buttons"
+      style="
+      margin-left: {current > 0 && current < 5 && '3px'};
+      background: {(current > 0 && current < 5 && '#2d3031') || ''};
+      top: {current === 0 || current === 5 ? 56.5 : 0}%;
+      left: {current === 0 || current === 5 ? 7.5 : 200}%;
+      align-items: {(current > 0 && current < 5 && 'flex-start') || 'center'};
+      justify-content: {current === 0 ? 'space-between' : current === 5 ? 'center' : 'flex-end'};
+      height: {current === 5 && '13%' && current === 0 && '16%'};"
+    >
+      <Button color="red" text="Стать добровольцем" />
+      {#if current === 0}
+        <Button
+          text="Как это работает"
+          arrow={true}
+          on:click={() => (current = 1)}
+        />
+      {/if}
+    </div>
+    {#if showBecomeVolunterBlock}
+      <div class="become-volunter-wrapper" transition:fly={{ y: -200 }}>
+        <BecomeVolunteer bind:show={showBecomeVolunterBlock} />
+      </div>
+    {/if}
+  {/if}
 </main>
 
-<style type="text/scss">
+<style lang="scss">
+@use 'src/styles.scss' as *;
 @import url('./../styles/fonts/gilroy/stylesheet.css');
 
 main {
-  width: 100%;
-  height: 100%;
+  width: 84%;
+  height: 75%;
   overflow: hidden;
-  background-color: #2d3031;
+  background-color: $black;
+  font-family: Gilroy;
+  margin-top: 7%;
+  margin-left: 8%;
+  position: relative;
+  @media (max-width: 800px) {
+    height: 90%;
+  }
 }
 
 .container {
-  margin: 7% 8%;
-  height: 76%;
-  position: relative;
-  display: grid;
-  grid-template-columns: repeat(8, 1fr);
-  grid-template-rows: repeat(4, 1fr);
-  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  section {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(8, 12.5%);
+    grid-template-rows: repeat(4, 25%);
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+
+    box-sizing: border-box;
+
+    .empty-square {
+      background-color: $black;
+      z-index: 2;
+      border-top: 2px solid #3f3f3f;
+      border-left: 2px solid #3f3f3f;
+      transition: opacity 1.5s;
+      color: $white;
+      &.invisible {
+        opacity: 0;
+      }
+      &.disabled {
+        opacity: 1;
+      }
+    }
+
+    @media (max-width: 800px) {
+      grid-template-columns: repeat(6, 16.65%);
+      grid-template-rows: repeat(11, 9.1%);
+    }
+  }
 }
 
 .logo {
-  background-color: #2d3031;
+  background-color: $black;
   z-index: 2;
+  position: absolute;
+  top: 0;
+  height: 25%;
+  width: 25%;
 
-  grid-column-start: 1;
-  grid-column-end: 3;
-
-  color: #ffffff;
-  font-family: Gilroy;
+  color: #fff;
   font-style: normal;
   font-weight: 800;
-  font-size: 1.7rem;
+  font-size: 1.3rem;
   line-height: 1.8rem;
   text-transform: uppercase;
   &_red {
-    color: #ee2424;
+    color: $red;
+  }
+
+  @media (max-width: 800px) {
+    height: 9%;
+    width: 49%;
+    font-size: 1rem;
   }
 }
-.empty-square {
-  background-color: #2d3031;
+
+.buttons {
   z-index: 2;
-  border-top: 2px solid #3f3f3f;
-  border-left: 2px solid #3f3f3f;
-  transition: opacity 1.5s;
-  &.invisible {
-    opacity: 0;
+  position: absolute;
+  width: 25%;
+  height: 25%;
+  white-space: nowrap;
+  display: flex;
+  transition: top 1000ms ease 0s, left 1000ms ease 0s;
+  @media (max-width: 800px) {
+    flex-direction: column;
+    width: auto;
+    height: 16%;
   }
 }
 
@@ -97,59 +443,277 @@ main {
   grid-row-start: 2;
   grid-row-end: 3;
 
-  background-color: #2d3031;
+  background-color: $black;
   z-index: 2;
 
   cursor: default;
   white-space: nowrap;
-  color: #ffffff;
+  color: $white;
   font-weight: 800;
   font-size: 2rem;
   line-height: 2rem;
   overflow: hidden;
+
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(0, -50%);
   text-transform: uppercase;
 
+  @media (max-width: 800px) {
+    grid-column-start: 1;
+    grid-column-end: 5;
+    grid-row-start: 4;
+    grid-row-end: 5;
+    background-color: transparent;
+
+    font-size: 1.3rem;
+    line-height: 1.7rem;
+    white-space: normal;
+    left: 12%;
+    top: 0%;
+    transform: none;
+    top: 50%;
+    transform: translate(0, -50%);
+  }
+
+  &__subtitle {
+    margin-top: 1rem;
+    font-weight: normal;
+    font-size: 1.3rem;
+    text-transform: none;
+    &_red {
+      font-weight: normal;
+      color: $red;
+    }
+  }
+
   &:hover {
     background: transparent;
   }
 }
 
-.slider-wrapper {
-  background-color: #2d3031;
-  z-index: 2;
+@media (max-width: 800px) {
+  .text__subtitle {
+    grid-column-start: 1;
+    grid-column-end: 5;
+    grid-row-start: 5;
+    grid-row-end: 7;
 
-  grid-column-start: 8;
-  grid-column-end: 9;
-  grid-row-start: 2;
-  grid-row-end: 4;
+    background-color: transparent;
+    z-index: 2;
+
+    color: $white;
+    text-transform: none;
+    font-weight: normal;
+    font-size: 1rem;
+    line-height: 1.7rem;
+    white-space: normal;
+
+    position: absolute;
+    transform: none;
+    top: 10%;
+    transform: translate(0, -20%);
+    left: -1000%;
+    transition: left 400ms ease 0.5s;
+    &_red {
+      font-weight: normal;
+      color: $red;
+    }
+
+    &:hover {
+      background: transparent;
+    }
+  }
+
+  section.active .text__subtitle {
+    left: 12%;
+  }
+
+  .join {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 2;
+    width: 16.6%;
+    height: 9.1%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: $black;
+    &:active:after {
+      position: absolute;
+      top: 10%;
+      left: 10%;
+      width: 3rem;
+      height: 3rem;
+      background: #868383;
+      border-radius: 50%;
+      content: '';
+      opacity: 0.5;
+      transform: scale(0);
+      animation: pulse 0.2s ease-in-out;
+    }
+  }
+
+  .become-volunter-wrapper {
+    position: fixed;
+    margin-left: -8%;
+    width: 100%;
+    z-index: 4;
+    top: 0;
+    height: 26%;
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+    background: $gray;
+  }
 }
 
-.social {
-  background-color: #2d3031;
-  z-index: 2;
+@keyframes pulse {
+  to {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
 
-  grid-column-start: 1;
+.info {
+  grid-column-start: 2;
   grid-column-end: 3;
-  grid-row-start: 4;
+  grid-row-start: 3;
   grid-row-end: 4;
+  z-index: 2;
+  white-space: nowrap;
+
+  color: #fff;
+  font-weight: normal;
+  font-size: 1.2rem;
+  line-height: 1.2rem;
+  overflow: hidden;
+
+  position: absolute;
+  top: 50%;
+  left: -1000%;
+  transform: translate(0%, -50%);
+  transition: left 400ms ease 0.5s;
+
+  &_red {
+    color: $red;
+  }
+
+  @media (max-width: 800px) {
+    font-size: 1rem;
+    line-height: 1.2rem;
+    grid-column-start: 1;
+    grid-column-end: 5;
+    grid-row-start: 5;
+    grid-row-end: 9;
+    white-space: normal;
+    top: 20%;
+    transform: translate(0, -20%);
+  }
+}
+section.active .info {
+  left: 50%;
+  @media (max-width: 800px) {
+    left: 12%;
+  }
+}
+
+.slider-wrapper {
+  background-color: $black;
+  z-index: 2;
+  position: absolute;
+  right: 0;
+  top: 25%;
+  width: 12.5%;
+  height: 49%;
+  margin-top: 2px;
+  margin-right: -2px;
+
+  @media (max-width: 800px) {
+    top: 27.3%;
+    width: 18%;
+    height: 45.2%;
+    margin-right: -8px;
+  }
+}
+
+.company {
+  background-color: $black;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  position: absolute;
+  top: 75%;
+  height: 25%;
+  width: 25%;
+  margin-top: 2px;
+  margin-right: 2px;
+  @media (max-width: 800px) {
+    top: 90.9%;
+    height: 9.1%;
+    width: 32.6%;
+  }
+
+  .company-data {
+    position: absolute;
+    bottom: 0;
+    display: flex;
+    align-items: flex-end;
+
+    @media (max-width: 800px) {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+
+    .text_logo {
+      color: $white;
+      line-height: 0.8rem;
+      font-size: 1rem;
+      font-weight: 600;
+      margin-right: 1rem;
+
+      @media (max-width: 800px) {
+        margin-bottom: 0.5rem;
+        font-size: 0.9rem;
+      }
+    }
+
+    svg {
+      @media (max-width: 800px) {
+        width: 6rem;
+      }
+    }
+  }
+}
+
+.socials {
+  @media (max-width: 800px) {
+    background-color: $black;
+    z-index: 2;
+    display: flex;
+    align-items: flex-end;
+    justify-content: left;
+    position: absolute;
+    top: 91.4%;
+    left: 69.4%;
+    height: 9.1%;
+    width: 32.6%;
+  }
 }
 
 .video-box {
   position: absolute;
   z-index: 1;
   overflow: hidden;
-}
-
-.video-box video {
-}
-
-@media (min-width: 640px) {
-  main {
-    max-width: none;
+  top: 0;
+  &::before {
+    content: '';
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    background-color: rgba(54, 54, 47, 0.5);
   }
 }
 </style>
