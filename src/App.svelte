@@ -21,6 +21,8 @@ let lastAnimation = 0
 let lastAnimationM = 0
 let inVisibleBlocks = []
 let showBecomeVolunterBlock = false
+let glitchAnimation = false
+let disableGlitch = false
 const animationTime = 1000
 const animationTimeM = 1000
 
@@ -31,6 +33,13 @@ $: pagesLength = pages.length
 
 $: isMobile =
   outerWidth < 800 || userAgent.match(/iPad/i) || userAgent.match(/iPhone/i)
+
+$: {
+  if (current || current == 0) {
+    glitchAnimation = false
+  }
+  setTimeout(() => (glitchAnimation = true))
+}
 
 onMount(() => {
   window.addEventListener('touchstart', (e) => {
@@ -150,6 +159,10 @@ function emptySquareBorder(i, p) {
 function clickJoin(e) {
   setTimeout(() => (showBecomeVolunterBlock = true))
 }
+
+function glitch(node) {
+  setTimeout(() => (disableGlitch = true), 2000)
+}
 </script>
 
 <svelte:window on:mousewheel={scroll} bind:outerWidth />
@@ -175,7 +188,13 @@ function clickJoin(e) {
             />
           {/each}
           <div class="text">
-            <div>{page.title}</div>
+            {#if glitchAnimation}
+              <div class="glitch" class:disable={disableGlitch} use:glitch>
+                <span aria-hidden="true">{page.title}</span>
+                {page.title}
+                <span aria-hidden="true">{page.title}</span>
+              </div>
+            {/if}
             {#if page.subtitle}
               <div class="text__subtitle">
                 {page.subtitle}
@@ -261,7 +280,13 @@ function clickJoin(e) {
             </div>
           {/each}
           <div class="text">
-            <div>{page.title}</div>
+            {#if glitchAnimation}
+              <div class="glitch" class:disable={disableGlitch} use:glitch>
+                <span aria-hidden="true">{page.title}</span>
+                {page.title}
+                <span aria-hidden="true">{page.title}</span>
+              </div>
+            {/if}
           </div>
           {#if page.subtitle}
             <div class="text__subtitle">
@@ -462,6 +487,44 @@ main {
   transform: translate(0, -50%);
   text-transform: uppercase;
 
+  .glitch {
+    position: relative;
+
+    text-shadow: 0.05em 0 0 rgba(255, 0, 0, 0.75),
+      -0.025em -0.05em 0 rgba(0, 255, 0, 0.75),
+      0.025em 0.05em 0 rgba(0, 0, 255, 0.75);
+
+    animation: glitch 500ms 4;
+
+    span {
+      position: absolute;
+      top: 0;
+      left: 0;
+      &:first-child {
+        animation: glitch 650ms 4;
+        clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
+        transform: translate(-0.025em, -0.0125em);
+        /* color: green; */
+        opacity: 0.8;
+      }
+
+      &:last-child {
+        animation: glitch 375ms 4;
+        clip-path: polygon(0 80%, 100% 20%, 100% 100%, 0 100%);
+        transform: translate(0.0125em, 0.025em);
+        /* color: red; */
+        opacity: 0.8;
+      }
+    }
+
+    &.disable {
+      text-shadow: none;
+      span {
+        display: none;
+      }
+    }
+  }
+
   @media (max-width: 800px) {
     grid-column-start: 1;
     grid-column-end: 5;
@@ -568,13 +631,6 @@ main {
     border-bottom-left-radius: 12px;
     border-bottom-right-radius: 12px;
     background: $gray;
-  }
-}
-
-@keyframes pulse {
-  to {
-    transform: scale(2);
-    opacity: 0;
   }
 }
 
