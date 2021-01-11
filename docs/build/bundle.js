@@ -744,7 +744,7 @@ var app = (function () {
 
     var Join = "<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<path d=\"M10.5882 10.875C7.57819 10.875 5.12939 8.43577 5.12939 5.4375C5.12939 2.43923 7.57819 0 10.5882 0C13.5982 0 16.047 2.43923 16.047 5.4375C16.047 8.43577 13.5982 10.875 10.5882 10.875Z\" fill=\"#EE2424\"/>\n<path d=\"M12.7059 14.8593C12.7059 13.6556 13.0452 12.5293 13.6333 11.5702C12.715 12.0246 11.6813 12.2812 10.5882 12.2812C9.17045 12.2812 7.85167 11.8512 6.75628 11.1152C5.40183 11.6382 4.15929 12.4414 3.10127 13.4953C1.10136 15.4873 0 18.1358 0 20.953V23.2968C0 23.6851 0.316047 24 0.705882 24H20.4706C20.8604 24 21.1765 23.6851 21.1765 23.2968V20.953C21.1765 20.9108 21.1753 20.8684 21.1748 20.8261C20.5126 21.0598 19.8004 21.1875 19.0588 21.1875C15.5558 21.1875 12.7059 18.3487 12.7059 14.8593Z\" fill=\"#EE2424\"/>\n<path d=\"M19.0589 9.9375C16.3343 9.9375 14.1177 12.1455 14.1177 14.8594C14.1177 17.5733 16.3343 19.7812 19.0589 19.7812C21.7834 19.7812 24 17.5733 24 14.8594C24 12.1455 21.7834 9.9375 19.0589 9.9375ZM20.4706 15.5625H19.7647V16.2656C19.7647 16.6539 19.4487 16.9688 19.0589 16.9688C18.669 16.9688 18.353 16.6539 18.353 16.2656V15.5625H17.6471C17.2573 15.5625 16.9412 15.2477 16.9412 14.8594C16.9412 14.4711 17.2573 14.1562 17.6471 14.1562H18.353V13.4531C18.353 13.0648 18.669 12.75 19.0589 12.75C19.4487 12.75 19.7647 13.0648 19.7647 13.4531V14.1562H20.4706C20.8605 14.1562 21.1765 14.4711 21.1765 14.8594C21.1765 15.2477 20.8605 15.5625 20.4706 15.5625Z\" fill=\"#EE2424\"/>\n</svg>";
 
-    var Logo = "<svg\n    width=\"128\"\n    height=\"24\"\n    viewBox=\"0 0 128 24\"\n    fill=\"none\"\n    xmlns=\"http://www.w3.org/2000/svg\"\n    xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n>\n    <rect width=\"128\" height=\"24\" fill=\"url(#pattern0)\" />\n    <defs>\n    <pattern\n        id=\"pattern0\"\n        patternContentUnits=\"objectBoundingBox\"\n        width=\"1\"\n        height=\"1\"\n    >\n        <use\n        xlink:href=\"#image0\"\n        transform=\"translate(0 -0.00666667) scale(0.005 0.0266667)\"\n        />\n    </pattern>\n    <image\n        id=\"image0\"\n        width=\"200\"\n        height=\"38\"\n        xlink:href=\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAAAmCAYAAACBFtRsAAAGyElEQVR4nO2ceYhVVRzHv+OujU5pik42FuZSKZapGEzZYiZaQf9kSWaLIWLYRmSEFYVYVNQfabQSWlEqWeZSRmRmlIWo00KaaVpMuTSN+zb1i0PfCz8O951338x7c99zfh+4zDvnnXPuWe7vnN9y35SJiMAwjFha2bQYRmZMQAwjgAmIYQQwATGMACYghhHABMQwApiAGEaAliAgLs7zb5YyhwA0NFN/QvxTBH1oLKH5c+M6XNzdj+dkFZA9AN4EcDOASgC/B8reA6ALgF4APm/GPoLC+wWARwCMZF9KlcEAxgN4DsAWNYalALoBOBXArFIb28kaSX8IwJMqvQNAVUy5HwGcr9IjAKxrhv5F7OODEzENwLxmvH8+6QNgJ9urpuA7zgHwCz+XAagF0LNUBmU2iNGclJWaGtnSBeQ8AI8DOIU73QtF0KeTjZd4ejs19lkAZ5TS+NoUQR/SZlYp6sYlxJVUcUuSNAXEGXJLvLyOAE4DMIRGX1mg/gHaC9sB1NNT5QzySTFlX/R0/TEALuTnp1S+O1Gujam/m/eq5b00Y3nf11WeM7hHeeVWAdig0kkN8iMAFgBYCeAneoOcQ+FSAHfy5PsQwDsANtIj1x3AMAA3ArgsQ7trAbwNYD2AvXwWqlj+1iw7/Q+8V53yTu3PUHaxskHaq3E7VesZr2wbrlM/AMP5PKSLpMcO5x8IXH1FZGFM7+pFZLqIdIypO4NlZmZpe55qT+dP9O61TUSuF5HWgbY2iUiNlzczpt/TvDL1vHTeNK/OZhE5O3Dv9iJySZaxThKRBtXmMY4zVKdcRObHjGGFiAzKUtdd1arOeJVf4bU3ONCGKztLRI6k+IxKmjZIFXfsTLhd5wYAz6vvD3DnnMud1WdMHvu3lSfBkoBhWcmTrhAIx79dte1O1AqVPqa8RY62AMq9vizw5vBunhyaTp42cRDAZABrVN4rdON+n8exjg185zx8TwC4Js0YVdo2iDOKf1Zppyb9CuBlAH8z70E+KJX0sdeo8hdRjejC9BUZ7jMHQFeVrk7Qt3upWkW4hRrtHftnZlEDm4Ib5yZVfxwf7AqqeuOp5kQ41/ZjANoxf5RSe+YDuB/AXwBeU3UGUQUawLlfxNhRAwX0aW5I9VSNopCAc2rcAWAggNbq/nU5jncqVUTNXvZ3M/M+Zfr2As1zkLQF5HJePi42cQvzjgP4GMBtAJapci749CX12mxMzBAHyYR7QD5S342mnt+c+MHNCer0qOTuqwXkJgqH4wKefquYjuITLu5zQtWZTOEAPZoTaJNFttJ6/l3tRcJdjOkur3+zGyEgfXn5TKWdFfV1eUsVkI186Gs9NWavV26X99fRP6FwNAb/1ZN+BbpPLuS6Vm3V52jn9w3pD7wT3PGH+hwJxZ9emXyplW49F1KdPep9114JyO6Yus1CmgLyQIwXIxdaN6Gu8T9reWXDf9siH3O/nCfWoWJei7SM9E+aKBxGcRPnQNEcpDu+qIUDKQrI+156KY1E4VWToV5S2nrlmroQ2d4GTmKox73z5u/EJ2LK5BNfJZ2r5jzuimI+uc7n8Szfr1FOGMcMCpXuQy42Y8FIS0AOeOkhefYG+Z6RRTnWr/ACi5/FBAg1vbz0tpgyW9XnNvQElTMwGvE1XbeFor/X7sqEQunP5+IMAp8U3xZy3rAOBRx3o0nLBjnXS4+kyzZyoe5rYvvXMZq8h+lHaQz25S46JUHMZIpSA7fwbdVh9J5FVHP368bI77fMX0QX8NU8fVbQXRkxWs39RO7kYIzhDXpxCoHbla+iigs6SPpwg+qs7jfW8xpV09sVuV5fpWdroFoz37ESwl//+wC8520WubRXOFIKUO4Ske4JIrLRNYf1qjJEa+NYLSKdmxBJPyQio7P0S5dfJyKdEoylMyPvEXVeRDnq2zKv3lveGP23BWq87zNFsH8TkQFZ+jg0Zj6/E5GeCddrcIJ+jMth/bOtdcFIS8XqQT10TAG9UaPo93f++t6NqN+J8Rf3jtXFMXq4zwj+4GpooMxQ7rzaTep2za8APAzgrEb0M1d6M84xm/GmuGdgQ4xrdRDfwZoZo3I1hncBTI+J/BcVxfCDqSP0h4cM4a60CXaq+EQHBsySsl8d26er6Lu2F8opvHEcZ/2jCcp/w1dAamlbRS8XDk/Q16Mc22Ev/tDDe5jqPLuotwoUgnWjOEargPAdZoTdt0Xc3IbsgoOcj7h1a6c2pWz9aOD6h2yvXNc6b9j/5jWMAC39B1OGEcQExDACmIAYRgATEMMIYAJiGAFMQAwjgAmIYQQwATGMACYghpEJAP8B/Xa134MygkcAAAAASUVORK5CYII=\"\n    />\n    </defs>\n</svg>";
+    var Logo = "<svg\n    class=\"articul-media\"\n    width=\"128\"\n    height=\"24\"\n    viewBox=\"0 0 128 24\"\n    fill=\"none\"\n    xmlns=\"http://www.w3.org/2000/svg\"\n    xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n>\n    <rect width=\"128\" height=\"24\" fill=\"url(#pattern0)\" />\n    <defs>\n    <pattern\n        id=\"pattern0\"\n        patternContentUnits=\"objectBoundingBox\"\n        width=\"1\"\n        height=\"1\"\n    >\n        <use\n        xlink:href=\"#image0\"\n        transform=\"translate(0 -0.00666667) scale(0.005 0.0266667)\"\n        />\n    </pattern>\n    <image\n        id=\"image0\"\n        width=\"200\"\n        height=\"38\"\n        xlink:href=\"data:image/png;base64,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\"\n    />\n    </defs>\n</svg>";
 
     var arrowRight = "<svg width=\"9\" height=\"11\" viewBox=\"0 0 9 16\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<path d=\"M8.70711 8.70711C9.09763 8.31658 9.09763 7.68342 8.70711 7.29289L2.34315 0.928932C1.95262 0.538408 1.31946 0.538408 0.928932 0.928932C0.538408 1.31946 0.538408 1.95262 0.928932 2.34315L6.58579 8L0.928932 13.6569C0.538408 14.0474 0.538408 14.6805 0.928932 15.0711C1.31946 15.4616 1.95262 15.4616 2.34315 15.0711L8.70711 8.70711ZM7 9H8V7H7V9Z\" fill=\"white\"/>\n</svg>";
 
@@ -1872,45 +1872,45 @@ var app = (function () {
 
     function get_each_context_3(ctx, list, i) {
     	const child_ctx = ctx.slice();
-    	child_ctx[30] = list[i];
-    	child_ctx[32] = i;
+    	child_ctx[31] = list[i];
+    	child_ctx[33] = i;
     	return child_ctx;
     }
 
     function get_each_context_4(ctx, list, i) {
     	const child_ctx = ctx.slice();
-    	child_ctx[33] = list[i];
+    	child_ctx[34] = list[i];
     	return child_ctx;
     }
 
     function get_each_context_5(ctx, list, i) {
     	const child_ctx = ctx.slice();
-    	child_ctx[36] = list[i];
-    	child_ctx[38] = i;
+    	child_ctx[37] = list[i];
+    	child_ctx[39] = i;
     	return child_ctx;
     }
 
     function get_each_context$1(ctx, list, i) {
     	const child_ctx = ctx.slice();
-    	child_ctx[30] = list[i];
-    	child_ctx[32] = i;
+    	child_ctx[31] = list[i];
+    	child_ctx[33] = i;
     	return child_ctx;
     }
 
     function get_each_context_1(ctx, list, i) {
     	const child_ctx = ctx.slice();
-    	child_ctx[33] = list[i];
+    	child_ctx[34] = list[i];
     	return child_ctx;
     }
 
     function get_each_context_2(ctx, list, i) {
     	const child_ctx = ctx.slice();
-    	child_ctx[36] = list[i];
-    	child_ctx[38] = i;
+    	child_ctx[37] = list[i];
+    	child_ctx[39] = i;
     	return child_ctx;
     }
 
-    // (243:2) {:else}
+    // (245:2) {:else}
     function create_else_block(ctx) {
     	let div0;
     	let div0_resize_listener;
@@ -2018,39 +2018,39 @@ var app = (function () {
     			t12 = space();
     			if (if_block2) if_block2.c();
     			if_block2_anchor = empty();
-    			attr_dev(div0, "class", "container svelte-rwmo4s");
+    			attr_dev(div0, "class", "container svelte-e9afhe");
     			set_style(div0, "transform", "translate3d(0px, -" + /*current*/ ctx[5] * 100 + "%, 0px)");
     			set_style(div0, "transition", "transform 500ms ease 0s");
     			add_render_callback(() => /*div0_elementresize_handler_1*/ ctx[20].call(div0));
-    			add_location(div0, file$5, 243, 4, 6129);
+    			add_location(div0, file$5, 245, 4, 6234);
     			if (source.src !== (source_src_value = "./previewcity.mp4")) attr_dev(source, "src", source_src_value);
     			attr_dev(source, "type", "video/mp4");
-    			add_location(source, file$5, 290, 8, 7557);
+    			add_location(source, file$5, 292, 8, 7662);
     			video.autoplay = true;
     			video.loop = true;
     			video.muted = true;
     			video.controls = "";
     			set_style(video, "height", /*containerHeight*/ ctx[3] + "px");
-    			add_location(video, file$5, 283, 6, 7425);
-    			attr_dev(div1, "class", "video-box svelte-rwmo4s");
-    			add_location(div1, file$5, 282, 4, 7395);
-    			attr_dev(span, "class", "logo_red svelte-rwmo4s");
-    			add_location(span, file$5, 294, 22, 7658);
-    			attr_dev(div2, "class", "logo svelte-rwmo4s");
-    			add_location(div2, file$5, 294, 4, 7640);
-    			attr_dev(div3, "class", "slider-wrapper svelte-rwmo4s");
+    			add_location(video, file$5, 285, 6, 7530);
+    			attr_dev(div1, "class", "video-box svelte-e9afhe");
+    			add_location(div1, file$5, 284, 4, 7500);
+    			attr_dev(span, "class", "logo_red svelte-e9afhe");
+    			add_location(span, file$5, 296, 22, 7763);
+    			attr_dev(div2, "class", "logo svelte-e9afhe");
+    			add_location(div2, file$5, 296, 4, 7745);
+    			attr_dev(div3, "class", "slider-wrapper svelte-e9afhe");
     			set_style(div3, "margin-top", /*current*/ ctx[5] > 0 && /*current*/ ctx[5] < 5 && "0px" || "2px");
-    			add_location(div3, file$5, 301, 4, 7869);
-    			attr_dev(div4, "class", "text_logo svelte-rwmo4s");
-    			add_location(div4, file$5, 309, 8, 8133);
+    			add_location(div3, file$5, 303, 4, 7974);
+    			attr_dev(div4, "class", "text_logo svelte-e9afhe");
+    			add_location(div4, file$5, 311, 8, 8238);
     			html_tag = new HtmlTag(null);
-    			attr_dev(div5, "class", "company-data svelte-rwmo4s");
-    			add_location(div5, file$5, 308, 6, 8098);
-    			attr_dev(div6, "class", "company svelte-rwmo4s");
-    			add_location(div6, file$5, 307, 4, 8070);
-    			attr_dev(div7, "class", "socials svelte-rwmo4s");
-    			add_location(div7, file$5, 313, 4, 8222);
-    			attr_dev(div8, "class", "buttons svelte-rwmo4s");
+    			attr_dev(div5, "class", "company-data svelte-e9afhe");
+    			add_location(div5, file$5, 310, 6, 8203);
+    			attr_dev(div6, "class", "company svelte-e9afhe");
+    			add_location(div6, file$5, 309, 4, 8175);
+    			attr_dev(div7, "class", "socials svelte-e9afhe");
+    			add_location(div7, file$5, 315, 4, 8327);
+    			attr_dev(div8, "class", "buttons svelte-e9afhe");
     			set_style(div8, "margin-left", /*current*/ ctx[5] > 0 && /*current*/ ctx[5] < 5 && "3px");
     			set_style(div8, "background", /*current*/ ctx[5] > 0 && /*current*/ ctx[5] < 5 && "#2d3031" || "");
 
@@ -2069,7 +2069,7 @@ var app = (function () {
     			: /*current*/ ctx[5] === 5 ? "center" : "flex-end");
 
     			set_style(div8, "height", /*current*/ ctx[5] === 5 && "13%" && /*current*/ ctx[5] === 0 && "16%");
-    			add_location(div8, file$5, 316, 4, 8277);
+    			add_location(div8, file$5, 318, 4, 8382);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div0, anchor);
@@ -2314,14 +2314,14 @@ var app = (function () {
     		block,
     		id: create_else_block.name,
     		type: "else",
-    		source: "(243:2) {:else}",
+    		source: "(245:2) {:else}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (156:2) {#if !isMobile}
+    // (158:2) {#if !isMobile}
     function create_if_block$2(ctx) {
     	let div0;
     	let div0_resize_listener;
@@ -2413,37 +2413,37 @@ var app = (function () {
     			create_component(button.$$.fragment);
     			t10 = space();
     			if (if_block) if_block.c();
-    			attr_dev(div0, "class", "container svelte-rwmo4s");
+    			attr_dev(div0, "class", "container svelte-e9afhe");
     			set_style(div0, "transform", "translate3d(0px, -" + /*current*/ ctx[5] * 100 + "%, 0px)");
     			set_style(div0, "transition", "transform 1000ms ease 0s");
     			add_render_callback(() => /*div0_elementresize_handler*/ ctx[16].call(div0));
-    			add_location(div0, file$5, 156, 4, 3431);
+    			add_location(div0, file$5, 158, 4, 3536);
     			if (source.src !== (source_src_value = "./previewcity.mp4")) attr_dev(source, "src", source_src_value);
     			attr_dev(source, "type", "video/mp4");
-    			add_location(source, file$5, 204, 8, 4909);
+    			add_location(source, file$5, 206, 8, 5014);
     			video.autoplay = true;
     			video.loop = true;
     			video.muted = true;
     			video.controls = "";
     			set_style(video, "width", /*containerWidth*/ ctx[2] + 200 + "px");
-    			add_location(video, file$5, 197, 6, 4773);
-    			attr_dev(div1, "class", "video-box svelte-rwmo4s");
-    			add_location(div1, file$5, 196, 4, 4743);
-    			attr_dev(span, "class", "logo_red svelte-rwmo4s");
-    			add_location(span, file$5, 208, 22, 5010);
-    			attr_dev(div2, "class", "logo svelte-rwmo4s");
-    			add_location(div2, file$5, 208, 4, 4992);
-    			attr_dev(div3, "class", "slider-wrapper svelte-rwmo4s");
+    			add_location(video, file$5, 199, 6, 4878);
+    			attr_dev(div1, "class", "video-box svelte-e9afhe");
+    			add_location(div1, file$5, 198, 4, 4848);
+    			attr_dev(span, "class", "logo_red svelte-e9afhe");
+    			add_location(span, file$5, 210, 22, 5115);
+    			attr_dev(div2, "class", "logo svelte-e9afhe");
+    			add_location(div2, file$5, 210, 4, 5097);
+    			attr_dev(div3, "class", "slider-wrapper svelte-e9afhe");
     			set_style(div3, "margin-top", /*current*/ ctx[5] > 0 && /*current*/ ctx[5] < 5 && "0px" || "2px");
-    			add_location(div3, file$5, 210, 4, 5065);
-    			attr_dev(div4, "class", "text_logo svelte-rwmo4s");
-    			add_location(div4, file$5, 219, 8, 5327);
+    			add_location(div3, file$5, 212, 4, 5170);
+    			attr_dev(div4, "class", "text_logo svelte-e9afhe");
+    			add_location(div4, file$5, 221, 8, 5432);
     			html_tag = new HtmlTag(null);
-    			attr_dev(div5, "class", "company-data svelte-rwmo4s");
-    			add_location(div5, file$5, 218, 6, 5292);
-    			attr_dev(div6, "class", "company svelte-rwmo4s");
-    			add_location(div6, file$5, 216, 4, 5246);
-    			attr_dev(div7, "class", "buttons svelte-rwmo4s");
+    			attr_dev(div5, "class", "company-data svelte-e9afhe");
+    			add_location(div5, file$5, 220, 6, 5397);
+    			attr_dev(div6, "class", "company svelte-e9afhe");
+    			add_location(div6, file$5, 218, 4, 5351);
+    			attr_dev(div7, "class", "buttons svelte-e9afhe");
     			set_style(div7, "margin-left", /*current*/ ctx[5] > 0 && /*current*/ ctx[5] < 5 && "3px");
     			set_style(div7, "background", /*current*/ ctx[5] > 0 && /*current*/ ctx[5] < 5 && "#2d3031" || "");
 
@@ -2461,7 +2461,7 @@ var app = (function () {
     			? "flex-start"
     			: /*current*/ ctx[5] === 5 ? "center" : "flex-end");
 
-    			add_location(div7, file$5, 223, 4, 5416);
+    			add_location(div7, file$5, 225, 4, 5521);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div0, anchor);
@@ -2640,14 +2640,14 @@ var app = (function () {
     		block,
     		id: create_if_block$2.name,
     		type: "if",
-    		source: "(156:2) {#if !isMobile}",
+    		source: "(158:2) {#if !isMobile}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (251:10) {#each [...Array(66)] as emptySquare, i}
+    // (253:10) {#each [...Array(66)] as emptySquare, i}
     function create_each_block_5(ctx) {
     	let div;
     	let div_style_value;
@@ -2655,8 +2655,8 @@ var app = (function () {
     	const block = {
     		c: function create() {
     			div = element("div");
-    			attr_dev(div, "class", "empty-square svelte-rwmo4s");
-    			attr_dev(div, "style", div_style_value = /*emptySquareBorder*/ ctx[12](/*i*/ ctx[38], /*index*/ ctx[32]));
+    			attr_dev(div, "class", "empty-square svelte-e9afhe");
+    			attr_dev(div, "style", div_style_value = /*emptySquareBorder*/ ctx[12](/*i*/ ctx[39], /*index*/ ctx[33]));
 
     			toggle_class(div, "disabled", [
     				0,
@@ -2674,10 +2674,10 @@ var app = (function () {
     				/*current*/ ctx[5] > 0 && /*current*/ ctx[5] < 5
     				? 6
     				: 100
-    			].includes(/*i*/ ctx[38]));
+    			].includes(/*i*/ ctx[39]));
 
-    			toggle_class(div, "invisible", /*inVisibleBlocks*/ ctx[6].includes(/*i*/ ctx[38]));
-    			add_location(div, file$5, 251, 12, 6459);
+    			toggle_class(div, "invisible", /*inVisibleBlocks*/ ctx[6].includes(/*i*/ ctx[39]));
+    			add_location(div, file$5, 253, 12, 6564);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -2700,11 +2700,11 @@ var app = (function () {
     					/*current*/ ctx[5] > 0 && /*current*/ ctx[5] < 5
     					? 6
     					: 100
-    				].includes(/*i*/ ctx[38]));
+    				].includes(/*i*/ ctx[39]));
     			}
 
     			if (dirty[0] & /*inVisibleBlocks*/ 64) {
-    				toggle_class(div, "invisible", /*inVisibleBlocks*/ ctx[6].includes(/*i*/ ctx[38]));
+    				toggle_class(div, "invisible", /*inVisibleBlocks*/ ctx[6].includes(/*i*/ ctx[39]));
     			}
     		},
     		d: function destroy(detaching) {
@@ -2716,21 +2716,21 @@ var app = (function () {
     		block,
     		id: create_each_block_5.name,
     		type: "each",
-    		source: "(251:10) {#each [...Array(66)] as emptySquare, i}",
+    		source: "(253:10) {#each [...Array(66)] as emptySquare, i}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (264:10) {#if page.subtitle}
+    // (266:10) {#if page.subtitle}
     function create_if_block_8(ctx) {
     	let div;
-    	let t0_value = /*page*/ ctx[30].subtitle + "";
+    	let t0_value = /*page*/ ctx[31].subtitle + "";
     	let t0;
     	let t1;
     	let span;
-    	let t2_value = /*page*/ ctx[30].subtitle_red + "";
+    	let t2_value = /*page*/ ctx[31].subtitle_red + "";
     	let t2;
 
     	const block = {
@@ -2740,10 +2740,10 @@ var app = (function () {
     			t1 = space();
     			span = element("span");
     			t2 = text(t2_value);
-    			attr_dev(span, "class", "text__subtitle_red svelte-rwmo4s");
-    			add_location(span, file$5, 266, 14, 7011);
-    			attr_dev(div, "class", "text__subtitle svelte-rwmo4s");
-    			add_location(div, file$5, 264, 12, 6938);
+    			attr_dev(span, "class", "text__subtitle_red svelte-e9afhe");
+    			add_location(span, file$5, 268, 14, 7116);
+    			attr_dev(div, "class", "text__subtitle svelte-e9afhe");
+    			add_location(div, file$5, 266, 12, 7043);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -2753,8 +2753,8 @@ var app = (function () {
     			append_dev(span, t2);
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty[0] & /*pages*/ 1 && t0_value !== (t0_value = /*page*/ ctx[30].subtitle + "")) set_data_dev(t0, t0_value);
-    			if (dirty[0] & /*pages*/ 1 && t2_value !== (t2_value = /*page*/ ctx[30].subtitle_red + "")) set_data_dev(t2, t2_value);
+    			if (dirty[0] & /*pages*/ 1 && t0_value !== (t0_value = /*page*/ ctx[31].subtitle + "")) set_data_dev(t0, t0_value);
+    			if (dirty[0] & /*pages*/ 1 && t2_value !== (t2_value = /*page*/ ctx[31].subtitle_red + "")) set_data_dev(t2, t2_value);
     		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(div);
@@ -2765,17 +2765,17 @@ var app = (function () {
     		block,
     		id: create_if_block_8.name,
     		type: "if",
-    		source: "(264:10) {#if page.subtitle}",
+    		source: "(266:10) {#if page.subtitle}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (270:10) {#if page.info}
+    // (272:10) {#if page.info}
     function create_if_block_7(ctx) {
     	let div;
-    	let each_value_4 = /*page*/ ctx[30].info;
+    	let each_value_4 = /*page*/ ctx[31].info;
     	validate_each_argument(each_value_4);
     	let each_blocks = [];
 
@@ -2791,8 +2791,8 @@ var app = (function () {
     				each_blocks[i].c();
     			}
 
-    			attr_dev(div, "class", "info svelte-rwmo4s");
-    			add_location(div, file$5, 270, 12, 7144);
+    			attr_dev(div, "class", "info svelte-e9afhe");
+    			add_location(div, file$5, 272, 12, 7249);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -2803,7 +2803,7 @@ var app = (function () {
     		},
     		p: function update(ctx, dirty) {
     			if (dirty[0] & /*pages*/ 1) {
-    				each_value_4 = /*page*/ ctx[30].info;
+    				each_value_4 = /*page*/ ctx[31].info;
     				validate_each_argument(each_value_4);
     				let i;
 
@@ -2836,18 +2836,18 @@ var app = (function () {
     		block,
     		id: create_if_block_7.name,
     		type: "if",
-    		source: "(270:10) {#if page.info}",
+    		source: "(272:10) {#if page.info}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (272:14) {#each page.info as infoItem}
+    // (274:14) {#each page.info as infoItem}
     function create_each_block_4(ctx) {
     	let span;
     	let html_tag;
-    	let raw_value = /*infoItem*/ ctx[33] + "";
+    	let raw_value = /*infoItem*/ ctx[34] + "";
     	let t;
 
     	const block = {
@@ -2855,7 +2855,7 @@ var app = (function () {
     			span = element("span");
     			t = space();
     			html_tag = new HtmlTag(t);
-    			add_location(span, file$5, 272, 16, 7223);
+    			add_location(span, file$5, 274, 16, 7328);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, span, anchor);
@@ -2863,7 +2863,7 @@ var app = (function () {
     			append_dev(span, t);
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty[0] & /*pages*/ 1 && raw_value !== (raw_value = /*infoItem*/ ctx[33] + "")) html_tag.p(raw_value);
+    			if (dirty[0] & /*pages*/ 1 && raw_value !== (raw_value = /*infoItem*/ ctx[34] + "")) html_tag.p(raw_value);
     		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(span);
@@ -2874,20 +2874,20 @@ var app = (function () {
     		block,
     		id: create_each_block_4.name,
     		type: "each",
-    		source: "(272:14) {#each page.info as infoItem}",
+    		source: "(274:14) {#each page.info as infoItem}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (249:6) {#each pages as page, index}
+    // (251:6) {#each pages as page, index}
     function create_each_block_3(ctx) {
     	let section;
     	let t0;
     	let div1;
     	let div0;
-    	let t1_value = /*page*/ ctx[30].title + "";
+    	let t1_value = /*page*/ ctx[31].title + "";
     	let t1;
     	let t2;
     	let t3;
@@ -2900,8 +2900,8 @@ var app = (function () {
     		each_blocks[i] = create_each_block_5(get_each_context_5(ctx, each_value_5, i));
     	}
 
-    	let if_block0 = /*page*/ ctx[30].subtitle && create_if_block_8(ctx);
-    	let if_block1 = /*page*/ ctx[30].info && create_if_block_7(ctx);
+    	let if_block0 = /*page*/ ctx[31].subtitle && create_if_block_8(ctx);
+    	let if_block1 = /*page*/ ctx[31].info && create_if_block_7(ctx);
 
     	const block = {
     		c: function create() {
@@ -2920,12 +2920,12 @@ var app = (function () {
     			t3 = space();
     			if (if_block1) if_block1.c();
     			t4 = space();
-    			add_location(div0, file$5, 261, 12, 6855);
-    			attr_dev(div1, "class", "text svelte-rwmo4s");
-    			add_location(div1, file$5, 260, 10, 6824);
-    			attr_dev(section, "class", "svelte-rwmo4s");
-    			toggle_class(section, "active", /*current*/ ctx[5] === /*index*/ ctx[32]);
-    			add_location(section, file$5, 249, 8, 6353);
+    			add_location(div0, file$5, 263, 12, 6960);
+    			attr_dev(div1, "class", "text svelte-e9afhe");
+    			add_location(div1, file$5, 262, 10, 6929);
+    			attr_dev(section, "class", "svelte-e9afhe");
+    			toggle_class(section, "active", /*current*/ ctx[5] === /*index*/ ctx[33]);
+    			add_location(section, file$5, 251, 8, 6458);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, section, anchor);
@@ -2969,9 +2969,9 @@ var app = (function () {
     				each_blocks.length = each_value_5.length;
     			}
 
-    			if (dirty[0] & /*pages*/ 1 && t1_value !== (t1_value = /*page*/ ctx[30].title + "")) set_data_dev(t1, t1_value);
+    			if (dirty[0] & /*pages*/ 1 && t1_value !== (t1_value = /*page*/ ctx[31].title + "")) set_data_dev(t1, t1_value);
 
-    			if (/*page*/ ctx[30].subtitle) {
+    			if (/*page*/ ctx[31].subtitle) {
     				if (if_block0) {
     					if_block0.p(ctx, dirty);
     				} else {
@@ -2984,7 +2984,7 @@ var app = (function () {
     				if_block0 = null;
     			}
 
-    			if (/*page*/ ctx[30].info) {
+    			if (/*page*/ ctx[31].info) {
     				if (if_block1) {
     					if_block1.p(ctx, dirty);
     				} else {
@@ -2998,7 +2998,7 @@ var app = (function () {
     			}
 
     			if (dirty[0] & /*current*/ 32) {
-    				toggle_class(section, "active", /*current*/ ctx[5] === /*index*/ ctx[32]);
+    				toggle_class(section, "active", /*current*/ ctx[5] === /*index*/ ctx[33]);
     			}
     		},
     		d: function destroy(detaching) {
@@ -3013,14 +3013,14 @@ var app = (function () {
     		block,
     		id: create_each_block_3.name,
     		type: "each",
-    		source: "(249:6) {#each pages as page, index}",
+    		source: "(251:6) {#each pages as page, index}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (296:4) {#if current > 0 && current < 5}
+    // (298:4) {#if current > 0 && current < 5}
     function create_if_block_6(ctx) {
     	let div;
     	let div_transition;
@@ -3031,8 +3031,8 @@ var app = (function () {
     	const block = {
     		c: function create() {
     			div = element("div");
-    			attr_dev(div, "class", "join svelte-rwmo4s");
-    			add_location(div, file$5, 296, 6, 7751);
+    			attr_dev(div, "class", "join svelte-e9afhe");
+    			add_location(div, file$5, 298, 6, 7856);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -3072,14 +3072,14 @@ var app = (function () {
     		block,
     		id: create_if_block_6.name,
     		type: "if",
-    		source: "(296:4) {#if current > 0 && current < 5}",
+    		source: "(298:4) {#if current > 0 && current < 5}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (329:6) {#if current === 0}
+    // (331:6) {#if current === 0}
     function create_if_block_5(ctx) {
     	let button;
     	let current;
@@ -3118,14 +3118,14 @@ var app = (function () {
     		block,
     		id: create_if_block_5.name,
     		type: "if",
-    		source: "(329:6) {#if current === 0}",
+    		source: "(331:6) {#if current === 0}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (337:4) {#if showBecomeVolunterBlock}
+    // (339:4) {#if showBecomeVolunterBlock}
     function create_if_block_4(ctx) {
     	let div;
     	let becomevolunteer;
@@ -3154,8 +3154,8 @@ var app = (function () {
     		c: function create() {
     			div = element("div");
     			create_component(becomevolunteer.$$.fragment);
-    			attr_dev(div, "class", "become-volunter-wrapper svelte-rwmo4s");
-    			add_location(div, file$5, 337, 6, 9080);
+    			attr_dev(div, "class", "become-volunter-wrapper svelte-e9afhe");
+    			add_location(div, file$5, 339, 6, 9185);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -3201,14 +3201,14 @@ var app = (function () {
     		block,
     		id: create_if_block_4.name,
     		type: "if",
-    		source: "(337:4) {#if showBecomeVolunterBlock}",
+    		source: "(339:4) {#if showBecomeVolunterBlock}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (166:10) {#each [...Array(32)] as emptySquare, i}
+    // (168:10) {#each [...Array(32)] as emptySquare, i}
     function create_each_block_2(ctx) {
     	let div;
     	let div_style_value;
@@ -3216,14 +3216,14 @@ var app = (function () {
     	let dispose;
 
     	function mouseenter_handler() {
-    		return /*mouseenter_handler*/ ctx[15](/*i*/ ctx[38]);
+    		return /*mouseenter_handler*/ ctx[15](/*i*/ ctx[39]);
     	}
 
     	const block = {
     		c: function create() {
     			div = element("div");
-    			attr_dev(div, "class", "empty-square svelte-rwmo4s");
-    			attr_dev(div, "style", div_style_value = /*emptySquareBorder*/ ctx[12](/*i*/ ctx[38], /*index*/ ctx[32]));
+    			attr_dev(div, "class", "empty-square svelte-e9afhe");
+    			attr_dev(div, "style", div_style_value = /*emptySquareBorder*/ ctx[12](/*i*/ ctx[39], /*index*/ ctx[33]));
 
     			toggle_class(div, "disabled", [
     				15,
@@ -3233,10 +3233,10 @@ var app = (function () {
     				/*current*/ ctx[5] > 0 && /*current*/ ctx[5] < 5
     				? 6
     				: 100
-    			].includes(/*i*/ ctx[38]));
+    			].includes(/*i*/ ctx[39]));
 
-    			toggle_class(div, "invisible", /*inVisibleBlocks*/ ctx[6].includes(/*i*/ ctx[38]));
-    			add_location(div, file$5, 166, 12, 3830);
+    			toggle_class(div, "invisible", /*inVisibleBlocks*/ ctx[6].includes(/*i*/ ctx[39]));
+    			add_location(div, file$5, 168, 12, 3935);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -3258,11 +3258,11 @@ var app = (function () {
     					/*current*/ ctx[5] > 0 && /*current*/ ctx[5] < 5
     					? 6
     					: 100
-    				].includes(/*i*/ ctx[38]));
+    				].includes(/*i*/ ctx[39]));
     			}
 
     			if (dirty[0] & /*inVisibleBlocks*/ 64) {
-    				toggle_class(div, "invisible", /*inVisibleBlocks*/ ctx[6].includes(/*i*/ ctx[38]));
+    				toggle_class(div, "invisible", /*inVisibleBlocks*/ ctx[6].includes(/*i*/ ctx[39]));
     			}
     		},
     		d: function destroy(detaching) {
@@ -3276,21 +3276,21 @@ var app = (function () {
     		block,
     		id: create_each_block_2.name,
     		type: "each",
-    		source: "(166:10) {#each [...Array(32)] as emptySquare, i}",
+    		source: "(168:10) {#each [...Array(32)] as emptySquare, i}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (177:12) {#if page.subtitle}
+    // (179:12) {#if page.subtitle}
     function create_if_block_3(ctx) {
     	let div;
-    	let t0_value = /*page*/ ctx[30].subtitle + "";
+    	let t0_value = /*page*/ ctx[31].subtitle + "";
     	let t0;
     	let t1;
     	let span;
-    	let t2_value = /*page*/ ctx[30].subtitle_red + "";
+    	let t2_value = /*page*/ ctx[31].subtitle_red + "";
     	let t2;
 
     	const block = {
@@ -3300,10 +3300,10 @@ var app = (function () {
     			t1 = space();
     			span = element("span");
     			t2 = text(t2_value);
-    			attr_dev(span, "class", "text__subtitle_red svelte-rwmo4s");
-    			add_location(span, file$5, 179, 16, 4344);
-    			attr_dev(div, "class", "text__subtitle svelte-rwmo4s");
-    			add_location(div, file$5, 177, 14, 4267);
+    			attr_dev(span, "class", "text__subtitle_red svelte-e9afhe");
+    			add_location(span, file$5, 181, 16, 4449);
+    			attr_dev(div, "class", "text__subtitle svelte-e9afhe");
+    			add_location(div, file$5, 179, 14, 4372);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -3313,8 +3313,8 @@ var app = (function () {
     			append_dev(span, t2);
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty[0] & /*pages*/ 1 && t0_value !== (t0_value = /*page*/ ctx[30].subtitle + "")) set_data_dev(t0, t0_value);
-    			if (dirty[0] & /*pages*/ 1 && t2_value !== (t2_value = /*page*/ ctx[30].subtitle_red + "")) set_data_dev(t2, t2_value);
+    			if (dirty[0] & /*pages*/ 1 && t0_value !== (t0_value = /*page*/ ctx[31].subtitle + "")) set_data_dev(t0, t0_value);
+    			if (dirty[0] & /*pages*/ 1 && t2_value !== (t2_value = /*page*/ ctx[31].subtitle_red + "")) set_data_dev(t2, t2_value);
     		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(div);
@@ -3325,17 +3325,17 @@ var app = (function () {
     		block,
     		id: create_if_block_3.name,
     		type: "if",
-    		source: "(177:12) {#if page.subtitle}",
+    		source: "(179:12) {#if page.subtitle}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (184:10) {#if page.info}
+    // (186:10) {#if page.info}
     function create_if_block_2(ctx) {
     	let div;
-    	let each_value_1 = /*page*/ ctx[30].info;
+    	let each_value_1 = /*page*/ ctx[31].info;
     	validate_each_argument(each_value_1);
     	let each_blocks = [];
 
@@ -3351,8 +3351,8 @@ var app = (function () {
     				each_blocks[i].c();
     			}
 
-    			attr_dev(div, "class", "info svelte-rwmo4s");
-    			add_location(div, file$5, 184, 12, 4498);
+    			attr_dev(div, "class", "info svelte-e9afhe");
+    			add_location(div, file$5, 186, 12, 4603);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -3363,7 +3363,7 @@ var app = (function () {
     		},
     		p: function update(ctx, dirty) {
     			if (dirty[0] & /*pages*/ 1) {
-    				each_value_1 = /*page*/ ctx[30].info;
+    				each_value_1 = /*page*/ ctx[31].info;
     				validate_each_argument(each_value_1);
     				let i;
 
@@ -3396,18 +3396,18 @@ var app = (function () {
     		block,
     		id: create_if_block_2.name,
     		type: "if",
-    		source: "(184:10) {#if page.info}",
+    		source: "(186:10) {#if page.info}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (186:14) {#each page.info as infoItem}
+    // (188:14) {#each page.info as infoItem}
     function create_each_block_1(ctx) {
     	let p;
     	let html_tag;
-    	let raw_value = /*infoItem*/ ctx[33] + "";
+    	let raw_value = /*infoItem*/ ctx[34] + "";
     	let t;
 
     	const block = {
@@ -3415,7 +3415,7 @@ var app = (function () {
     			p = element("p");
     			t = space();
     			html_tag = new HtmlTag(t);
-    			add_location(p, file$5, 186, 16, 4577);
+    			add_location(p, file$5, 188, 16, 4682);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, p, anchor);
@@ -3423,7 +3423,7 @@ var app = (function () {
     			append_dev(p, t);
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty[0] & /*pages*/ 1 && raw_value !== (raw_value = /*infoItem*/ ctx[33] + "")) html_tag.p(raw_value);
+    			if (dirty[0] & /*pages*/ 1 && raw_value !== (raw_value = /*infoItem*/ ctx[34] + "")) html_tag.p(raw_value);
     		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(p);
@@ -3434,20 +3434,20 @@ var app = (function () {
     		block,
     		id: create_each_block_1.name,
     		type: "each",
-    		source: "(186:14) {#each page.info as infoItem}",
+    		source: "(188:14) {#each page.info as infoItem}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (164:6) {#each pages as page, index}
+    // (166:6) {#each pages as page, index}
     function create_each_block$1(ctx) {
     	let section;
     	let t0;
     	let div1;
     	let div0;
-    	let t1_value = /*page*/ ctx[30].title + "";
+    	let t1_value = /*page*/ ctx[31].title + "";
     	let t1;
     	let t2;
     	let t3;
@@ -3460,8 +3460,8 @@ var app = (function () {
     		each_blocks[i] = create_each_block_2(get_each_context_2(ctx, each_value_2, i));
     	}
 
-    	let if_block0 = /*page*/ ctx[30].subtitle && create_if_block_3(ctx);
-    	let if_block1 = /*page*/ ctx[30].info && create_if_block_2(ctx);
+    	let if_block0 = /*page*/ ctx[31].subtitle && create_if_block_3(ctx);
+    	let if_block1 = /*page*/ ctx[31].info && create_if_block_2(ctx);
 
     	const block = {
     		c: function create() {
@@ -3480,12 +3480,12 @@ var app = (function () {
     			t3 = space();
     			if (if_block1) if_block1.c();
     			t4 = space();
-    			add_location(div0, file$5, 175, 12, 4197);
-    			attr_dev(div1, "class", "text svelte-rwmo4s");
-    			add_location(div1, file$5, 174, 10, 4166);
-    			attr_dev(section, "class", "svelte-rwmo4s");
-    			toggle_class(section, "active", /*current*/ ctx[5] === /*index*/ ctx[32]);
-    			add_location(section, file$5, 164, 8, 3724);
+    			add_location(div0, file$5, 177, 12, 4302);
+    			attr_dev(div1, "class", "text svelte-e9afhe");
+    			add_location(div1, file$5, 176, 10, 4271);
+    			attr_dev(section, "class", "svelte-e9afhe");
+    			toggle_class(section, "active", /*current*/ ctx[5] === /*index*/ ctx[33]);
+    			add_location(section, file$5, 166, 8, 3829);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, section, anchor);
@@ -3529,9 +3529,9 @@ var app = (function () {
     				each_blocks.length = each_value_2.length;
     			}
 
-    			if (dirty[0] & /*pages*/ 1 && t1_value !== (t1_value = /*page*/ ctx[30].title + "")) set_data_dev(t1, t1_value);
+    			if (dirty[0] & /*pages*/ 1 && t1_value !== (t1_value = /*page*/ ctx[31].title + "")) set_data_dev(t1, t1_value);
 
-    			if (/*page*/ ctx[30].subtitle) {
+    			if (/*page*/ ctx[31].subtitle) {
     				if (if_block0) {
     					if_block0.p(ctx, dirty);
     				} else {
@@ -3544,7 +3544,7 @@ var app = (function () {
     				if_block0 = null;
     			}
 
-    			if (/*page*/ ctx[30].info) {
+    			if (/*page*/ ctx[31].info) {
     				if (if_block1) {
     					if_block1.p(ctx, dirty);
     				} else {
@@ -3558,7 +3558,7 @@ var app = (function () {
     			}
 
     			if (dirty[0] & /*current*/ 32) {
-    				toggle_class(section, "active", /*current*/ ctx[5] === /*index*/ ctx[32]);
+    				toggle_class(section, "active", /*current*/ ctx[5] === /*index*/ ctx[33]);
     			}
     		},
     		d: function destroy(detaching) {
@@ -3573,14 +3573,14 @@ var app = (function () {
     		block,
     		id: create_each_block$1.name,
     		type: "each",
-    		source: "(164:6) {#each pages as page, index}",
+    		source: "(166:6) {#each pages as page, index}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (235:6) {#if current === 0}
+    // (237:6) {#if current === 0}
     function create_if_block_1$1(ctx) {
     	let button;
     	let current;
@@ -3619,7 +3619,7 @@ var app = (function () {
     		block,
     		id: create_if_block_1$1.name,
     		type: "if",
-    		source: "(235:6) {#if current === 0}",
+    		source: "(237:6) {#if current === 0}",
     		ctx
     	});
 
@@ -3649,8 +3649,8 @@ var app = (function () {
     		c: function create() {
     			main = element("main");
     			if_block.c();
-    			attr_dev(main, "class", "svelte-rwmo4s");
-    			add_location(main, file$5, 154, 0, 3402);
+    			attr_dev(main, "class", "svelte-e9afhe");
+    			add_location(main, file$5, 156, 0, 3507);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -3748,6 +3748,7 @@ var app = (function () {
     	let inVisibleBlocks = [];
     	let showBecomeVolunterBlock = false;
     	let beta, gamma;
+    	const userAgent = window.navigator.userAgent;
 
     	onMount(() => {
     		window.addEventListener("touchstart", e => {
@@ -3942,6 +3943,7 @@ var app = (function () {
     		animationTimeM,
     		beta,
     		gamma,
+    		userAgent,
     		hover,
     		randomInteger,
     		scroll,
@@ -3983,7 +3985,7 @@ var app = (function () {
     		}
 
     		if ($$self.$$.dirty[0] & /*outerWidth*/ 2) {
-    			 $$invalidate(9, isMobile = outerWidth < 800);
+    			 $$invalidate(9, isMobile = outerWidth < 800 || userAgent.match(/iPad/i) || userAgent.match(/iPhone/i));
     		}
     	};
 

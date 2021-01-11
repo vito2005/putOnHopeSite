@@ -25,10 +25,12 @@ const animationTime = 1000
 const animationTimeM = 1000
 
 let beta, gamma
+const userAgent = window.navigator.userAgent
 
 $: pagesLength = pages.length
 
-$: isMobile = outerWidth < 800
+$: isMobile =
+  outerWidth < 800 || userAgent.match(/iPad/i) || userAgent.match(/iPhone/i)
 
 onMount(() => {
   window.addEventListener('touchstart', (e) => {
@@ -680,7 +682,7 @@ section.active .info {
       }
     }
 
-    svg {
+    :global(svg.articul-media) {
       @media (max-width: 800px) {
         width: 6rem;
       }
