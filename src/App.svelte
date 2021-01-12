@@ -25,6 +25,7 @@ let glitchAnimation = false
 let disableGlitch = false
 const animationTime = 1000
 const animationTimeM = 1000
+let disabledBlocks = []
 
 let beta, gamma
 const userAgent = window.navigator.userAgent
@@ -39,6 +40,14 @@ $: {
     glitchAnimation = false
   }
   setTimeout(() => (glitchAnimation = true))
+}
+
+$: {
+  disabledBlocks = [15, 23, 24, 25]
+
+  if (current > 0 && current < 5) {
+    disabledBlocks = disabledBlocks.concat([6, 7])
+  }
 }
 
 onMount(() => {
@@ -68,14 +77,17 @@ onMount(() => {
       }
       if (event.beta > 15) {
         hover(62)
+        hover(50)
       }
 
       if (event.gamma > 15) {
         hover(34)
+        hover(30)
       }
 
       if (event.gamma < -15) {
         hover(26)
+        hover(20)
       }
 
       beta = event.beta
@@ -90,16 +102,7 @@ onMount(() => {
 
 function hover(index) {
   inVisibleBlocks = []
-  inVisibleBlocks.push(index)
-  inVisibleBlocks.push(index + 1)
-  inVisibleBlocks.push(index - 1)
-  inVisibleBlocks.push(index + 8)
-  inVisibleBlocks.push(index - 8)
-  inVisibleBlocks.push(index + 9)
-  inVisibleBlocks.push(index - 9)
-  inVisibleBlocks.push(index + 7)
-  inVisibleBlocks.push(index - 7)
-
+  inVisibleBlocks = inVisibleBlocks.concat([index])
   inVisibleBlocks.push(randomInteger(index, index + 5))
   inVisibleBlocks.push(randomInteger(index, index - 5))
   inVisibleBlocks = [...inVisibleBlocks]
@@ -146,7 +149,14 @@ function emptySquareBorder(i, p) {
   const bb = 'border-bottom: 2px solid #3f3f3f;'
 
   let borderMap = {
-    7: br,
+    6:
+      p > 0 && p < 5
+        ? 'border-top-color: #2d3031'
+        : 'border-top-color: #3f3f3f',
+    7:
+      p > 0 && p < 5
+        ? 'border-right-color: #2d3031; border-left-color: #2d3031;'
+        : br,
     15: p > 0 && p < 5 ? 'border-top-color: #2d3031' : '',
     25: bb,
     31: 'border-right: 2px solid #3f3f3f; border-bottom: 2px solid #3f3f3f;',
@@ -190,7 +200,7 @@ function glitch(node) {
           {#each [...Array(32)] as emptySquare, i}
             <div
               class="empty-square"
-              class:disabled={[15, 23, 24, 25, current > 0 && current < 5 ? 6 : 100].includes(i)}
+              class:disabled={disabledBlocks.includes(i)}
               class:invisible={inVisibleBlocks.includes(i)}
               on:mouseenter={() => hover(i)}
               style={emptySquareBorder(i, index)}
@@ -255,7 +265,6 @@ function glitch(node) {
       class="buttons"
       style="
       margin-left: {current > 0 && current < 5 && '3px'};
-      background: {(current > 0 && current < 5 && '#2d3031') || ''};
       top: {current === 0 || current === 5 ? 50 : 0}%;
       left: {current === 0 ? 18.75 : current === 5 ? 62.5 : 75}%;
       align-items: {(current > 0 && current < 5 && 'flex-start') || 'center'};
