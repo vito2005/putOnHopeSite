@@ -91,6 +91,15 @@ onMount(() => {
 function hover(index) {
   inVisibleBlocks = []
   inVisibleBlocks.push(index)
+  inVisibleBlocks.push(index + 1)
+  inVisibleBlocks.push(index - 1)
+  inVisibleBlocks.push(index + 8)
+  inVisibleBlocks.push(index - 8)
+  inVisibleBlocks.push(index + 9)
+  inVisibleBlocks.push(index - 9)
+  inVisibleBlocks.push(index + 7)
+  inVisibleBlocks.push(index - 7)
+
   inVisibleBlocks.push(randomInteger(index, index + 5))
   inVisibleBlocks.push(randomInteger(index, index - 5))
   inVisibleBlocks = [...inVisibleBlocks]
@@ -470,7 +479,6 @@ main {
   grid-row-start: 2;
   grid-row-end: 3;
 
-  background-color: $black;
   z-index: 2;
 
   cursor: default;

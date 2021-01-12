@@ -1913,7 +1913,7 @@ var app = (function () {
     	return child_ctx;
     }
 
-    // (264:2) {:else}
+    // (273:2) {:else}
     function create_else_block(ctx) {
     	let div0;
     	let div0_resize_listener;
@@ -2021,39 +2021,39 @@ var app = (function () {
     			t12 = space();
     			if (if_block2) if_block2.c();
     			if_block2_anchor = empty();
-    			attr_dev(div0, "class", "container svelte-wnnac8");
+    			attr_dev(div0, "class", "container svelte-6n801x");
     			set_style(div0, "transform", "translate3d(0px, -" + /*current*/ ctx[2] * 100 + "%, 0px)");
     			set_style(div0, "transition", "transform 500ms ease 0s");
     			add_render_callback(() => /*div0_elementresize_handler_1*/ ctx[23].call(div0));
-    			add_location(div0, file$5, 264, 4, 6746);
+    			add_location(div0, file$5, 273, 4, 7019);
     			if (source.src !== (source_src_value = "./previewcity.mp4")) attr_dev(source, "src", source_src_value);
     			attr_dev(source, "type", "video/mp4");
-    			add_location(source, file$5, 317, 8, 8438);
+    			add_location(source, file$5, 326, 8, 8711);
     			video.autoplay = true;
     			video.loop = true;
     			video.muted = true;
     			video.controls = "";
     			set_style(video, "height", /*containerHeight*/ ctx[4] + "px");
-    			add_location(video, file$5, 310, 6, 8306);
-    			attr_dev(div1, "class", "video-box svelte-wnnac8");
-    			add_location(div1, file$5, 309, 4, 8276);
-    			attr_dev(span, "class", "logo_red svelte-wnnac8");
-    			add_location(span, file$5, 321, 22, 8539);
-    			attr_dev(div2, "class", "logo svelte-wnnac8");
-    			add_location(div2, file$5, 321, 4, 8521);
-    			attr_dev(div3, "class", "slider-wrapper svelte-wnnac8");
+    			add_location(video, file$5, 319, 6, 8579);
+    			attr_dev(div1, "class", "video-box svelte-6n801x");
+    			add_location(div1, file$5, 318, 4, 8549);
+    			attr_dev(span, "class", "logo_red svelte-6n801x");
+    			add_location(span, file$5, 330, 22, 8812);
+    			attr_dev(div2, "class", "logo svelte-6n801x");
+    			add_location(div2, file$5, 330, 4, 8794);
+    			attr_dev(div3, "class", "slider-wrapper svelte-6n801x");
     			set_style(div3, "margin-top", /*current*/ ctx[2] > 0 && /*current*/ ctx[2] < 5 && "0px" || "2px");
-    			add_location(div3, file$5, 328, 4, 8750);
-    			attr_dev(div4, "class", "text_logo svelte-wnnac8");
-    			add_location(div4, file$5, 336, 8, 9014);
+    			add_location(div3, file$5, 337, 4, 9023);
+    			attr_dev(div4, "class", "text_logo svelte-6n801x");
+    			add_location(div4, file$5, 345, 8, 9287);
     			html_tag = new HtmlTag(null);
-    			attr_dev(div5, "class", "company-data svelte-wnnac8");
-    			add_location(div5, file$5, 335, 6, 8979);
-    			attr_dev(div6, "class", "company svelte-wnnac8");
-    			add_location(div6, file$5, 334, 4, 8951);
-    			attr_dev(div7, "class", "socials svelte-wnnac8");
-    			add_location(div7, file$5, 340, 4, 9103);
-    			attr_dev(div8, "class", "buttons svelte-wnnac8");
+    			attr_dev(div5, "class", "company-data svelte-6n801x");
+    			add_location(div5, file$5, 344, 6, 9252);
+    			attr_dev(div6, "class", "company svelte-6n801x");
+    			add_location(div6, file$5, 343, 4, 9224);
+    			attr_dev(div7, "class", "socials svelte-6n801x");
+    			add_location(div7, file$5, 349, 4, 9376);
+    			attr_dev(div8, "class", "buttons svelte-6n801x");
     			set_style(div8, "margin-left", /*current*/ ctx[2] > 0 && /*current*/ ctx[2] < 5 && "3px");
     			set_style(div8, "background", /*current*/ ctx[2] > 0 && /*current*/ ctx[2] < 5 && "#2d3031" || "");
 
@@ -2072,7 +2072,7 @@ var app = (function () {
     			: /*current*/ ctx[2] === 5 ? "center" : "flex-end");
 
     			set_style(div8, "height", /*current*/ ctx[2] === 5 && "13%" && /*current*/ ctx[2] === 0 && "16%");
-    			add_location(div8, file$5, 343, 4, 9158);
+    			add_location(div8, file$5, 352, 4, 9431);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div0, anchor);
@@ -2317,14 +2317,14 @@ var app = (function () {
     		block,
     		id: create_else_block.name,
     		type: "else",
-    		source: "(264:2) {:else}",
+    		source: "(273:2) {:else}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (171:2) {#if !isMobile}
+    // (180:2) {#if !isMobile}
     function create_if_block$2(ctx) {
     	let div0;
     	let div0_resize_listener;
@@ -2416,37 +2416,37 @@ var app = (function () {
     			create_component(button.$$.fragment);
     			t10 = space();
     			if (if_block) if_block.c();
-    			attr_dev(div0, "class", "container svelte-wnnac8");
+    			attr_dev(div0, "class", "container svelte-6n801x");
     			set_style(div0, "transform", "translate3d(0px, -" + /*current*/ ctx[2] * 100 + "%, 0px)");
     			set_style(div0, "transition", "transform 1000ms ease 0s");
     			add_render_callback(() => /*div0_elementresize_handler*/ ctx[19].call(div0));
-    			add_location(div0, file$5, 171, 4, 3784);
+    			add_location(div0, file$5, 180, 4, 4057);
     			if (source.src !== (source_src_value = "./previewcity.mp4")) attr_dev(source, "src", source_src_value);
     			attr_dev(source, "type", "video/mp4");
-    			add_location(source, file$5, 225, 8, 5526);
+    			add_location(source, file$5, 234, 8, 5799);
     			video.autoplay = true;
     			video.loop = true;
     			video.muted = true;
     			video.controls = "";
     			set_style(video, "width", /*containerWidth*/ ctx[3] + 200 + "px");
-    			add_location(video, file$5, 218, 6, 5390);
-    			attr_dev(div1, "class", "video-box svelte-wnnac8");
-    			add_location(div1, file$5, 217, 4, 5360);
-    			attr_dev(span, "class", "logo_red svelte-wnnac8");
-    			add_location(span, file$5, 229, 22, 5627);
-    			attr_dev(div2, "class", "logo svelte-wnnac8");
-    			add_location(div2, file$5, 229, 4, 5609);
-    			attr_dev(div3, "class", "slider-wrapper svelte-wnnac8");
+    			add_location(video, file$5, 227, 6, 5663);
+    			attr_dev(div1, "class", "video-box svelte-6n801x");
+    			add_location(div1, file$5, 226, 4, 5633);
+    			attr_dev(span, "class", "logo_red svelte-6n801x");
+    			add_location(span, file$5, 238, 22, 5900);
+    			attr_dev(div2, "class", "logo svelte-6n801x");
+    			add_location(div2, file$5, 238, 4, 5882);
+    			attr_dev(div3, "class", "slider-wrapper svelte-6n801x");
     			set_style(div3, "margin-top", /*current*/ ctx[2] > 0 && /*current*/ ctx[2] < 5 && "0px" || "2px");
-    			add_location(div3, file$5, 231, 4, 5682);
-    			attr_dev(div4, "class", "text_logo svelte-wnnac8");
-    			add_location(div4, file$5, 240, 8, 5944);
+    			add_location(div3, file$5, 240, 4, 5955);
+    			attr_dev(div4, "class", "text_logo svelte-6n801x");
+    			add_location(div4, file$5, 249, 8, 6217);
     			html_tag = new HtmlTag(null);
-    			attr_dev(div5, "class", "company-data svelte-wnnac8");
-    			add_location(div5, file$5, 239, 6, 5909);
-    			attr_dev(div6, "class", "company svelte-wnnac8");
-    			add_location(div6, file$5, 237, 4, 5863);
-    			attr_dev(div7, "class", "buttons svelte-wnnac8");
+    			attr_dev(div5, "class", "company-data svelte-6n801x");
+    			add_location(div5, file$5, 248, 6, 6182);
+    			attr_dev(div6, "class", "company svelte-6n801x");
+    			add_location(div6, file$5, 246, 4, 6136);
+    			attr_dev(div7, "class", "buttons svelte-6n801x");
     			set_style(div7, "margin-left", /*current*/ ctx[2] > 0 && /*current*/ ctx[2] < 5 && "3px");
     			set_style(div7, "background", /*current*/ ctx[2] > 0 && /*current*/ ctx[2] < 5 && "#2d3031" || "");
 
@@ -2464,7 +2464,7 @@ var app = (function () {
     			? "flex-start"
     			: /*current*/ ctx[2] === 5 ? "center" : "flex-end");
 
-    			add_location(div7, file$5, 244, 4, 6033);
+    			add_location(div7, file$5, 253, 4, 6306);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div0, anchor);
@@ -2643,14 +2643,14 @@ var app = (function () {
     		block,
     		id: create_if_block$2.name,
     		type: "if",
-    		source: "(171:2) {#if !isMobile}",
+    		source: "(180:2) {#if !isMobile}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (272:10) {#each [...Array(66)] as emptySquare, i}
+    // (281:10) {#each [...Array(66)] as emptySquare, i}
     function create_each_block_5(ctx) {
     	let div;
     	let div_style_value;
@@ -2658,7 +2658,7 @@ var app = (function () {
     	const block = {
     		c: function create() {
     			div = element("div");
-    			attr_dev(div, "class", "empty-square svelte-wnnac8");
+    			attr_dev(div, "class", "empty-square svelte-6n801x");
     			attr_dev(div, "style", div_style_value = /*emptySquareBorder*/ ctx[14](/*i*/ ctx[42], /*index*/ ctx[36]));
 
     			toggle_class(div, "disabled", [
@@ -2680,7 +2680,7 @@ var app = (function () {
     			].includes(/*i*/ ctx[42]));
 
     			toggle_class(div, "invisible", /*inVisibleBlocks*/ ctx[6].includes(/*i*/ ctx[42]));
-    			add_location(div, file$5, 272, 12, 7076);
+    			add_location(div, file$5, 281, 12, 7349);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -2719,14 +2719,14 @@ var app = (function () {
     		block,
     		id: create_each_block_5.name,
     		type: "each",
-    		source: "(272:10) {#each [...Array(66)] as emptySquare, i}",
+    		source: "(281:10) {#each [...Array(66)] as emptySquare, i}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (283:12) {#if glitchAnimation}
+    // (292:12) {#if glitchAnimation}
     function create_if_block_10(ctx) {
     	let div;
     	let span0;
@@ -2754,14 +2754,14 @@ var app = (function () {
     			span1 = element("span");
     			t4 = text(t4_value);
     			attr_dev(span0, "aria-hidden", "true");
-    			attr_dev(span0, "class", "svelte-wnnac8");
-    			add_location(span0, file$5, 284, 16, 7586);
+    			attr_dev(span0, "class", "svelte-6n801x");
+    			add_location(span0, file$5, 293, 16, 7859);
     			attr_dev(span1, "aria-hidden", "true");
-    			attr_dev(span1, "class", "svelte-wnnac8");
-    			add_location(span1, file$5, 286, 16, 7676);
-    			attr_dev(div, "class", "glitch svelte-wnnac8");
+    			attr_dev(span1, "class", "svelte-6n801x");
+    			add_location(span1, file$5, 295, 16, 7949);
+    			attr_dev(div, "class", "glitch svelte-6n801x");
     			toggle_class(div, "disable", /*disableGlitch*/ ctx[9]);
-    			add_location(div, file$5, 283, 14, 7508);
+    			add_location(div, file$5, 292, 14, 7781);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -2798,14 +2798,14 @@ var app = (function () {
     		block,
     		id: create_if_block_10.name,
     		type: "if",
-    		source: "(283:12) {#if glitchAnimation}",
+    		source: "(292:12) {#if glitchAnimation}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (291:10) {#if page.subtitle}
+    // (300:10) {#if page.subtitle}
     function create_if_block_9(ctx) {
     	let div;
     	let t0_value = /*page*/ ctx[34].subtitle + "";
@@ -2822,10 +2822,10 @@ var app = (function () {
     			t1 = space();
     			span = element("span");
     			t2 = text(t2_value);
-    			attr_dev(span, "class", "text__subtitle_red svelte-wnnac8");
-    			add_location(span, file$5, 293, 14, 7892);
-    			attr_dev(div, "class", "text__subtitle svelte-wnnac8");
-    			add_location(div, file$5, 291, 12, 7819);
+    			attr_dev(span, "class", "text__subtitle_red svelte-6n801x");
+    			add_location(span, file$5, 302, 14, 8165);
+    			attr_dev(div, "class", "text__subtitle svelte-6n801x");
+    			add_location(div, file$5, 300, 12, 8092);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -2847,14 +2847,14 @@ var app = (function () {
     		block,
     		id: create_if_block_9.name,
     		type: "if",
-    		source: "(291:10) {#if page.subtitle}",
+    		source: "(300:10) {#if page.subtitle}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (297:10) {#if page.info}
+    // (306:10) {#if page.info}
     function create_if_block_8(ctx) {
     	let div;
     	let each_value_4 = /*page*/ ctx[34].info;
@@ -2873,8 +2873,8 @@ var app = (function () {
     				each_blocks[i].c();
     			}
 
-    			attr_dev(div, "class", "info svelte-wnnac8");
-    			add_location(div, file$5, 297, 12, 8025);
+    			attr_dev(div, "class", "info svelte-6n801x");
+    			add_location(div, file$5, 306, 12, 8298);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -2918,14 +2918,14 @@ var app = (function () {
     		block,
     		id: create_if_block_8.name,
     		type: "if",
-    		source: "(297:10) {#if page.info}",
+    		source: "(306:10) {#if page.info}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (299:14) {#each page.info as infoItem}
+    // (308:14) {#each page.info as infoItem}
     function create_each_block_4(ctx) {
     	let span;
     	let html_tag;
@@ -2937,7 +2937,7 @@ var app = (function () {
     			span = element("span");
     			t = space();
     			html_tag = new HtmlTag(t);
-    			add_location(span, file$5, 299, 16, 8104);
+    			add_location(span, file$5, 308, 16, 8377);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, span, anchor);
@@ -2956,14 +2956,14 @@ var app = (function () {
     		block,
     		id: create_each_block_4.name,
     		type: "each",
-    		source: "(299:14) {#each page.info as infoItem}",
+    		source: "(308:14) {#each page.info as infoItem}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (270:6) {#each pages as page, index}
+    // (279:6) {#each pages as page, index}
     function create_each_block_3(ctx) {
     	let section;
     	let t0;
@@ -2999,11 +2999,11 @@ var app = (function () {
     			t2 = space();
     			if (if_block2) if_block2.c();
     			t3 = space();
-    			attr_dev(div, "class", "text svelte-wnnac8");
-    			add_location(div, file$5, 281, 10, 7441);
-    			attr_dev(section, "class", "svelte-wnnac8");
+    			attr_dev(div, "class", "text svelte-6n801x");
+    			add_location(div, file$5, 290, 10, 7714);
+    			attr_dev(section, "class", "svelte-6n801x");
     			toggle_class(section, "active", /*current*/ ctx[2] === /*index*/ ctx[36]);
-    			add_location(section, file$5, 270, 8, 6970);
+    			add_location(section, file$5, 279, 8, 7243);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, section, anchor);
@@ -3102,14 +3102,14 @@ var app = (function () {
     		block,
     		id: create_each_block_3.name,
     		type: "each",
-    		source: "(270:6) {#each pages as page, index}",
+    		source: "(279:6) {#each pages as page, index}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (323:4) {#if current > 0 && current < 5}
+    // (332:4) {#if current > 0 && current < 5}
     function create_if_block_7(ctx) {
     	let div;
     	let div_transition;
@@ -3120,8 +3120,8 @@ var app = (function () {
     	const block = {
     		c: function create() {
     			div = element("div");
-    			attr_dev(div, "class", "join svelte-wnnac8");
-    			add_location(div, file$5, 323, 6, 8632);
+    			attr_dev(div, "class", "join svelte-6n801x");
+    			add_location(div, file$5, 332, 6, 8905);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -3161,14 +3161,14 @@ var app = (function () {
     		block,
     		id: create_if_block_7.name,
     		type: "if",
-    		source: "(323:4) {#if current > 0 && current < 5}",
+    		source: "(332:4) {#if current > 0 && current < 5}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (356:6) {#if current === 0}
+    // (365:6) {#if current === 0}
     function create_if_block_6(ctx) {
     	let button;
     	let current;
@@ -3207,14 +3207,14 @@ var app = (function () {
     		block,
     		id: create_if_block_6.name,
     		type: "if",
-    		source: "(356:6) {#if current === 0}",
+    		source: "(365:6) {#if current === 0}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (364:4) {#if showBecomeVolunterBlock}
+    // (373:4) {#if showBecomeVolunterBlock}
     function create_if_block_5(ctx) {
     	let div;
     	let becomevolunteer;
@@ -3243,8 +3243,8 @@ var app = (function () {
     		c: function create() {
     			div = element("div");
     			create_component(becomevolunteer.$$.fragment);
-    			attr_dev(div, "class", "become-volunter-wrapper svelte-wnnac8");
-    			add_location(div, file$5, 364, 6, 9961);
+    			attr_dev(div, "class", "become-volunter-wrapper svelte-6n801x");
+    			add_location(div, file$5, 373, 6, 10234);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -3290,14 +3290,14 @@ var app = (function () {
     		block,
     		id: create_if_block_5.name,
     		type: "if",
-    		source: "(364:4) {#if showBecomeVolunterBlock}",
+    		source: "(373:4) {#if showBecomeVolunterBlock}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (181:10) {#each [...Array(32)] as emptySquare, i}
+    // (190:10) {#each [...Array(32)] as emptySquare, i}
     function create_each_block_2(ctx) {
     	let div;
     	let div_style_value;
@@ -3311,7 +3311,7 @@ var app = (function () {
     	const block = {
     		c: function create() {
     			div = element("div");
-    			attr_dev(div, "class", "empty-square svelte-wnnac8");
+    			attr_dev(div, "class", "empty-square svelte-6n801x");
     			attr_dev(div, "style", div_style_value = /*emptySquareBorder*/ ctx[14](/*i*/ ctx[42], /*index*/ ctx[36]));
 
     			toggle_class(div, "disabled", [
@@ -3325,7 +3325,7 @@ var app = (function () {
     			].includes(/*i*/ ctx[42]));
 
     			toggle_class(div, "invisible", /*inVisibleBlocks*/ ctx[6].includes(/*i*/ ctx[42]));
-    			add_location(div, file$5, 181, 12, 4183);
+    			add_location(div, file$5, 190, 12, 4456);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -3365,14 +3365,14 @@ var app = (function () {
     		block,
     		id: create_each_block_2.name,
     		type: "each",
-    		source: "(181:10) {#each [...Array(32)] as emptySquare, i}",
+    		source: "(190:10) {#each [...Array(32)] as emptySquare, i}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (191:12) {#if glitchAnimation}
+    // (200:12) {#if glitchAnimation}
     function create_if_block_4(ctx) {
     	let div;
     	let span0;
@@ -3400,14 +3400,14 @@ var app = (function () {
     			span1 = element("span");
     			t4 = text(t4_value);
     			attr_dev(span0, "aria-hidden", "true");
-    			attr_dev(span0, "class", "svelte-wnnac8");
-    			add_location(span0, file$5, 192, 16, 4664);
+    			attr_dev(span0, "class", "svelte-6n801x");
+    			add_location(span0, file$5, 201, 16, 4937);
     			attr_dev(span1, "aria-hidden", "true");
-    			attr_dev(span1, "class", "svelte-wnnac8");
-    			add_location(span1, file$5, 194, 16, 4754);
-    			attr_dev(div, "class", "glitch svelte-wnnac8");
+    			attr_dev(span1, "class", "svelte-6n801x");
+    			add_location(span1, file$5, 203, 16, 5027);
+    			attr_dev(div, "class", "glitch svelte-6n801x");
     			toggle_class(div, "disable", /*disableGlitch*/ ctx[9]);
-    			add_location(div, file$5, 191, 14, 4586);
+    			add_location(div, file$5, 200, 14, 4859);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -3444,14 +3444,14 @@ var app = (function () {
     		block,
     		id: create_if_block_4.name,
     		type: "if",
-    		source: "(191:12) {#if glitchAnimation}",
+    		source: "(200:12) {#if glitchAnimation}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (198:12) {#if page.subtitle}
+    // (207:12) {#if page.subtitle}
     function create_if_block_3(ctx) {
     	let div;
     	let t0_value = /*page*/ ctx[34].subtitle + "";
@@ -3468,10 +3468,10 @@ var app = (function () {
     			t1 = space();
     			span = element("span");
     			t2 = text(t2_value);
-    			attr_dev(span, "class", "text__subtitle_red svelte-wnnac8");
-    			add_location(span, file$5, 200, 16, 4961);
-    			attr_dev(div, "class", "text__subtitle svelte-wnnac8");
-    			add_location(div, file$5, 198, 14, 4884);
+    			attr_dev(span, "class", "text__subtitle_red svelte-6n801x");
+    			add_location(span, file$5, 209, 16, 5234);
+    			attr_dev(div, "class", "text__subtitle svelte-6n801x");
+    			add_location(div, file$5, 207, 14, 5157);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -3493,14 +3493,14 @@ var app = (function () {
     		block,
     		id: create_if_block_3.name,
     		type: "if",
-    		source: "(198:12) {#if page.subtitle}",
+    		source: "(207:12) {#if page.subtitle}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (205:10) {#if page.info}
+    // (214:10) {#if page.info}
     function create_if_block_2(ctx) {
     	let div;
     	let each_value_1 = /*page*/ ctx[34].info;
@@ -3519,8 +3519,8 @@ var app = (function () {
     				each_blocks[i].c();
     			}
 
-    			attr_dev(div, "class", "info svelte-wnnac8");
-    			add_location(div, file$5, 205, 12, 5115);
+    			attr_dev(div, "class", "info svelte-6n801x");
+    			add_location(div, file$5, 214, 12, 5388);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -3564,14 +3564,14 @@ var app = (function () {
     		block,
     		id: create_if_block_2.name,
     		type: "if",
-    		source: "(205:10) {#if page.info}",
+    		source: "(214:10) {#if page.info}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (207:14) {#each page.info as infoItem}
+    // (216:14) {#each page.info as infoItem}
     function create_each_block_1(ctx) {
     	let p;
     	let html_tag;
@@ -3583,7 +3583,7 @@ var app = (function () {
     			p = element("p");
     			t = space();
     			html_tag = new HtmlTag(t);
-    			add_location(p, file$5, 207, 16, 5194);
+    			add_location(p, file$5, 216, 16, 5467);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, p, anchor);
@@ -3602,14 +3602,14 @@ var app = (function () {
     		block,
     		id: create_each_block_1.name,
     		type: "each",
-    		source: "(207:14) {#each page.info as infoItem}",
+    		source: "(216:14) {#each page.info as infoItem}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (179:6) {#each pages as page, index}
+    // (188:6) {#each pages as page, index}
     function create_each_block$1(ctx) {
     	let section;
     	let t0;
@@ -3645,11 +3645,11 @@ var app = (function () {
     			t2 = space();
     			if (if_block2) if_block2.c();
     			t3 = space();
-    			attr_dev(div, "class", "text svelte-wnnac8");
-    			add_location(div, file$5, 189, 10, 4519);
-    			attr_dev(section, "class", "svelte-wnnac8");
+    			attr_dev(div, "class", "text svelte-6n801x");
+    			add_location(div, file$5, 198, 10, 4792);
+    			attr_dev(section, "class", "svelte-6n801x");
     			toggle_class(section, "active", /*current*/ ctx[2] === /*index*/ ctx[36]);
-    			add_location(section, file$5, 179, 8, 4077);
+    			add_location(section, file$5, 188, 8, 4350);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, section, anchor);
@@ -3748,14 +3748,14 @@ var app = (function () {
     		block,
     		id: create_each_block$1.name,
     		type: "each",
-    		source: "(179:6) {#each pages as page, index}",
+    		source: "(188:6) {#each pages as page, index}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (256:6) {#if current === 0}
+    // (265:6) {#if current === 0}
     function create_if_block_1$1(ctx) {
     	let button;
     	let current;
@@ -3794,7 +3794,7 @@ var app = (function () {
     		block,
     		id: create_if_block_1$1.name,
     		type: "if",
-    		source: "(256:6) {#if current === 0}",
+    		source: "(265:6) {#if current === 0}",
     		ctx
     	});
 
@@ -3824,8 +3824,8 @@ var app = (function () {
     		c: function create() {
     			main = element("main");
     			if_block.c();
-    			attr_dev(main, "class", "svelte-wnnac8");
-    			add_location(main, file$5, 169, 0, 3755);
+    			attr_dev(main, "class", "svelte-6n801x");
+    			add_location(main, file$5, 178, 0, 4028);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -3975,6 +3975,14 @@ var app = (function () {
     	function hover(index) {
     		$$invalidate(6, inVisibleBlocks = []);
     		inVisibleBlocks.push(index);
+    		inVisibleBlocks.push(index + 1);
+    		inVisibleBlocks.push(index - 1);
+    		inVisibleBlocks.push(index + 8);
+    		inVisibleBlocks.push(index - 8);
+    		inVisibleBlocks.push(index + 9);
+    		inVisibleBlocks.push(index - 9);
+    		inVisibleBlocks.push(index + 7);
+    		inVisibleBlocks.push(index - 7);
     		inVisibleBlocks.push(randomInteger(index, index + 5));
     		inVisibleBlocks.push(randomInteger(index, index - 5));
     		$$invalidate(6, inVisibleBlocks = [...inVisibleBlocks]);
