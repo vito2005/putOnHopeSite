@@ -1,5 +1,7 @@
 <script>
 import { onMount } from 'svelte'
+import { fly } from 'svelte/transition'
+
 import Join from './assets/join.svg'
 import Logo from './assets/logo.svg'
 
@@ -7,8 +9,8 @@ import Button from './components/Button.svelte'
 import Slider from './components/Slider.svelte'
 import Socials from './components/Socials/Socials.svelte'
 import BecomeVolunteer from './components/BecomeVolunteer.svelte'
-import { fly } from 'svelte/transition'
 import VideoBackground from './components/VideoBackground.svelte'
+import FireFlies from './components/FireFlies.svelte'
 
 export let pages
 let outerWidth
@@ -357,6 +359,7 @@ function glitch(node) {
         />
       {/if}
     </div>
+    <FireFlies />
     {#if showBecomeVolunterBlock}
       <div class="become-volunter-wrapper" transition:fly={{ y: -200 }}>
         <BecomeVolunteer bind:show={showBecomeVolunterBlock} />
