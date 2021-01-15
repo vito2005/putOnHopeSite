@@ -10,6 +10,7 @@ export let width
     muted
     controls=""
     style="height: {height}px; width: {width}px"
+    playsinline
   >
     <source src="./previewcity.mp4" type="video/mp4" />
   </video>

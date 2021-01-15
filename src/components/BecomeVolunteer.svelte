@@ -1,18 +1,19 @@
 <script>
-import { onMount } from 'svelte'
+import { tick, afterUpdate } from 'svelte'
 
 import Button from './Button.svelte'
 
 export let show
 let becomeVolunteer
-onMount(() => {
-  document.addEventListener('click', hideBecomeVolunteer)
 
-  return () => document.removeEventListener('click', hideBecomeVolunteer)
+afterUpdate(async () => {
+  document.addEventListener('touchstart', hideBecomeVolunteer)
+
+  return () => document.removeEventListener('touchstart', hideBecomeVolunteer)
 })
 
-function hideBecomeVolunteer({ target }) {
-  if (target === becomeVolunteer) {
+function hideBecomeVolunteer(event) {
+  if (becomeVolunteer && becomeVolunteer.contains(event.target)) {
     return
   }
   show && (show = false)

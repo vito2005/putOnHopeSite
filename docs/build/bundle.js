@@ -290,6 +290,9 @@ var app = (function () {
     function onMount(fn) {
         get_current_component().$$.on_mount.push(fn);
     }
+    function afterUpdate(fn) {
+        get_current_component().$$.after_update.push(fn);
+    }
     function createEventDispatcher() {
         const component = get_current_component();
         return (type, detail) => {
@@ -316,6 +319,10 @@ var app = (function () {
             update_scheduled = true;
             resolved_promise.then(flush);
         }
+    }
+    function tick() {
+        schedule_update();
+        return resolved_promise;
     }
     function add_render_callback(fn) {
         render_callbacks.push(fn);
@@ -767,8 +774,6 @@ var app = (function () {
 
     var Join = "<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<path d=\"M10.5882 10.875C7.57819 10.875 5.12939 8.43577 5.12939 5.4375C5.12939 2.43923 7.57819 0 10.5882 0C13.5982 0 16.047 2.43923 16.047 5.4375C16.047 8.43577 13.5982 10.875 10.5882 10.875Z\" fill=\"#EE2424\"/>\n<path d=\"M12.7059 14.8593C12.7059 13.6556 13.0452 12.5293 13.6333 11.5702C12.715 12.0246 11.6813 12.2812 10.5882 12.2812C9.17045 12.2812 7.85167 11.8512 6.75628 11.1152C5.40183 11.6382 4.15929 12.4414 3.10127 13.4953C1.10136 15.4873 0 18.1358 0 20.953V23.2968C0 23.6851 0.316047 24 0.705882 24H20.4706C20.8604 24 21.1765 23.6851 21.1765 23.2968V20.953C21.1765 20.9108 21.1753 20.8684 21.1748 20.8261C20.5126 21.0598 19.8004 21.1875 19.0588 21.1875C15.5558 21.1875 12.7059 18.3487 12.7059 14.8593Z\" fill=\"#EE2424\"/>\n<path d=\"M19.0589 9.9375C16.3343 9.9375 14.1177 12.1455 14.1177 14.8594C14.1177 17.5733 16.3343 19.7812 19.0589 19.7812C21.7834 19.7812 24 17.5733 24 14.8594C24 12.1455 21.7834 9.9375 19.0589 9.9375ZM20.4706 15.5625H19.7647V16.2656C19.7647 16.6539 19.4487 16.9688 19.0589 16.9688C18.669 16.9688 18.353 16.6539 18.353 16.2656V15.5625H17.6471C17.2573 15.5625 16.9412 15.2477 16.9412 14.8594C16.9412 14.4711 17.2573 14.1562 17.6471 14.1562H18.353V13.4531C18.353 13.0648 18.669 12.75 19.0589 12.75C19.4487 12.75 19.7647 13.0648 19.7647 13.4531V14.1562H20.4706C20.8605 14.1562 21.1765 14.4711 21.1765 14.8594C21.1765 15.2477 20.8605 15.5625 20.4706 15.5625Z\" fill=\"#EE2424\"/>\n</svg>";
 
-    var Logo = "<svg\n    class=\"articul-media\"\n    width=\"128\"\n    height=\"24\"\n    viewBox=\"0 0 128 24\"\n    fill=\"none\"\n    xmlns=\"http://www.w3.org/2000/svg\"\n    xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n>\n    <rect width=\"128\" height=\"24\" fill=\"url(#pattern0)\" />\n    <defs>\n    <pattern\n        id=\"pattern0\"\n        patternContentUnits=\"objectBoundingBox\"\n        width=\"1\"\n        height=\"1\"\n    >\n        <use\n        xlink:href=\"#image0\"\n        transform=\"translate(0 -0.00666667) scale(0.005 0.0266667)\"\n        />\n    </pattern>\n    <image\n        id=\"image0\"\n        width=\"200\"\n        height=\"38\"\n        xlink:href=\"data:image/png;base64,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\"\n    />\n    </defs>\n</svg>";
-
     var arrowRight = "<svg width=\"9\" height=\"11\" viewBox=\"0 0 9 16\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<path d=\"M8.70711 8.70711C9.09763 8.31658 9.09763 7.68342 8.70711 7.29289L2.34315 0.928932C1.95262 0.538408 1.31946 0.538408 0.928932 0.928932C0.538408 1.31946 0.538408 1.95262 0.928932 2.34315L6.58579 8L0.928932 13.6569C0.538408 14.0474 0.538408 14.6805 0.928932 15.0711C1.31946 15.4616 1.95262 15.4616 2.34315 15.0711L8.70711 8.70711ZM7 9H8V7H7V9Z\" fill=\"white\"/>\n</svg>";
 
     /* src/components/Button.svelte generated by Svelte v3.31.0 */
@@ -1004,8 +1009,9 @@ var app = (function () {
     			path = svg_element("path");
     			attr_dev(path, "d", "M6 36L11.7735 26L0.226498 26L6 36ZM7 27L7 4.37114e-08L5 -4.37114e-08L5 27L7 27Z");
     			attr_dev(path, "fill", path_fill_value = /*disabled*/ ctx[1] ? "#3f3f3f" : "white");
+    			attr_dev(path, "class", "svelte-1xs9sp2");
     			add_location(path, file$1, 23, 2, 381);
-    			attr_dev(svg, "class", svg_class_value = "arrow arrow_" + /*type*/ ctx[0] + " svelte-mlhs1n");
+    			attr_dev(svg, "class", svg_class_value = "arrow arrow_" + /*type*/ ctx[0] + " svelte-1xs9sp2");
     			attr_dev(svg, "width", "12");
     			attr_dev(svg, "height", "36");
     			attr_dev(svg, "viewBox", "0 0 12 36");
@@ -1031,7 +1037,7 @@ var app = (function () {
     				attr_dev(path, "fill", path_fill_value);
     			}
 
-    			if (dirty & /*type*/ 1 && svg_class_value !== (svg_class_value = "arrow arrow_" + /*type*/ ctx[0] + " svelte-mlhs1n")) {
+    			if (dirty & /*type*/ 1 && svg_class_value !== (svg_class_value = "arrow arrow_" + /*type*/ ctx[0] + " svelte-1xs9sp2")) {
     				attr_dev(svg, "class", svg_class_value);
     			}
 
@@ -1207,7 +1213,7 @@ var app = (function () {
     	const block = {
     		c: function create() {
     			div = element("div");
-    			attr_dev(div, "class", "page-point svelte-fmn42t");
+    			attr_dev(div, "class", "page-point svelte-12z2zof");
     			toggle_class(div, "current", /*current*/ ctx[0] === /*index*/ ctx[8]);
     			add_location(div, file$2, 22, 6, 406);
     		},
@@ -1327,9 +1333,9 @@ var app = (function () {
 
     			t1 = space();
     			if (if_block1) if_block1.c();
-    			attr_dev(div0, "class", "pages svelte-fmn42t");
+    			attr_dev(div0, "class", "pages svelte-12z2zof");
     			add_location(div0, file$2, 20, 2, 335);
-    			attr_dev(div1, "class", "slider svelte-fmn42t");
+    			attr_dev(div1, "class", "slider svelte-12z2zof");
     			add_location(div1, file$2, 15, 0, 225);
     		},
     		l: function claim(nodes) {
@@ -1732,13 +1738,13 @@ var app = (function () {
     			t3 = space();
     			div2 = element("div");
     			attr_dev(div0, "class", "become-volunteer__text_header svelte-1don5a8");
-    			add_location(div0, file$4, 23, 4, 504);
+    			add_location(div0, file$4, 24, 4, 561);
     			attr_dev(div1, "class", "become-volunteer__text svelte-1don5a8");
-    			add_location(div1, file$4, 22, 2, 463);
+    			add_location(div1, file$4, 23, 2, 520);
     			attr_dev(div2, "class", "become-volunteer__line svelte-1don5a8");
-    			add_location(div2, file$4, 29, 2, 705);
+    			add_location(div2, file$4, 30, 2, 762);
     			attr_dev(div3, "class", "become-volunteer svelte-1don5a8");
-    			add_location(div3, file$4, 21, 0, 402);
+    			add_location(div3, file$4, 22, 0, 459);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -1789,13 +1795,13 @@ var app = (function () {
     	let { show } = $$props;
     	let becomeVolunteer;
 
-    	onMount(() => {
-    		document.addEventListener("click", hideBecomeVolunteer);
-    		return () => document.removeEventListener("click", hideBecomeVolunteer);
+    	afterUpdate(async () => {
+    		document.addEventListener("touchstart", hideBecomeVolunteer);
+    		return () => document.removeEventListener("touchstart", hideBecomeVolunteer);
     	});
 
-    	function hideBecomeVolunteer({ target }) {
-    		if (target === becomeVolunteer) {
+    	function hideBecomeVolunteer(event) {
+    		if (becomeVolunteer && becomeVolunteer.contains(event.target)) {
     			return;
     		}
 
@@ -1820,7 +1826,8 @@ var app = (function () {
     	};
 
     	$$self.$capture_state = () => ({
-    		onMount,
+    		tick,
+    		afterUpdate,
     		Button,
     		show,
     		becomeVolunteer,
@@ -1885,13 +1892,14 @@ var app = (function () {
     			source = element("source");
     			if (source.src !== (source_src_value = "./previewcity.mp4")) attr_dev(source, "src", source_src_value);
     			attr_dev(source, "type", "video/mp4");
-    			add_location(source, file$5, 13, 4, 193);
+    			add_location(source, file$5, 14, 4, 209);
     			video.autoplay = true;
     			video.loop = true;
     			video.muted = true;
     			video.controls = "";
     			set_style(video, "height", /*height*/ ctx[0] + "px");
     			set_style(video, "width", /*width*/ ctx[1] + "px");
+    			video.playsInline = true;
     			add_location(video, file$5, 6, 2, 81);
     			attr_dev(div, "class", "video-box svelte-48d60m");
     			add_location(div, file$5, 5, 0, 55);
@@ -2003,41 +2011,38 @@ var app = (function () {
     }
 
     /* src/components/FireFlies.svelte generated by Svelte v3.31.0 */
-
     const file$6 = "src/components/FireFlies.svelte";
 
     function create_fragment$6(ctx) {
-    	let div0;
-    	let t;
     	let div1;
+    	let div0;
 
     	const block = {
     		c: function create() {
-    			div0 = element("div");
-    			t = space();
     			div1 = element("div");
-    			attr_dev(div0, "id", "box");
-    			attr_dev(div0, "class", "svelte-1t70zcu");
-    			add_location(div0, file$6, 0, 0, 0);
-    			attr_dev(div1, "id", "box2");
-    			attr_dev(div1, "class", "svelte-1t70zcu");
-    			add_location(div1, file$6, 1, 0, 17);
+    			div0 = element("div");
+    			attr_dev(div0, "class", "svelte-94a1xt");
+    			add_location(div0, file$6, 54, 2, 1144);
+    			attr_dev(div1, "id", "box");
+    			attr_dev(div1, "class", "svelte-94a1xt");
+    			add_location(div1, file$6, 53, 0, 1104);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
     		},
     		m: function mount(target, anchor) {
-    			insert_dev(target, div0, anchor);
-    			insert_dev(target, t, anchor);
     			insert_dev(target, div1, anchor);
+    			append_dev(div1, div0);
+    			/*div0_binding*/ ctx[5](div0);
+    			/*div1_binding*/ ctx[6](div1);
     		},
     		p: noop,
     		i: noop,
     		o: noop,
     		d: function destroy(detaching) {
-    			if (detaching) detach_dev(div0);
-    			if (detaching) detach_dev(t);
     			if (detaching) detach_dev(div1);
+    			/*div0_binding*/ ctx[5](null);
+    			/*div1_binding*/ ctx[6](null);
     		}
     	};
 
@@ -2052,22 +2057,130 @@ var app = (function () {
     	return block;
     }
 
-    function instance$6($$self, $$props) {
+    function linear(timeFraction) {
+    	return timeFraction;
+    }
+
+    function instance$6($$self, $$props, $$invalidate) {
     	let { $$slots: slots = {}, $$scope } = $$props;
     	validate_slots("FireFlies", slots, []);
-    	const writable_props = [];
+    	let { flyPos } = $$props;
+    	let { topFireFly } = $$props;
+    	let { leftFireFly } = $$props;
+    	let fireFly;
+    	let fireFlyBox;
+    	let fireFly2;
+
+    	onMount(() => {
+    		setInterval(updateFlyPos, 300);
+    	});
+
+    	function updateFlyPos() {
+    		$$invalidate(4, flyPos = [fireFly && fireFly.getBoundingClientRect()]); //fireFly2 && fireFly2.getBoundingClientRect(),
+    		const { left, top } = fireFly.getBoundingClientRect();
+
+    		if (left < 60) {
+    			$$invalidate(0, fireFly.style.animationName = "none", fireFly);
+    			$$invalidate(0, fireFly.style.left = 0 + "%", fireFly);
+
+    			setTimeout(() => {
+    				$$invalidate(0, fireFly.style.animationName = "spanAnimation", fireFly);
+    			});
+    		}
+
+    		if (top < 40) {
+    			$$invalidate(1, fireFlyBox.style.top = 0 + "%", fireFlyBox);
+    		}
+    	}
+
+    	const writable_props = ["flyPos", "topFireFly", "leftFireFly"];
 
     	Object.keys($$props).forEach(key => {
     		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== "$$") console.warn(`<FireFlies> was created with unknown prop '${key}'`);
     	});
 
-    	return [];
+    	function div0_binding($$value) {
+    		binding_callbacks[$$value ? "unshift" : "push"](() => {
+    			fireFly = $$value;
+    			(($$invalidate(0, fireFly), $$invalidate(2, topFireFly)), $$invalidate(3, leftFireFly));
+    		});
+    	}
+
+    	function div1_binding($$value) {
+    		binding_callbacks[$$value ? "unshift" : "push"](() => {
+    			fireFlyBox = $$value;
+    			(($$invalidate(1, fireFlyBox), $$invalidate(2, topFireFly)), $$invalidate(3, leftFireFly));
+    		});
+    	}
+
+    	$$self.$$set = $$props => {
+    		if ("flyPos" in $$props) $$invalidate(4, flyPos = $$props.flyPos);
+    		if ("topFireFly" in $$props) $$invalidate(2, topFireFly = $$props.topFireFly);
+    		if ("leftFireFly" in $$props) $$invalidate(3, leftFireFly = $$props.leftFireFly);
+    	};
+
+    	$$self.$capture_state = () => ({
+    		onMount,
+    		flyPos,
+    		topFireFly,
+    		leftFireFly,
+    		fireFly,
+    		fireFlyBox,
+    		fireFly2,
+    		updateFlyPos,
+    		linear
+    	});
+
+    	$$self.$inject_state = $$props => {
+    		if ("flyPos" in $$props) $$invalidate(4, flyPos = $$props.flyPos);
+    		if ("topFireFly" in $$props) $$invalidate(2, topFireFly = $$props.topFireFly);
+    		if ("leftFireFly" in $$props) $$invalidate(3, leftFireFly = $$props.leftFireFly);
+    		if ("fireFly" in $$props) $$invalidate(0, fireFly = $$props.fireFly);
+    		if ("fireFlyBox" in $$props) $$invalidate(1, fireFlyBox = $$props.fireFlyBox);
+    		if ("fireFly2" in $$props) fireFly2 = $$props.fireFly2;
+    	};
+
+    	if ($$props && "$$inject" in $$props) {
+    		$$self.$inject_state($$props.$$inject);
+    	}
+
+    	$$self.$$.update = () => {
+    		if ($$self.$$.dirty & /*topFireFly, leftFireFly*/ 12) {
+    			 if (topFireFly || topFireFly === 0) {
+    				$$invalidate(1, fireFlyBox.style.animationName = "none", fireFlyBox);
+    				$$invalidate(0, fireFly.style.animationName = "none", fireFly);
+    				$$invalidate(1, fireFlyBox.style.top = topFireFly * 10 + 5 + "%", fireFlyBox);
+    				$$invalidate(0, fireFly.style.left = leftFireFly * 20 + "%", fireFly);
+
+    				setTimeout(
+    					() => {
+    						$$invalidate(1, fireFlyBox.style.animationName = "boxAnimation", fireFlyBox);
+    						$$invalidate(0, fireFly.style.animationName = "spanAnimation", fireFly);
+    					},
+    					100
+    				);
+
+    				$$invalidate(2, topFireFly = null);
+    				$$invalidate(3, leftFireFly = null);
+    			}
+    		}
+    	};
+
+    	return [
+    		fireFly,
+    		fireFlyBox,
+    		topFireFly,
+    		leftFireFly,
+    		flyPos,
+    		div0_binding,
+    		div1_binding
+    	];
     }
 
     class FireFlies extends SvelteComponentDev {
     	constructor(options) {
     		super(options);
-    		init(this, options, instance$6, create_fragment$6, safe_not_equal, {});
+    		init(this, options, instance$6, create_fragment$6, safe_not_equal, { flyPos: 4, topFireFly: 2, leftFireFly: 3 });
 
     		dispatch_dev("SvelteRegisterComponent", {
     			component: this,
@@ -2075,55 +2188,182 @@ var app = (function () {
     			options,
     			id: create_fragment$6.name
     		});
+
+    		const { ctx } = this.$$;
+    		const props = options.props || {};
+
+    		if (/*flyPos*/ ctx[4] === undefined && !("flyPos" in props)) {
+    			console.warn("<FireFlies> was created without expected prop 'flyPos'");
+    		}
+
+    		if (/*topFireFly*/ ctx[2] === undefined && !("topFireFly" in props)) {
+    			console.warn("<FireFlies> was created without expected prop 'topFireFly'");
+    		}
+
+    		if (/*leftFireFly*/ ctx[3] === undefined && !("leftFireFly" in props)) {
+    			console.warn("<FireFlies> was created without expected prop 'leftFireFly'");
+    		}
+    	}
+
+    	get flyPos() {
+    		throw new Error("<FireFlies>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	set flyPos(value) {
+    		throw new Error("<FireFlies>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	get topFireFly() {
+    		throw new Error("<FireFlies>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	set topFireFly(value) {
+    		throw new Error("<FireFlies>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	get leftFireFly() {
+    		throw new Error("<FireFlies>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	set leftFireFly(value) {
+    		throw new Error("<FireFlies>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+    }
+
+    var Logo = "<svg\n    class=\"articul-media\"\n    width=\"128\"\n    height=\"24\"\n    viewBox=\"0 0 128 24\"\n    fill=\"none\"\n    xmlns=\"http://www.w3.org/2000/svg\"\n    xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n>\n    <rect width=\"128\" height=\"24\" fill=\"url(#pattern0)\" />\n    <defs>\n    <pattern\n        id=\"pattern0\"\n        patternContentUnits=\"objectBoundingBox\"\n        width=\"1\"\n        height=\"1\"\n    >\n        <use\n        xlink:href=\"#image0\"\n        transform=\"translate(0 -0.00666667) scale(0.005 0.0266667)\"\n        />\n    </pattern>\n    <image\n        id=\"image0\"\n        width=\"200\"\n        height=\"38\"\n        xlink:href=\"data:image/png;base64,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\"\n    />\n    </defs>\n</svg>";
+
+    /* src/components/CompanyData.svelte generated by Svelte v3.31.0 */
+    const file$7 = "src/components/CompanyData.svelte";
+
+    function create_fragment$7(ctx) {
+    	let div1;
+    	let div0;
+    	let a0;
+    	let t1;
+    	let a1;
+
+    	const block = {
+    		c: function create() {
+    			div1 = element("div");
+    			div0 = element("div");
+    			a0 = element("a");
+    			a0.textContent = "Liza Alert";
+    			t1 = space();
+    			a1 = element("a");
+    			attr_dev(a0, "href", "https://lizaalert.org/");
+    			attr_dev(a0, "class", "text_logo svelte-13s6hhh");
+    			add_location(a0, file$7, 6, 4, 117);
+    			attr_dev(div0, "class", "text_logo svelte-13s6hhh");
+    			add_location(div0, file$7, 5, 2, 89);
+    			attr_dev(a1, "href", "https://articulmedia.ru/");
+    			attr_dev(a1, "class", "articul-media svelte-13s6hhh");
+    			add_location(a1, file$7, 8, 2, 194);
+    			attr_dev(div1, "class", "company-data svelte-13s6hhh");
+    			add_location(div1, file$7, 4, 0, 60);
+    		},
+    		l: function claim(nodes) {
+    			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, div1, anchor);
+    			append_dev(div1, div0);
+    			append_dev(div0, a0);
+    			append_dev(div1, t1);
+    			append_dev(div1, a1);
+    			a1.innerHTML = Logo;
+    		},
+    		p: noop,
+    		i: noop,
+    		o: noop,
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(div1);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_fragment$7.name,
+    		type: "component",
+    		source: "",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    function instance$7($$self, $$props, $$invalidate) {
+    	let { $$slots: slots = {}, $$scope } = $$props;
+    	validate_slots("CompanyData", slots, []);
+    	const writable_props = [];
+
+    	Object.keys($$props).forEach(key => {
+    		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== "$$") console.warn(`<CompanyData> was created with unknown prop '${key}'`);
+    	});
+
+    	$$self.$capture_state = () => ({ Logo });
+    	return [];
+    }
+
+    class CompanyData extends SvelteComponentDev {
+    	constructor(options) {
+    		super(options);
+    		init(this, options, instance$7, create_fragment$7, safe_not_equal, {});
+
+    		dispatch_dev("SvelteRegisterComponent", {
+    			component: this,
+    			tagName: "CompanyData",
+    			options,
+    			id: create_fragment$7.name
+    		});
     	}
     }
 
     /* src/App.svelte generated by Svelte v3.31.0 */
 
     const { window: window_1 } = globals;
-    const file$7 = "src/App.svelte";
+    const file$8 = "src/App.svelte";
 
     function get_each_context_3(ctx, list, i) {
     	const child_ctx = ctx.slice();
-    	child_ctx[35] = list[i];
-    	child_ctx[37] = i;
+    	child_ctx[42] = list[i];
+    	child_ctx[44] = i;
     	return child_ctx;
     }
 
     function get_each_context_4(ctx, list, i) {
     	const child_ctx = ctx.slice();
-    	child_ctx[38] = list[i];
+    	child_ctx[45] = list[i];
     	return child_ctx;
     }
 
     function get_each_context_5(ctx, list, i) {
     	const child_ctx = ctx.slice();
-    	child_ctx[41] = list[i];
-    	child_ctx[43] = i;
+    	child_ctx[48] = list[i];
+    	child_ctx[50] = i;
     	return child_ctx;
     }
 
     function get_each_context$1(ctx, list, i) {
     	const child_ctx = ctx.slice();
-    	child_ctx[35] = list[i];
-    	child_ctx[37] = i;
+    	child_ctx[42] = list[i];
+    	child_ctx[44] = i;
     	return child_ctx;
     }
 
     function get_each_context_1(ctx, list, i) {
     	const child_ctx = ctx.slice();
-    	child_ctx[38] = list[i];
+    	child_ctx[45] = list[i];
     	return child_ctx;
     }
 
     function get_each_context_2(ctx, list, i) {
     	const child_ctx = ctx.slice();
-    	child_ctx[41] = list[i];
-    	child_ctx[43] = i;
+    	child_ctx[48] = list[i];
+    	child_ctx[50] = i;
     	return child_ctx;
     }
 
-    // (274:2) {:else}
+    // (268:2) {:else}
     function create_else_block(ctx) {
     	let div0;
     	let div0_resize_listener;
@@ -2134,26 +2374,26 @@ var app = (function () {
     	let span;
     	let t3;
     	let t4;
-    	let t5;
     	let div2;
     	let slider;
     	let updating_current;
-    	let t6;
-    	let div5;
-    	let div4;
+    	let t5;
     	let div3;
-    	let t8;
-    	let html_tag;
-    	let t9;
-    	let div6;
+    	let companydata;
+    	let t6;
+    	let div4;
     	let socials;
-    	let t10;
-    	let div7;
+    	let t7;
+    	let div5;
     	let button;
-    	let t11;
-    	let t12;
+    	let t8;
+    	let t9;
     	let fireflies;
-    	let t13;
+    	let updating_flyPos;
+    	let updating_topFireFly;
+    	let updating_leftFireFly;
+    	let t10;
+    	let t11;
     	let if_block2_anchor;
     	let current;
     	let each_value_3 = /*pages*/ ctx[0];
@@ -2165,27 +2405,26 @@ var app = (function () {
     	}
 
     	videobackground = new VideoBackground({
-    			props: { height: /*containerHeight*/ ctx[5] },
+    			props: { height: /*containerHeight*/ ctx[7] },
     			$$inline: true
     		});
 
-    	let if_block0 = /*current*/ ctx[2] > 0 && /*current*/ ctx[2] < 5 && create_if_block_7(ctx);
-
     	function slider_current_binding_1(value) {
-    		/*slider_current_binding_1*/ ctx[25].call(null, value);
+    		/*slider_current_binding_1*/ ctx[31].call(null, value);
     	}
 
     	let slider_props = {
-    		pages: /*pagesLength*/ ctx[11],
-    		isMobile: /*isMobile*/ ctx[12]
+    		pages: /*pagesLength*/ ctx[14],
+    		isMobile: /*isMobile*/ ctx[15]
     	};
 
-    	if (/*current*/ ctx[2] !== void 0) {
-    		slider_props.current = /*current*/ ctx[2];
+    	if (/*current*/ ctx[3] !== void 0) {
+    		slider_props.current = /*current*/ ctx[3];
     	}
 
     	slider = new Slider({ props: slider_props, $$inline: true });
     	binding_callbacks.push(() => bind(slider, "current", slider_current_binding_1));
+    	companydata = new CompanyData({ $$inline: true });
     	socials = new Socials({ $$inline: true });
 
     	button = new Button({
@@ -2193,9 +2432,40 @@ var app = (function () {
     			$$inline: true
     		});
 
-    	let if_block1 = /*current*/ ctx[2] === 0 && create_if_block_6(ctx);
-    	fireflies = new FireFlies({ $$inline: true });
-    	let if_block2 = /*showBecomeVolunterBlock*/ ctx[8] && create_if_block_5(ctx);
+    	let if_block0 = /*current*/ ctx[3] === 0 && create_if_block_7(ctx);
+
+    	function fireflies_flyPos_binding(value) {
+    		/*fireflies_flyPos_binding*/ ctx[33].call(null, value);
+    	}
+
+    	function fireflies_topFireFly_binding(value) {
+    		/*fireflies_topFireFly_binding*/ ctx[34].call(null, value);
+    	}
+
+    	function fireflies_leftFireFly_binding(value) {
+    		/*fireflies_leftFireFly_binding*/ ctx[35].call(null, value);
+    	}
+
+    	let fireflies_props = {};
+
+    	if (/*flyPos*/ ctx[5] !== void 0) {
+    		fireflies_props.flyPos = /*flyPos*/ ctx[5];
+    	}
+
+    	if (/*topFireFly*/ ctx[12] !== void 0) {
+    		fireflies_props.topFireFly = /*topFireFly*/ ctx[12];
+    	}
+
+    	if (/*leftFireFly*/ ctx[13] !== void 0) {
+    		fireflies_props.leftFireFly = /*leftFireFly*/ ctx[13];
+    	}
+
+    	fireflies = new FireFlies({ props: fireflies_props, $$inline: true });
+    	binding_callbacks.push(() => bind(fireflies, "flyPos", fireflies_flyPos_binding));
+    	binding_callbacks.push(() => bind(fireflies, "topFireFly", fireflies_topFireFly_binding));
+    	binding_callbacks.push(() => bind(fireflies, "leftFireFly", fireflies_leftFireFly_binding));
+    	let if_block1 = /*current*/ ctx[3] > 0 && /*current*/ ctx[3] < 5 && create_if_block_6(ctx);
+    	let if_block2 = /*showBecomeVolunterBlock*/ ctx[9] && create_if_block_5(ctx);
 
     	const block = {
     		c: function create() {
@@ -2213,70 +2483,62 @@ var app = (function () {
     			span.textContent = "ОДЕТЬ";
     			t3 = text(" НАДЕЖДУ");
     			t4 = space();
-    			if (if_block0) if_block0.c();
-    			t5 = space();
     			div2 = element("div");
     			create_component(slider.$$.fragment);
-    			t6 = space();
-    			div5 = element("div");
-    			div4 = element("div");
+    			t5 = space();
     			div3 = element("div");
-    			div3.textContent = "Lisa Alert";
-    			t8 = space();
-    			t9 = space();
-    			div6 = element("div");
+    			create_component(companydata.$$.fragment);
+    			t6 = space();
+    			div4 = element("div");
     			create_component(socials.$$.fragment);
-    			t10 = space();
-    			div7 = element("div");
+    			t7 = space();
+    			div5 = element("div");
     			create_component(button.$$.fragment);
-    			t11 = space();
-    			if (if_block1) if_block1.c();
-    			t12 = space();
+    			t8 = space();
+    			if (if_block0) if_block0.c();
+    			t9 = space();
     			create_component(fireflies.$$.fragment);
-    			t13 = space();
+    			t10 = space();
+    			if (if_block1) if_block1.c();
+    			t11 = space();
     			if (if_block2) if_block2.c();
     			if_block2_anchor = empty();
-    			attr_dev(div0, "class", "container svelte-18lz0m9");
-    			set_style(div0, "transform", "translate3d(0px, -" + /*current*/ ctx[2] * 100 + "%, 0px)");
+    			attr_dev(div0, "class", "container svelte-1eib5ud");
+    			set_style(div0, "transform", "translate3d(0px, -" + /*current*/ ctx[3] * 100 + "%, 0px)");
     			set_style(div0, "transition", "transform 500ms ease 0s");
-    			add_render_callback(() => /*div0_elementresize_handler_1*/ ctx[24].call(div0));
-    			add_location(div0, file$7, 274, 4, 7003);
-    			attr_dev(span, "class", "logo_red svelte-18lz0m9");
-    			add_location(span, file$7, 319, 22, 8556);
-    			attr_dev(div1, "class", "logo svelte-18lz0m9");
-    			add_location(div1, file$7, 319, 4, 8538);
-    			attr_dev(div2, "class", "slider-wrapper svelte-18lz0m9");
-    			set_style(div2, "margin-top", /*current*/ ctx[2] > 0 && /*current*/ ctx[2] < 5 && "0px" || "2px");
-    			add_location(div2, file$7, 326, 4, 8767);
-    			attr_dev(div3, "class", "text_logo svelte-18lz0m9");
-    			add_location(div3, file$7, 334, 8, 9031);
-    			html_tag = new HtmlTag(null);
-    			attr_dev(div4, "class", "company-data svelte-18lz0m9");
-    			add_location(div4, file$7, 333, 6, 8996);
-    			attr_dev(div5, "class", "company svelte-18lz0m9");
-    			add_location(div5, file$7, 332, 4, 8968);
-    			attr_dev(div6, "class", "socials svelte-18lz0m9");
-    			add_location(div6, file$7, 338, 4, 9120);
-    			attr_dev(div7, "class", "buttons svelte-18lz0m9");
-    			set_style(div7, "margin-left", /*current*/ ctx[2] > 0 && /*current*/ ctx[2] < 5 && "3px");
-    			set_style(div7, "background", /*current*/ ctx[2] > 0 && /*current*/ ctx[2] < 5 && "#2d3031" || "");
+    			add_render_callback(() => /*div0_elementresize_handler_1*/ ctx[29].call(div0));
+    			add_location(div0, file$8, 268, 4, 6899);
+    			attr_dev(span, "class", "logo_red svelte-1eib5ud");
+    			add_location(span, file$8, 315, 22, 8533);
+    			attr_dev(div1, "class", "logo svelte-1eib5ud");
+    			add_location(div1, file$8, 315, 4, 8515);
+    			attr_dev(div2, "class", "slider-wrapper svelte-1eib5ud");
+    			set_style(div2, "margin-top", /*current*/ ctx[3] > 0 && /*current*/ ctx[3] < 5 && "0px" || "2px");
+    			add_location(div2, file$8, 316, 4, 8587);
+    			attr_dev(div3, "class", "company svelte-1eib5ud");
+    			add_location(div3, file$8, 322, 4, 8788);
+    			attr_dev(div4, "class", "socials svelte-1eib5ud");
+    			add_location(div4, file$8, 325, 4, 8847);
+    			attr_dev(div5, "class", "buttons svelte-1eib5ud");
+    			set_style(div5, "margin-left", /*current*/ ctx[3] > 0 && /*current*/ ctx[3] < 5 && "3px");
+    			set_style(div5, "background", /*current*/ ctx[3] > 0 && /*current*/ ctx[3] < 5 && "#2d3031" || "");
 
-    			set_style(div7, "top", (/*current*/ ctx[2] === 0 || /*current*/ ctx[2] === 5
+    			set_style(div5, "top", (/*current*/ ctx[3] === 0 || /*current*/ ctx[3] === 5
     			? 56.5
     			: 0) + "%");
 
-    			set_style(div7, "left", (/*current*/ ctx[2] === 0 || /*current*/ ctx[2] === 5
+    			set_style(div5, "left", (/*current*/ ctx[3] === 0 || /*current*/ ctx[3] === 5
     			? 7.5
     			: 200) + "%");
 
-    			set_style(div7, "align-items", /*current*/ ctx[2] > 0 && /*current*/ ctx[2] < 5 && "flex-start" || "center");
+    			set_style(div5, "align-items", /*current*/ ctx[3] > 0 && /*current*/ ctx[3] < 5 && "flex-start" || "center");
 
-    			set_style(div7, "justify-content", /*current*/ ctx[2] === 0
+    			set_style(div5, "justify-content", /*current*/ ctx[3] === 0
     			? "space-between"
-    			: /*current*/ ctx[2] === 5 ? "center" : "flex-end");
+    			: /*current*/ ctx[3] === 5 ? "center" : "flex-end");
 
-    			set_style(div7, "height", /*current*/ ctx[2] === 5 && "13%" && /*current*/ ctx[2] === 0 && "16%");
-    			add_location(div7, file$7, 341, 4, 9175);
+    			set_style(div5, "height", /*current*/ ctx[3] === 5 && "13%" && /*current*/ ctx[3] === 0 && "16%");
+    			add_location(div5, file$8, 328, 4, 8902);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div0, anchor);
@@ -2285,7 +2547,8 @@ var app = (function () {
     				each_blocks[i].m(div0, null);
     			}
 
-    			div0_resize_listener = add_resize_listener(div0, /*div0_elementresize_handler_1*/ ctx[24].bind(div0));
+    			div0_resize_listener = add_resize_listener(div0, /*div0_elementresize_handler_1*/ ctx[29].bind(div0));
+    			/*div0_binding_1*/ ctx[30](div0);
     			insert_dev(target, t0, anchor);
     			mount_component(videobackground, target, anchor);
     			insert_dev(target, t1, anchor);
@@ -2293,33 +2556,30 @@ var app = (function () {
     			append_dev(div1, span);
     			append_dev(div1, t3);
     			insert_dev(target, t4, anchor);
-    			if (if_block0) if_block0.m(target, anchor);
-    			insert_dev(target, t5, anchor);
     			insert_dev(target, div2, anchor);
     			mount_component(slider, div2, null);
+    			insert_dev(target, t5, anchor);
+    			insert_dev(target, div3, anchor);
+    			mount_component(companydata, div3, null);
     			insert_dev(target, t6, anchor);
+    			insert_dev(target, div4, anchor);
+    			mount_component(socials, div4, null);
+    			insert_dev(target, t7, anchor);
     			insert_dev(target, div5, anchor);
-    			append_dev(div5, div4);
-    			append_dev(div4, div3);
-    			append_dev(div4, t8);
-    			html_tag.m(Logo, div4);
+    			mount_component(button, div5, null);
+    			append_dev(div5, t8);
+    			if (if_block0) if_block0.m(div5, null);
     			insert_dev(target, t9, anchor);
-    			insert_dev(target, div6, anchor);
-    			mount_component(socials, div6, null);
-    			insert_dev(target, t10, anchor);
-    			insert_dev(target, div7, anchor);
-    			mount_component(button, div7, null);
-    			append_dev(div7, t11);
-    			if (if_block1) if_block1.m(div7, null);
-    			insert_dev(target, t12, anchor);
     			mount_component(fireflies, target, anchor);
-    			insert_dev(target, t13, anchor);
+    			insert_dev(target, t10, anchor);
+    			if (if_block1) if_block1.m(target, anchor);
+    			insert_dev(target, t11, anchor);
     			if (if_block2) if_block2.m(target, anchor);
     			insert_dev(target, if_block2_anchor, anchor);
     			current = true;
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty[0] & /*current, pages, disableGlitch, glitchAnimation, emptySquareBorder, inVisibleBlocks*/ 34437) {
+    			if (dirty[0] & /*current, pages, disableGlitch, glitchAnimation, emptySquareBorder, inVisibleBlocks, setFireFliesCoords*/ 2362633) {
     				each_value_3 = /*pages*/ ctx[0];
     				validate_each_argument(each_value_3);
     				let i;
@@ -2343,26 +2603,41 @@ var app = (function () {
     				each_blocks.length = each_value_3.length;
     			}
 
-    			if (!current || dirty[0] & /*current*/ 4) {
-    				set_style(div0, "transform", "translate3d(0px, -" + /*current*/ ctx[2] * 100 + "%, 0px)");
+    			if (!current || dirty[0] & /*current*/ 8) {
+    				set_style(div0, "transform", "translate3d(0px, -" + /*current*/ ctx[3] * 100 + "%, 0px)");
     			}
 
     			const videobackground_changes = {};
-    			if (dirty[0] & /*containerHeight*/ 32) videobackground_changes.height = /*containerHeight*/ ctx[5];
+    			if (dirty[0] & /*containerHeight*/ 128) videobackground_changes.height = /*containerHeight*/ ctx[7];
     			videobackground.$set(videobackground_changes);
+    			const slider_changes = {};
+    			if (dirty[0] & /*pagesLength*/ 16384) slider_changes.pages = /*pagesLength*/ ctx[14];
+    			if (dirty[0] & /*isMobile*/ 32768) slider_changes.isMobile = /*isMobile*/ ctx[15];
 
-    			if (/*current*/ ctx[2] > 0 && /*current*/ ctx[2] < 5) {
+    			if (!updating_current && dirty[0] & /*current*/ 8) {
+    				updating_current = true;
+    				slider_changes.current = /*current*/ ctx[3];
+    				add_flush_callback(() => updating_current = false);
+    			}
+
+    			slider.$set(slider_changes);
+
+    			if (!current || dirty[0] & /*current*/ 8) {
+    				set_style(div2, "margin-top", /*current*/ ctx[3] > 0 && /*current*/ ctx[3] < 5 && "0px" || "2px");
+    			}
+
+    			if (/*current*/ ctx[3] === 0) {
     				if (if_block0) {
     					if_block0.p(ctx, dirty);
 
-    					if (dirty[0] & /*current*/ 4) {
+    					if (dirty[0] & /*current*/ 8) {
     						transition_in(if_block0, 1);
     					}
     				} else {
     					if_block0 = create_if_block_7(ctx);
     					if_block0.c();
     					transition_in(if_block0, 1);
-    					if_block0.m(t5.parentNode, t5);
+    					if_block0.m(div5, null);
     				}
     			} else if (if_block0) {
     				group_outros();
@@ -2374,34 +2649,74 @@ var app = (function () {
     				check_outros();
     			}
 
-    			const slider_changes = {};
-    			if (dirty[0] & /*pagesLength*/ 2048) slider_changes.pages = /*pagesLength*/ ctx[11];
-    			if (dirty[0] & /*isMobile*/ 4096) slider_changes.isMobile = /*isMobile*/ ctx[12];
-
-    			if (!updating_current && dirty[0] & /*current*/ 4) {
-    				updating_current = true;
-    				slider_changes.current = /*current*/ ctx[2];
-    				add_flush_callback(() => updating_current = false);
+    			if (!current || dirty[0] & /*current*/ 8) {
+    				set_style(div5, "margin-left", /*current*/ ctx[3] > 0 && /*current*/ ctx[3] < 5 && "3px");
     			}
 
-    			slider.$set(slider_changes);
-
-    			if (!current || dirty[0] & /*current*/ 4) {
-    				set_style(div2, "margin-top", /*current*/ ctx[2] > 0 && /*current*/ ctx[2] < 5 && "0px" || "2px");
+    			if (!current || dirty[0] & /*current*/ 8) {
+    				set_style(div5, "background", /*current*/ ctx[3] > 0 && /*current*/ ctx[3] < 5 && "#2d3031" || "");
     			}
 
-    			if (/*current*/ ctx[2] === 0) {
+    			if (!current || dirty[0] & /*current*/ 8) {
+    				set_style(div5, "top", (/*current*/ ctx[3] === 0 || /*current*/ ctx[3] === 5
+    				? 56.5
+    				: 0) + "%");
+    			}
+
+    			if (!current || dirty[0] & /*current*/ 8) {
+    				set_style(div5, "left", (/*current*/ ctx[3] === 0 || /*current*/ ctx[3] === 5
+    				? 7.5
+    				: 200) + "%");
+    			}
+
+    			if (!current || dirty[0] & /*current*/ 8) {
+    				set_style(div5, "align-items", /*current*/ ctx[3] > 0 && /*current*/ ctx[3] < 5 && "flex-start" || "center");
+    			}
+
+    			if (!current || dirty[0] & /*current*/ 8) {
+    				set_style(div5, "justify-content", /*current*/ ctx[3] === 0
+    				? "space-between"
+    				: /*current*/ ctx[3] === 5 ? "center" : "flex-end");
+    			}
+
+    			if (!current || dirty[0] & /*current*/ 8) {
+    				set_style(div5, "height", /*current*/ ctx[3] === 5 && "13%" && /*current*/ ctx[3] === 0 && "16%");
+    			}
+
+    			const fireflies_changes = {};
+
+    			if (!updating_flyPos && dirty[0] & /*flyPos*/ 32) {
+    				updating_flyPos = true;
+    				fireflies_changes.flyPos = /*flyPos*/ ctx[5];
+    				add_flush_callback(() => updating_flyPos = false);
+    			}
+
+    			if (!updating_topFireFly && dirty[0] & /*topFireFly*/ 4096) {
+    				updating_topFireFly = true;
+    				fireflies_changes.topFireFly = /*topFireFly*/ ctx[12];
+    				add_flush_callback(() => updating_topFireFly = false);
+    			}
+
+    			if (!updating_leftFireFly && dirty[0] & /*leftFireFly*/ 8192) {
+    				updating_leftFireFly = true;
+    				fireflies_changes.leftFireFly = /*leftFireFly*/ ctx[13];
+    				add_flush_callback(() => updating_leftFireFly = false);
+    			}
+
+    			fireflies.$set(fireflies_changes);
+
+    			if (/*current*/ ctx[3] > 0 && /*current*/ ctx[3] < 5) {
     				if (if_block1) {
     					if_block1.p(ctx, dirty);
 
-    					if (dirty[0] & /*current*/ 4) {
+    					if (dirty[0] & /*current*/ 8) {
     						transition_in(if_block1, 1);
     					}
     				} else {
     					if_block1 = create_if_block_6(ctx);
     					if_block1.c();
     					transition_in(if_block1, 1);
-    					if_block1.m(div7, null);
+    					if_block1.m(t11.parentNode, t11);
     				}
     			} else if (if_block1) {
     				group_outros();
@@ -2413,45 +2728,11 @@ var app = (function () {
     				check_outros();
     			}
 
-    			if (!current || dirty[0] & /*current*/ 4) {
-    				set_style(div7, "margin-left", /*current*/ ctx[2] > 0 && /*current*/ ctx[2] < 5 && "3px");
-    			}
-
-    			if (!current || dirty[0] & /*current*/ 4) {
-    				set_style(div7, "background", /*current*/ ctx[2] > 0 && /*current*/ ctx[2] < 5 && "#2d3031" || "");
-    			}
-
-    			if (!current || dirty[0] & /*current*/ 4) {
-    				set_style(div7, "top", (/*current*/ ctx[2] === 0 || /*current*/ ctx[2] === 5
-    				? 56.5
-    				: 0) + "%");
-    			}
-
-    			if (!current || dirty[0] & /*current*/ 4) {
-    				set_style(div7, "left", (/*current*/ ctx[2] === 0 || /*current*/ ctx[2] === 5
-    				? 7.5
-    				: 200) + "%");
-    			}
-
-    			if (!current || dirty[0] & /*current*/ 4) {
-    				set_style(div7, "align-items", /*current*/ ctx[2] > 0 && /*current*/ ctx[2] < 5 && "flex-start" || "center");
-    			}
-
-    			if (!current || dirty[0] & /*current*/ 4) {
-    				set_style(div7, "justify-content", /*current*/ ctx[2] === 0
-    				? "space-between"
-    				: /*current*/ ctx[2] === 5 ? "center" : "flex-end");
-    			}
-
-    			if (!current || dirty[0] & /*current*/ 4) {
-    				set_style(div7, "height", /*current*/ ctx[2] === 5 && "13%" && /*current*/ ctx[2] === 0 && "16%");
-    			}
-
-    			if (/*showBecomeVolunterBlock*/ ctx[8]) {
+    			if (/*showBecomeVolunterBlock*/ ctx[9]) {
     				if (if_block2) {
     					if_block2.p(ctx, dirty);
 
-    					if (dirty[0] & /*showBecomeVolunterBlock*/ 256) {
+    					if (dirty[0] & /*showBecomeVolunterBlock*/ 512) {
     						transition_in(if_block2, 1);
     					}
     				} else {
@@ -2473,23 +2754,25 @@ var app = (function () {
     		i: function intro(local) {
     			if (current) return;
     			transition_in(videobackground.$$.fragment, local);
-    			transition_in(if_block0);
     			transition_in(slider.$$.fragment, local);
+    			transition_in(companydata.$$.fragment, local);
     			transition_in(socials.$$.fragment, local);
     			transition_in(button.$$.fragment, local);
-    			transition_in(if_block1);
+    			transition_in(if_block0);
     			transition_in(fireflies.$$.fragment, local);
+    			transition_in(if_block1);
     			transition_in(if_block2);
     			current = true;
     		},
     		o: function outro(local) {
     			transition_out(videobackground.$$.fragment, local);
-    			transition_out(if_block0);
     			transition_out(slider.$$.fragment, local);
+    			transition_out(companydata.$$.fragment, local);
     			transition_out(socials.$$.fragment, local);
     			transition_out(button.$$.fragment, local);
-    			transition_out(if_block1);
+    			transition_out(if_block0);
     			transition_out(fireflies.$$.fragment, local);
+    			transition_out(if_block1);
     			transition_out(if_block2);
     			current = false;
     		},
@@ -2497,27 +2780,29 @@ var app = (function () {
     			if (detaching) detach_dev(div0);
     			destroy_each(each_blocks, detaching);
     			div0_resize_listener();
+    			/*div0_binding_1*/ ctx[30](null);
     			if (detaching) detach_dev(t0);
     			destroy_component(videobackground, detaching);
     			if (detaching) detach_dev(t1);
     			if (detaching) detach_dev(div1);
     			if (detaching) detach_dev(t4);
-    			if (if_block0) if_block0.d(detaching);
-    			if (detaching) detach_dev(t5);
     			if (detaching) detach_dev(div2);
     			destroy_component(slider);
+    			if (detaching) detach_dev(t5);
+    			if (detaching) detach_dev(div3);
+    			destroy_component(companydata);
     			if (detaching) detach_dev(t6);
-    			if (detaching) detach_dev(div5);
-    			if (detaching) detach_dev(t9);
-    			if (detaching) detach_dev(div6);
+    			if (detaching) detach_dev(div4);
     			destroy_component(socials);
-    			if (detaching) detach_dev(t10);
-    			if (detaching) detach_dev(div7);
+    			if (detaching) detach_dev(t7);
+    			if (detaching) detach_dev(div5);
     			destroy_component(button);
-    			if (if_block1) if_block1.d();
-    			if (detaching) detach_dev(t12);
+    			if (if_block0) if_block0.d();
+    			if (detaching) detach_dev(t9);
     			destroy_component(fireflies, detaching);
-    			if (detaching) detach_dev(t13);
+    			if (detaching) detach_dev(t10);
+    			if (if_block1) if_block1.d(detaching);
+    			if (detaching) detach_dev(t11);
     			if (if_block2) if_block2.d(detaching);
     			if (detaching) detach_dev(if_block2_anchor);
     		}
@@ -2527,14 +2812,14 @@ var app = (function () {
     		block,
     		id: create_else_block.name,
     		type: "else",
-    		source: "(274:2) {:else}",
+    		source: "(268:2) {:else}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (193:2) {#if !isMobile}
+    // (190:2) {#if !isMobile}
     function create_if_block$2(ctx) {
     	let div0;
     	let div0_resize_listener;
@@ -2549,17 +2834,14 @@ var app = (function () {
     	let slider;
     	let updating_current;
     	let t5;
-    	let div5;
+    	let div3;
     	let socials;
     	let t6;
+    	let companydata;
+    	let t7;
     	let div4;
-    	let div3;
-    	let t8;
-    	let html_tag;
-    	let t9;
-    	let div6;
     	let button;
-    	let t10;
+    	let t8;
     	let current;
     	let each_value = /*pages*/ ctx[0];
     	validate_each_argument(each_value);
@@ -2570,30 +2852,31 @@ var app = (function () {
     	}
 
     	videobackground = new VideoBackground({
-    			props: { width: /*containerWidth*/ ctx[4] + 200 },
+    			props: { width: /*containerWidth*/ ctx[6] + 200 },
     			$$inline: true
     		});
 
     	function slider_current_binding(value) {
-    		/*slider_current_binding*/ ctx[22].call(null, value);
+    		/*slider_current_binding*/ ctx[26].call(null, value);
     	}
 
-    	let slider_props = { pages: /*pagesLength*/ ctx[11] };
+    	let slider_props = { pages: /*pagesLength*/ ctx[14] };
 
-    	if (/*current*/ ctx[2] !== void 0) {
-    		slider_props.current = /*current*/ ctx[2];
+    	if (/*current*/ ctx[3] !== void 0) {
+    		slider_props.current = /*current*/ ctx[3];
     	}
 
     	slider = new Slider({ props: slider_props, $$inline: true });
     	binding_callbacks.push(() => bind(slider, "current", slider_current_binding));
     	socials = new Socials({ $$inline: true });
+    	companydata = new CompanyData({ $$inline: true });
 
     	button = new Button({
     			props: { color: "red", text: "Стать добровольцем" },
     			$$inline: true
     		});
 
-    	let if_block = /*current*/ ctx[2] === 0 && create_if_block_1$1(ctx);
+    	let if_block = /*current*/ ctx[3] === 0 && create_if_block_1$1(ctx);
 
     	const block = {
     		c: function create() {
@@ -2614,55 +2897,47 @@ var app = (function () {
     			div2 = element("div");
     			create_component(slider.$$.fragment);
     			t5 = space();
-    			div5 = element("div");
+    			div3 = element("div");
     			create_component(socials.$$.fragment);
     			t6 = space();
+    			create_component(companydata.$$.fragment);
+    			t7 = space();
     			div4 = element("div");
-    			div3 = element("div");
-    			div3.textContent = "Lisa Alert";
-    			t8 = space();
-    			t9 = space();
-    			div6 = element("div");
     			create_component(button.$$.fragment);
-    			t10 = space();
+    			t8 = space();
     			if (if_block) if_block.c();
-    			attr_dev(div0, "class", "container svelte-18lz0m9");
-    			set_style(div0, "transform", "translate3d(0px, -" + /*current*/ ctx[2] * 100 + "%, 0px)");
+    			attr_dev(div0, "class", "container svelte-1eib5ud");
+    			set_style(div0, "transform", "translate3d(0px, -" + /*current*/ ctx[3] * 100 + "%, 0px)");
     			set_style(div0, "transition", "transform 1000ms ease 0s");
-    			add_render_callback(() => /*div0_elementresize_handler*/ ctx[20].call(div0));
-    			add_location(div0, file$7, 193, 4, 4346);
-    			attr_dev(span, "class", "logo_red svelte-18lz0m9");
-    			add_location(span, file$7, 240, 22, 5953);
-    			attr_dev(div1, "class", "logo svelte-18lz0m9");
-    			add_location(div1, file$7, 240, 4, 5935);
-    			attr_dev(div2, "class", "slider-wrapper svelte-18lz0m9");
-    			set_style(div2, "margin-top", /*current*/ ctx[2] > 0 && /*current*/ ctx[2] < 5 && "0px" || "2px");
-    			add_location(div2, file$7, 242, 4, 6008);
-    			attr_dev(div3, "class", "text_logo svelte-18lz0m9");
-    			add_location(div3, file$7, 251, 8, 6270);
-    			html_tag = new HtmlTag(null);
-    			attr_dev(div4, "class", "company-data svelte-18lz0m9");
-    			add_location(div4, file$7, 250, 6, 6235);
-    			attr_dev(div5, "class", "company svelte-18lz0m9");
-    			add_location(div5, file$7, 248, 4, 6189);
-    			attr_dev(div6, "class", "buttons svelte-18lz0m9");
-    			set_style(div6, "margin-left", /*current*/ ctx[2] > 0 && /*current*/ ctx[2] < 5 && "3px");
+    			add_render_callback(() => /*div0_elementresize_handler*/ ctx[24].call(div0));
+    			add_location(div0, file$8, 190, 4, 4335);
+    			attr_dev(span, "class", "logo_red svelte-1eib5ud");
+    			add_location(span, file$8, 237, 22, 5942);
+    			attr_dev(div1, "class", "logo svelte-1eib5ud");
+    			add_location(div1, file$8, 237, 4, 5924);
+    			attr_dev(div2, "class", "slider-wrapper svelte-1eib5ud");
+    			set_style(div2, "margin-top", /*current*/ ctx[3] > 0 && /*current*/ ctx[3] < 5 && "0px" || "2px");
+    			add_location(div2, file$8, 239, 4, 5997);
+    			attr_dev(div3, "class", "company svelte-1eib5ud");
+    			add_location(div3, file$8, 245, 4, 6178);
+    			attr_dev(div4, "class", "buttons svelte-1eib5ud");
+    			set_style(div4, "margin-left", /*current*/ ctx[3] > 0 && /*current*/ ctx[3] < 5 && "3px");
 
-    			set_style(div6, "top", (/*current*/ ctx[2] === 0 || /*current*/ ctx[2] === 5
+    			set_style(div4, "top", (/*current*/ ctx[3] === 0 || /*current*/ ctx[3] === 5
     			? 50
     			: 0) + "%");
 
-    			set_style(div6, "left", (/*current*/ ctx[2] === 0
+    			set_style(div4, "left", (/*current*/ ctx[3] === 0
     			? 18.75
-    			: /*current*/ ctx[2] === 5 ? 62.5 : 75) + "%");
+    			: /*current*/ ctx[3] === 5 ? 62.5 : 75) + "%");
 
-    			set_style(div6, "align-items", /*current*/ ctx[2] > 0 && /*current*/ ctx[2] < 5 && "flex-start" || "center");
+    			set_style(div4, "align-items", /*current*/ ctx[3] > 0 && /*current*/ ctx[3] < 5 && "flex-start" || "center");
 
-    			set_style(div6, "justify-content", /*current*/ ctx[2] === 0
+    			set_style(div4, "justify-content", /*current*/ ctx[3] === 0
     			? "flex-start"
-    			: /*current*/ ctx[2] === 5 ? "center" : "flex-end");
+    			: /*current*/ ctx[3] === 5 ? "center" : "flex-end");
 
-    			add_location(div6, file$7, 255, 4, 6359);
+    			add_location(div4, file$8, 249, 4, 6255);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div0, anchor);
@@ -2671,8 +2946,8 @@ var app = (function () {
     				each_blocks[i].m(div0, null);
     			}
 
-    			div0_resize_listener = add_resize_listener(div0, /*div0_elementresize_handler*/ ctx[20].bind(div0));
-    			/*div0_binding*/ ctx[21](div0);
+    			div0_resize_listener = add_resize_listener(div0, /*div0_elementresize_handler*/ ctx[24].bind(div0));
+    			/*div0_binding*/ ctx[25](div0);
     			insert_dev(target, t0, anchor);
     			mount_component(videobackground, target, anchor);
     			insert_dev(target, t1, anchor);
@@ -2683,22 +2958,19 @@ var app = (function () {
     			insert_dev(target, div2, anchor);
     			mount_component(slider, div2, null);
     			insert_dev(target, t5, anchor);
-    			insert_dev(target, div5, anchor);
-    			mount_component(socials, div5, null);
-    			append_dev(div5, t6);
-    			append_dev(div5, div4);
-    			append_dev(div4, div3);
+    			insert_dev(target, div3, anchor);
+    			mount_component(socials, div3, null);
+    			append_dev(div3, t6);
+    			mount_component(companydata, div3, null);
+    			insert_dev(target, t7, anchor);
+    			insert_dev(target, div4, anchor);
+    			mount_component(button, div4, null);
     			append_dev(div4, t8);
-    			html_tag.m(Logo, div4);
-    			insert_dev(target, t9, anchor);
-    			insert_dev(target, div6, anchor);
-    			mount_component(button, div6, null);
-    			append_dev(div6, t10);
-    			if (if_block) if_block.m(div6, null);
+    			if (if_block) if_block.m(div4, null);
     			current = true;
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty[0] & /*current, pages, disableGlitch, glitchAnimation, emptySquareBorder, disabledBlocks, inVisibleBlocks, hover*/ 42637) {
+    			if (dirty[0] & /*current, pages, disableGlitch, glitchAnimation, emptySquareBorder, disabledBlocks, inVisibleBlocks, hover*/ 331033) {
     				each_value = /*pages*/ ctx[0];
     				validate_each_argument(each_value);
     				let i;
@@ -2722,40 +2994,40 @@ var app = (function () {
     				each_blocks.length = each_value.length;
     			}
 
-    			if (!current || dirty[0] & /*current*/ 4) {
-    				set_style(div0, "transform", "translate3d(0px, -" + /*current*/ ctx[2] * 100 + "%, 0px)");
+    			if (!current || dirty[0] & /*current*/ 8) {
+    				set_style(div0, "transform", "translate3d(0px, -" + /*current*/ ctx[3] * 100 + "%, 0px)");
     			}
 
     			const videobackground_changes = {};
-    			if (dirty[0] & /*containerWidth*/ 16) videobackground_changes.width = /*containerWidth*/ ctx[4] + 200;
+    			if (dirty[0] & /*containerWidth*/ 64) videobackground_changes.width = /*containerWidth*/ ctx[6] + 200;
     			videobackground.$set(videobackground_changes);
     			const slider_changes = {};
-    			if (dirty[0] & /*pagesLength*/ 2048) slider_changes.pages = /*pagesLength*/ ctx[11];
+    			if (dirty[0] & /*pagesLength*/ 16384) slider_changes.pages = /*pagesLength*/ ctx[14];
 
-    			if (!updating_current && dirty[0] & /*current*/ 4) {
+    			if (!updating_current && dirty[0] & /*current*/ 8) {
     				updating_current = true;
-    				slider_changes.current = /*current*/ ctx[2];
+    				slider_changes.current = /*current*/ ctx[3];
     				add_flush_callback(() => updating_current = false);
     			}
 
     			slider.$set(slider_changes);
 
-    			if (!current || dirty[0] & /*current*/ 4) {
-    				set_style(div2, "margin-top", /*current*/ ctx[2] > 0 && /*current*/ ctx[2] < 5 && "0px" || "2px");
+    			if (!current || dirty[0] & /*current*/ 8) {
+    				set_style(div2, "margin-top", /*current*/ ctx[3] > 0 && /*current*/ ctx[3] < 5 && "0px" || "2px");
     			}
 
-    			if (/*current*/ ctx[2] === 0) {
+    			if (/*current*/ ctx[3] === 0) {
     				if (if_block) {
     					if_block.p(ctx, dirty);
 
-    					if (dirty[0] & /*current*/ 4) {
+    					if (dirty[0] & /*current*/ 8) {
     						transition_in(if_block, 1);
     					}
     				} else {
     					if_block = create_if_block_1$1(ctx);
     					if_block.c();
     					transition_in(if_block, 1);
-    					if_block.m(div6, null);
+    					if_block.m(div4, null);
     				}
     			} else if (if_block) {
     				group_outros();
@@ -2767,30 +3039,30 @@ var app = (function () {
     				check_outros();
     			}
 
-    			if (!current || dirty[0] & /*current*/ 4) {
-    				set_style(div6, "margin-left", /*current*/ ctx[2] > 0 && /*current*/ ctx[2] < 5 && "3px");
+    			if (!current || dirty[0] & /*current*/ 8) {
+    				set_style(div4, "margin-left", /*current*/ ctx[3] > 0 && /*current*/ ctx[3] < 5 && "3px");
     			}
 
-    			if (!current || dirty[0] & /*current*/ 4) {
-    				set_style(div6, "top", (/*current*/ ctx[2] === 0 || /*current*/ ctx[2] === 5
+    			if (!current || dirty[0] & /*current*/ 8) {
+    				set_style(div4, "top", (/*current*/ ctx[3] === 0 || /*current*/ ctx[3] === 5
     				? 50
     				: 0) + "%");
     			}
 
-    			if (!current || dirty[0] & /*current*/ 4) {
-    				set_style(div6, "left", (/*current*/ ctx[2] === 0
+    			if (!current || dirty[0] & /*current*/ 8) {
+    				set_style(div4, "left", (/*current*/ ctx[3] === 0
     				? 18.75
-    				: /*current*/ ctx[2] === 5 ? 62.5 : 75) + "%");
+    				: /*current*/ ctx[3] === 5 ? 62.5 : 75) + "%");
     			}
 
-    			if (!current || dirty[0] & /*current*/ 4) {
-    				set_style(div6, "align-items", /*current*/ ctx[2] > 0 && /*current*/ ctx[2] < 5 && "flex-start" || "center");
+    			if (!current || dirty[0] & /*current*/ 8) {
+    				set_style(div4, "align-items", /*current*/ ctx[3] > 0 && /*current*/ ctx[3] < 5 && "flex-start" || "center");
     			}
 
-    			if (!current || dirty[0] & /*current*/ 4) {
-    				set_style(div6, "justify-content", /*current*/ ctx[2] === 0
+    			if (!current || dirty[0] & /*current*/ 8) {
+    				set_style(div4, "justify-content", /*current*/ ctx[3] === 0
     				? "flex-start"
-    				: /*current*/ ctx[2] === 5 ? "center" : "flex-end");
+    				: /*current*/ ctx[3] === 5 ? "center" : "flex-end");
     			}
     		},
     		i: function intro(local) {
@@ -2798,6 +3070,7 @@ var app = (function () {
     			transition_in(videobackground.$$.fragment, local);
     			transition_in(slider.$$.fragment, local);
     			transition_in(socials.$$.fragment, local);
+    			transition_in(companydata.$$.fragment, local);
     			transition_in(button.$$.fragment, local);
     			transition_in(if_block);
     			current = true;
@@ -2806,6 +3079,7 @@ var app = (function () {
     			transition_out(videobackground.$$.fragment, local);
     			transition_out(slider.$$.fragment, local);
     			transition_out(socials.$$.fragment, local);
+    			transition_out(companydata.$$.fragment, local);
     			transition_out(button.$$.fragment, local);
     			transition_out(if_block);
     			current = false;
@@ -2814,7 +3088,7 @@ var app = (function () {
     			if (detaching) detach_dev(div0);
     			destroy_each(each_blocks, detaching);
     			div0_resize_listener();
-    			/*div0_binding*/ ctx[21](null);
+    			/*div0_binding*/ ctx[25](null);
     			if (detaching) detach_dev(t0);
     			destroy_component(videobackground, detaching);
     			if (detaching) detach_dev(t1);
@@ -2823,10 +3097,11 @@ var app = (function () {
     			if (detaching) detach_dev(div2);
     			destroy_component(slider);
     			if (detaching) detach_dev(t5);
-    			if (detaching) detach_dev(div5);
+    			if (detaching) detach_dev(div3);
     			destroy_component(socials);
-    			if (detaching) detach_dev(t9);
-    			if (detaching) detach_dev(div6);
+    			destroy_component(companydata);
+    			if (detaching) detach_dev(t7);
+    			if (detaching) detach_dev(div4);
     			destroy_component(button);
     			if (if_block) if_block.d();
     		}
@@ -2836,23 +3111,29 @@ var app = (function () {
     		block,
     		id: create_if_block$2.name,
     		type: "if",
-    		source: "(193:2) {#if !isMobile}",
+    		source: "(190:2) {#if !isMobile}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (282:10) {#each [...Array(66)] as emptySquare, i}
+    // (277:10) {#each [...Array(66)] as emptySquare, i}
     function create_each_block_5(ctx) {
     	let div;
     	let div_style_value;
+    	let mounted;
+    	let dispose;
+
+    	function click_handler_1() {
+    		return /*click_handler_1*/ ctx[28](/*i*/ ctx[50]);
+    	}
 
     	const block = {
     		c: function create() {
     			div = element("div");
-    			attr_dev(div, "class", "empty-square svelte-18lz0m9");
-    			attr_dev(div, "style", div_style_value = /*emptySquareBorder*/ ctx[15](/*i*/ ctx[43], /*index*/ ctx[37]));
+    			attr_dev(div, "class", "empty-square svelte-1eib5ud");
+    			attr_dev(div, "style", div_style_value = /*emptySquareBorder*/ ctx[18](/*i*/ ctx[50], /*index*/ ctx[44]));
 
     			toggle_class(div, "disabled", [
     				0,
@@ -2862,24 +3143,31 @@ var app = (function () {
     				29,
     				35,
     				41,
-    				46,
+    				47,
     				60,
     				61,
     				65,
     				64,
-    				/*current*/ ctx[2] > 0 && /*current*/ ctx[2] < 5
+    				/*current*/ ctx[3] > 0 && /*current*/ ctx[3] < 5
     				? 6
     				: 100
-    			].includes(/*i*/ ctx[43]));
+    			].includes(/*i*/ ctx[50]));
 
-    			toggle_class(div, "invisible", /*inVisibleBlocks*/ ctx[7].includes(/*i*/ ctx[43]));
-    			add_location(div, file$7, 282, 12, 7333);
+    			toggle_class(div, "invisible", /*inVisibleBlocks*/ ctx[8].includes(/*i*/ ctx[50]));
+    			add_location(div, file$8, 277, 12, 7257);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
+
+    			if (!mounted) {
+    				dispose = listen_dev(div, "click", click_handler_1, false, false, false);
+    				mounted = true;
+    			}
     		},
-    		p: function update(ctx, dirty) {
-    			if (dirty[0] & /*current*/ 4) {
+    		p: function update(new_ctx, dirty) {
+    			ctx = new_ctx;
+
+    			if (dirty[0] & /*current*/ 8) {
     				toggle_class(div, "disabled", [
     					0,
     					1,
@@ -2888,23 +3176,25 @@ var app = (function () {
     					29,
     					35,
     					41,
-    					46,
+    					47,
     					60,
     					61,
     					65,
     					64,
-    					/*current*/ ctx[2] > 0 && /*current*/ ctx[2] < 5
+    					/*current*/ ctx[3] > 0 && /*current*/ ctx[3] < 5
     					? 6
     					: 100
-    				].includes(/*i*/ ctx[43]));
+    				].includes(/*i*/ ctx[50]));
     			}
 
-    			if (dirty[0] & /*inVisibleBlocks*/ 128) {
-    				toggle_class(div, "invisible", /*inVisibleBlocks*/ ctx[7].includes(/*i*/ ctx[43]));
+    			if (dirty[0] & /*inVisibleBlocks*/ 256) {
+    				toggle_class(div, "invisible", /*inVisibleBlocks*/ ctx[8].includes(/*i*/ ctx[50]));
     			}
     		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(div);
+    			mounted = false;
+    			dispose();
     		}
     	};
 
@@ -2912,25 +3202,25 @@ var app = (function () {
     		block,
     		id: create_each_block_5.name,
     		type: "each",
-    		source: "(282:10) {#each [...Array(66)] as emptySquare, i}",
+    		source: "(277:10) {#each [...Array(66)] as emptySquare, i}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (291:12) {#if glitchAnimation}
+    // (287:12) {#if glitchAnimation}
     function create_if_block_10(ctx) {
     	let div;
     	let span0;
-    	let t0_value = /*page*/ ctx[35].title + "";
+    	let t0_value = /*page*/ ctx[42].title + "";
     	let t0;
     	let t1;
-    	let t2_value = /*page*/ ctx[35].title + "";
+    	let t2_value = /*page*/ ctx[42].title + "";
     	let t2;
     	let t3;
     	let span1;
-    	let t4_value = /*page*/ ctx[35].title + "";
+    	let t4_value = /*page*/ ctx[42].title + "";
     	let t4;
     	let glitch_action;
     	let mounted;
@@ -2947,14 +3237,14 @@ var app = (function () {
     			span1 = element("span");
     			t4 = text(t4_value);
     			attr_dev(span0, "aria-hidden", "true");
-    			attr_dev(span0, "class", "svelte-18lz0m9");
-    			add_location(span0, file$7, 292, 16, 7798);
+    			attr_dev(span0, "class", "svelte-1eib5ud");
+    			add_location(span0, file$8, 288, 16, 7775);
     			attr_dev(span1, "aria-hidden", "true");
-    			attr_dev(span1, "class", "svelte-18lz0m9");
-    			add_location(span1, file$7, 294, 16, 7888);
-    			attr_dev(div, "class", "glitch svelte-18lz0m9");
-    			toggle_class(div, "disable", /*disableGlitch*/ ctx[10]);
-    			add_location(div, file$7, 291, 14, 7720);
+    			attr_dev(span1, "class", "svelte-1eib5ud");
+    			add_location(span1, file$8, 290, 16, 7865);
+    			attr_dev(div, "class", "glitch svelte-1eib5ud");
+    			toggle_class(div, "disable", /*disableGlitch*/ ctx[11]);
+    			add_location(div, file$8, 287, 14, 7697);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -2967,17 +3257,17 @@ var app = (function () {
     			append_dev(span1, t4);
 
     			if (!mounted) {
-    				dispose = action_destroyer(glitch_action = /*glitch*/ ctx[17].call(null, div));
+    				dispose = action_destroyer(glitch_action = /*glitch*/ ctx[20].call(null, div));
     				mounted = true;
     			}
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty[0] & /*pages*/ 1 && t0_value !== (t0_value = /*page*/ ctx[35].title + "")) set_data_dev(t0, t0_value);
-    			if (dirty[0] & /*pages*/ 1 && t2_value !== (t2_value = /*page*/ ctx[35].title + "")) set_data_dev(t2, t2_value);
-    			if (dirty[0] & /*pages*/ 1 && t4_value !== (t4_value = /*page*/ ctx[35].title + "")) set_data_dev(t4, t4_value);
+    			if (dirty[0] & /*pages*/ 1 && t0_value !== (t0_value = /*page*/ ctx[42].title + "")) set_data_dev(t0, t0_value);
+    			if (dirty[0] & /*pages*/ 1 && t2_value !== (t2_value = /*page*/ ctx[42].title + "")) set_data_dev(t2, t2_value);
+    			if (dirty[0] & /*pages*/ 1 && t4_value !== (t4_value = /*page*/ ctx[42].title + "")) set_data_dev(t4, t4_value);
 
-    			if (dirty[0] & /*disableGlitch*/ 1024) {
-    				toggle_class(div, "disable", /*disableGlitch*/ ctx[10]);
+    			if (dirty[0] & /*disableGlitch*/ 2048) {
+    				toggle_class(div, "disable", /*disableGlitch*/ ctx[11]);
     			}
     		},
     		d: function destroy(detaching) {
@@ -2991,21 +3281,21 @@ var app = (function () {
     		block,
     		id: create_if_block_10.name,
     		type: "if",
-    		source: "(291:12) {#if glitchAnimation}",
+    		source: "(287:12) {#if glitchAnimation}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (299:10) {#if page.subtitle}
+    // (295:10) {#if page.subtitle}
     function create_if_block_9(ctx) {
     	let div;
-    	let t0_value = /*page*/ ctx[35].subtitle + "";
+    	let t0_value = /*page*/ ctx[42].subtitle + "";
     	let t0;
     	let t1;
     	let span;
-    	let t2_value = /*page*/ ctx[35].subtitle_red + "";
+    	let t2_value = /*page*/ ctx[42].subtitle_red + "";
     	let t2;
 
     	const block = {
@@ -3015,10 +3305,10 @@ var app = (function () {
     			t1 = space();
     			span = element("span");
     			t2 = text(t2_value);
-    			attr_dev(span, "class", "text__subtitle_red svelte-18lz0m9");
-    			add_location(span, file$7, 301, 14, 8104);
-    			attr_dev(div, "class", "text__subtitle svelte-18lz0m9");
-    			add_location(div, file$7, 299, 12, 8031);
+    			attr_dev(span, "class", "text__subtitle_red svelte-1eib5ud");
+    			add_location(span, file$8, 297, 14, 8081);
+    			attr_dev(div, "class", "text__subtitle svelte-1eib5ud");
+    			add_location(div, file$8, 295, 12, 8008);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -3028,8 +3318,8 @@ var app = (function () {
     			append_dev(span, t2);
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty[0] & /*pages*/ 1 && t0_value !== (t0_value = /*page*/ ctx[35].subtitle + "")) set_data_dev(t0, t0_value);
-    			if (dirty[0] & /*pages*/ 1 && t2_value !== (t2_value = /*page*/ ctx[35].subtitle_red + "")) set_data_dev(t2, t2_value);
+    			if (dirty[0] & /*pages*/ 1 && t0_value !== (t0_value = /*page*/ ctx[42].subtitle + "")) set_data_dev(t0, t0_value);
+    			if (dirty[0] & /*pages*/ 1 && t2_value !== (t2_value = /*page*/ ctx[42].subtitle_red + "")) set_data_dev(t2, t2_value);
     		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(div);
@@ -3040,17 +3330,17 @@ var app = (function () {
     		block,
     		id: create_if_block_9.name,
     		type: "if",
-    		source: "(299:10) {#if page.subtitle}",
+    		source: "(295:10) {#if page.subtitle}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (305:10) {#if page.info}
+    // (301:10) {#if page.info}
     function create_if_block_8(ctx) {
     	let div;
-    	let each_value_4 = /*page*/ ctx[35].info;
+    	let each_value_4 = /*page*/ ctx[42].info;
     	validate_each_argument(each_value_4);
     	let each_blocks = [];
 
@@ -3066,8 +3356,8 @@ var app = (function () {
     				each_blocks[i].c();
     			}
 
-    			attr_dev(div, "class", "info svelte-18lz0m9");
-    			add_location(div, file$7, 305, 12, 8237);
+    			attr_dev(div, "class", "info svelte-1eib5ud");
+    			add_location(div, file$8, 301, 12, 8214);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -3078,7 +3368,7 @@ var app = (function () {
     		},
     		p: function update(ctx, dirty) {
     			if (dirty[0] & /*pages*/ 1) {
-    				each_value_4 = /*page*/ ctx[35].info;
+    				each_value_4 = /*page*/ ctx[42].info;
     				validate_each_argument(each_value_4);
     				let i;
 
@@ -3111,18 +3401,18 @@ var app = (function () {
     		block,
     		id: create_if_block_8.name,
     		type: "if",
-    		source: "(305:10) {#if page.info}",
+    		source: "(301:10) {#if page.info}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (307:14) {#each page.info as infoItem}
+    // (303:14) {#each page.info as infoItem}
     function create_each_block_4(ctx) {
     	let span;
     	let html_tag;
-    	let raw_value = /*infoItem*/ ctx[38] + "";
+    	let raw_value = /*infoItem*/ ctx[45] + "";
     	let t;
 
     	const block = {
@@ -3130,7 +3420,7 @@ var app = (function () {
     			span = element("span");
     			t = space();
     			html_tag = new HtmlTag(t);
-    			add_location(span, file$7, 307, 16, 8316);
+    			add_location(span, file$8, 303, 16, 8293);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, span, anchor);
@@ -3138,7 +3428,7 @@ var app = (function () {
     			append_dev(span, t);
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty[0] & /*pages*/ 1 && raw_value !== (raw_value = /*infoItem*/ ctx[38] + "")) html_tag.p(raw_value);
+    			if (dirty[0] & /*pages*/ 1 && raw_value !== (raw_value = /*infoItem*/ ctx[45] + "")) html_tag.p(raw_value);
     		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(span);
@@ -3149,14 +3439,14 @@ var app = (function () {
     		block,
     		id: create_each_block_4.name,
     		type: "each",
-    		source: "(307:14) {#each page.info as infoItem}",
+    		source: "(303:14) {#each page.info as infoItem}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (280:6) {#each pages as page, index}
+    // (275:6) {#each pages as page, index}
     function create_each_block_3(ctx) {
     	let section;
     	let t0;
@@ -3172,9 +3462,9 @@ var app = (function () {
     		each_blocks[i] = create_each_block_5(get_each_context_5(ctx, each_value_5, i));
     	}
 
-    	let if_block0 = /*glitchAnimation*/ ctx[9] && create_if_block_10(ctx);
-    	let if_block1 = /*page*/ ctx[35].subtitle && create_if_block_9(ctx);
-    	let if_block2 = /*page*/ ctx[35].info && create_if_block_8(ctx);
+    	let if_block0 = /*glitchAnimation*/ ctx[10] && create_if_block_10(ctx);
+    	let if_block1 = /*page*/ ctx[42].subtitle && create_if_block_9(ctx);
+    	let if_block2 = /*page*/ ctx[42].info && create_if_block_8(ctx);
 
     	const block = {
     		c: function create() {
@@ -3192,11 +3482,11 @@ var app = (function () {
     			t2 = space();
     			if (if_block2) if_block2.c();
     			t3 = space();
-    			attr_dev(div, "class", "text svelte-18lz0m9");
-    			add_location(div, file$7, 289, 10, 7653);
-    			attr_dev(section, "class", "svelte-18lz0m9");
-    			toggle_class(section, "active", /*current*/ ctx[2] === /*index*/ ctx[37]);
-    			add_location(section, file$7, 280, 8, 7227);
+    			attr_dev(div, "class", "text svelte-1eib5ud");
+    			add_location(div, file$8, 285, 10, 7630);
+    			attr_dev(section, "class", "svelte-1eib5ud");
+    			toggle_class(section, "active", /*current*/ ctx[3] === /*index*/ ctx[44]);
+    			add_location(section, file$8, 275, 8, 7151);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, section, anchor);
@@ -3215,7 +3505,7 @@ var app = (function () {
     			append_dev(section, t3);
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty[0] & /*emptySquareBorder, current, inVisibleBlocks*/ 32900) {
+    			if (dirty[0] & /*emptySquareBorder, current, inVisibleBlocks, setFireFliesCoords*/ 2359560) {
     				each_value_5 = [...Array(66)];
     				validate_each_argument(each_value_5);
     				let i;
@@ -3239,7 +3529,7 @@ var app = (function () {
     				each_blocks.length = each_value_5.length;
     			}
 
-    			if (/*glitchAnimation*/ ctx[9]) {
+    			if (/*glitchAnimation*/ ctx[10]) {
     				if (if_block0) {
     					if_block0.p(ctx, dirty);
     				} else {
@@ -3252,7 +3542,7 @@ var app = (function () {
     				if_block0 = null;
     			}
 
-    			if (/*page*/ ctx[35].subtitle) {
+    			if (/*page*/ ctx[42].subtitle) {
     				if (if_block1) {
     					if_block1.p(ctx, dirty);
     				} else {
@@ -3265,7 +3555,7 @@ var app = (function () {
     				if_block1 = null;
     			}
 
-    			if (/*page*/ ctx[35].info) {
+    			if (/*page*/ ctx[42].info) {
     				if (if_block2) {
     					if_block2.p(ctx, dirty);
     				} else {
@@ -3278,8 +3568,8 @@ var app = (function () {
     				if_block2 = null;
     			}
 
-    			if (dirty[0] & /*current*/ 4) {
-    				toggle_class(section, "active", /*current*/ ctx[2] === /*index*/ ctx[37]);
+    			if (dirty[0] & /*current*/ 8) {
+    				toggle_class(section, "active", /*current*/ ctx[3] === /*index*/ ctx[44]);
     			}
     		},
     		d: function destroy(detaching) {
@@ -3295,15 +3585,61 @@ var app = (function () {
     		block,
     		id: create_each_block_3.name,
     		type: "each",
-    		source: "(280:6) {#each pages as page, index}",
+    		source: "(275:6) {#each pages as page, index}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (321:4) {#if current > 0 && current < 5}
+    // (341:6) {#if current === 0}
     function create_if_block_7(ctx) {
+    	let button;
+    	let current;
+
+    	button = new Button({
+    			props: { text: "Как это работает", arrow: true },
+    			$$inline: true
+    		});
+
+    	button.$on("click", /*click_handler_2*/ ctx[32]);
+
+    	const block = {
+    		c: function create() {
+    			create_component(button.$$.fragment);
+    		},
+    		m: function mount(target, anchor) {
+    			mount_component(button, target, anchor);
+    			current = true;
+    		},
+    		p: noop,
+    		i: function intro(local) {
+    			if (current) return;
+    			transition_in(button.$$.fragment, local);
+    			current = true;
+    		},
+    		o: function outro(local) {
+    			transition_out(button.$$.fragment, local);
+    			current = false;
+    		},
+    		d: function destroy(detaching) {
+    			destroy_component(button, detaching);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_if_block_7.name,
+    		type: "if",
+    		source: "(341:6) {#if current === 0}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    // (351:4) {#if current > 0 && current < 5}
+    function create_if_block_6(ctx) {
     	let div;
     	let div_transition;
     	let current;
@@ -3313,8 +3649,8 @@ var app = (function () {
     	const block = {
     		c: function create() {
     			div = element("div");
-    			attr_dev(div, "class", "join svelte-18lz0m9");
-    			add_location(div, file$7, 321, 6, 8649);
+    			attr_dev(div, "class", "join svelte-1eib5ud");
+    			add_location(div, file$8, 351, 6, 9772);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -3322,7 +3658,7 @@ var app = (function () {
     			current = true;
 
     			if (!mounted) {
-    				dispose = listen_dev(div, "click", /*clickJoin*/ ctx[16], false, false, false);
+    				dispose = listen_dev(div, "mousedown", /*clickJoin*/ ctx[19], false, false, false);
     				mounted = true;
     			}
     		},
@@ -3352,62 +3688,16 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_if_block_7.name,
-    		type: "if",
-    		source: "(321:4) {#if current > 0 && current < 5}",
-    		ctx
-    	});
-
-    	return block;
-    }
-
-    // (354:6) {#if current === 0}
-    function create_if_block_6(ctx) {
-    	let button;
-    	let current;
-
-    	button = new Button({
-    			props: { text: "Как это работает", arrow: true },
-    			$$inline: true
-    		});
-
-    	button.$on("click", /*click_handler_1*/ ctx[26]);
-
-    	const block = {
-    		c: function create() {
-    			create_component(button.$$.fragment);
-    		},
-    		m: function mount(target, anchor) {
-    			mount_component(button, target, anchor);
-    			current = true;
-    		},
-    		p: noop,
-    		i: function intro(local) {
-    			if (current) return;
-    			transition_in(button.$$.fragment, local);
-    			current = true;
-    		},
-    		o: function outro(local) {
-    			transition_out(button.$$.fragment, local);
-    			current = false;
-    		},
-    		d: function destroy(detaching) {
-    			destroy_component(button, detaching);
-    		}
-    	};
-
-    	dispatch_dev("SvelteRegisterBlock", {
-    		block,
     		id: create_if_block_6.name,
     		type: "if",
-    		source: "(354:6) {#if current === 0}",
+    		source: "(351:4) {#if current > 0 && current < 5}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (363:4) {#if showBecomeVolunterBlock}
+    // (357:4) {#if showBecomeVolunterBlock}
     function create_if_block_5(ctx) {
     	let div;
     	let becomevolunteer;
@@ -3416,13 +3706,13 @@ var app = (function () {
     	let current;
 
     	function becomevolunteer_show_binding(value) {
-    		/*becomevolunteer_show_binding*/ ctx[27].call(null, value);
+    		/*becomevolunteer_show_binding*/ ctx[36].call(null, value);
     	}
 
     	let becomevolunteer_props = {};
 
-    	if (/*showBecomeVolunterBlock*/ ctx[8] !== void 0) {
-    		becomevolunteer_props.show = /*showBecomeVolunterBlock*/ ctx[8];
+    	if (/*showBecomeVolunterBlock*/ ctx[9] !== void 0) {
+    		becomevolunteer_props.show = /*showBecomeVolunterBlock*/ ctx[9];
     	}
 
     	becomevolunteer = new BecomeVolunteer({
@@ -3436,8 +3726,8 @@ var app = (function () {
     		c: function create() {
     			div = element("div");
     			create_component(becomevolunteer.$$.fragment);
-    			attr_dev(div, "class", "become-volunter-wrapper svelte-18lz0m9");
-    			add_location(div, file$7, 363, 6, 9996);
+    			attr_dev(div, "class", "become-volunter-wrapper svelte-1eib5ud");
+    			add_location(div, file$8, 357, 6, 9930);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -3447,9 +3737,9 @@ var app = (function () {
     		p: function update(ctx, dirty) {
     			const becomevolunteer_changes = {};
 
-    			if (!updating_show && dirty[0] & /*showBecomeVolunterBlock*/ 256) {
+    			if (!updating_show && dirty[0] & /*showBecomeVolunterBlock*/ 512) {
     				updating_show = true;
-    				becomevolunteer_changes.show = /*showBecomeVolunterBlock*/ ctx[8];
+    				becomevolunteer_changes.show = /*showBecomeVolunterBlock*/ ctx[9];
     				add_flush_callback(() => updating_show = false);
     			}
 
@@ -3483,14 +3773,14 @@ var app = (function () {
     		block,
     		id: create_if_block_5.name,
     		type: "if",
-    		source: "(363:4) {#if showBecomeVolunterBlock}",
+    		source: "(357:4) {#if showBecomeVolunterBlock}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (203:10) {#each [...Array(32)] as emptySquare, i}
+    // (200:10) {#each [...Array(32)] as emptySquare, i}
     function create_each_block_2(ctx) {
     	let div;
     	let div_style_value;
@@ -3498,17 +3788,17 @@ var app = (function () {
     	let dispose;
 
     	function mouseenter_handler() {
-    		return /*mouseenter_handler*/ ctx[19](/*i*/ ctx[43]);
+    		return /*mouseenter_handler*/ ctx[23](/*i*/ ctx[50]);
     	}
 
     	const block = {
     		c: function create() {
     			div = element("div");
-    			attr_dev(div, "class", "empty-square svelte-18lz0m9");
-    			attr_dev(div, "style", div_style_value = /*emptySquareBorder*/ ctx[15](/*i*/ ctx[43], /*index*/ ctx[37]));
-    			toggle_class(div, "disabled", /*disabledBlocks*/ ctx[3].includes(/*i*/ ctx[43]));
-    			toggle_class(div, "invisible", /*inVisibleBlocks*/ ctx[7].includes(/*i*/ ctx[43]));
-    			add_location(div, file$7, 203, 12, 4745);
+    			attr_dev(div, "class", "empty-square svelte-1eib5ud");
+    			attr_dev(div, "style", div_style_value = /*emptySquareBorder*/ ctx[18](/*i*/ ctx[50], /*index*/ ctx[44]));
+    			toggle_class(div, "disabled", /*disabledBlocks*/ ctx[4].includes(/*i*/ ctx[50]));
+    			toggle_class(div, "invisible", /*inVisibleBlocks*/ ctx[8].includes(/*i*/ ctx[50]));
+    			add_location(div, file$8, 200, 12, 4734);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -3521,12 +3811,12 @@ var app = (function () {
     		p: function update(new_ctx, dirty) {
     			ctx = new_ctx;
 
-    			if (dirty[0] & /*disabledBlocks*/ 8) {
-    				toggle_class(div, "disabled", /*disabledBlocks*/ ctx[3].includes(/*i*/ ctx[43]));
+    			if (dirty[0] & /*disabledBlocks*/ 16) {
+    				toggle_class(div, "disabled", /*disabledBlocks*/ ctx[4].includes(/*i*/ ctx[50]));
     			}
 
-    			if (dirty[0] & /*inVisibleBlocks*/ 128) {
-    				toggle_class(div, "invisible", /*inVisibleBlocks*/ ctx[7].includes(/*i*/ ctx[43]));
+    			if (dirty[0] & /*inVisibleBlocks*/ 256) {
+    				toggle_class(div, "invisible", /*inVisibleBlocks*/ ctx[8].includes(/*i*/ ctx[50]));
     			}
     		},
     		d: function destroy(detaching) {
@@ -3540,25 +3830,25 @@ var app = (function () {
     		block,
     		id: create_each_block_2.name,
     		type: "each",
-    		source: "(203:10) {#each [...Array(32)] as emptySquare, i}",
+    		source: "(200:10) {#each [...Array(32)] as emptySquare, i}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (213:12) {#if glitchAnimation}
+    // (210:12) {#if glitchAnimation}
     function create_if_block_4(ctx) {
     	let div;
     	let span0;
-    	let t0_value = /*page*/ ctx[35].title + "";
+    	let t0_value = /*page*/ ctx[42].title + "";
     	let t0;
     	let t1;
-    	let t2_value = /*page*/ ctx[35].title + "";
+    	let t2_value = /*page*/ ctx[42].title + "";
     	let t2;
     	let t3;
     	let span1;
-    	let t4_value = /*page*/ ctx[35].title + "";
+    	let t4_value = /*page*/ ctx[42].title + "";
     	let t4;
     	let glitch_action;
     	let mounted;
@@ -3575,14 +3865,14 @@ var app = (function () {
     			span1 = element("span");
     			t4 = text(t4_value);
     			attr_dev(span0, "aria-hidden", "true");
-    			attr_dev(span0, "class", "svelte-18lz0m9");
-    			add_location(span0, file$7, 214, 16, 5186);
+    			attr_dev(span0, "class", "svelte-1eib5ud");
+    			add_location(span0, file$8, 211, 16, 5175);
     			attr_dev(span1, "aria-hidden", "true");
-    			attr_dev(span1, "class", "svelte-18lz0m9");
-    			add_location(span1, file$7, 216, 16, 5276);
-    			attr_dev(div, "class", "glitch svelte-18lz0m9");
-    			toggle_class(div, "disable", /*disableGlitch*/ ctx[10]);
-    			add_location(div, file$7, 213, 14, 5108);
+    			attr_dev(span1, "class", "svelte-1eib5ud");
+    			add_location(span1, file$8, 213, 16, 5265);
+    			attr_dev(div, "class", "glitch svelte-1eib5ud");
+    			toggle_class(div, "disable", /*disableGlitch*/ ctx[11]);
+    			add_location(div, file$8, 210, 14, 5097);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -3595,17 +3885,17 @@ var app = (function () {
     			append_dev(span1, t4);
 
     			if (!mounted) {
-    				dispose = action_destroyer(glitch_action = /*glitch*/ ctx[17].call(null, div));
+    				dispose = action_destroyer(glitch_action = /*glitch*/ ctx[20].call(null, div));
     				mounted = true;
     			}
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty[0] & /*pages*/ 1 && t0_value !== (t0_value = /*page*/ ctx[35].title + "")) set_data_dev(t0, t0_value);
-    			if (dirty[0] & /*pages*/ 1 && t2_value !== (t2_value = /*page*/ ctx[35].title + "")) set_data_dev(t2, t2_value);
-    			if (dirty[0] & /*pages*/ 1 && t4_value !== (t4_value = /*page*/ ctx[35].title + "")) set_data_dev(t4, t4_value);
+    			if (dirty[0] & /*pages*/ 1 && t0_value !== (t0_value = /*page*/ ctx[42].title + "")) set_data_dev(t0, t0_value);
+    			if (dirty[0] & /*pages*/ 1 && t2_value !== (t2_value = /*page*/ ctx[42].title + "")) set_data_dev(t2, t2_value);
+    			if (dirty[0] & /*pages*/ 1 && t4_value !== (t4_value = /*page*/ ctx[42].title + "")) set_data_dev(t4, t4_value);
 
-    			if (dirty[0] & /*disableGlitch*/ 1024) {
-    				toggle_class(div, "disable", /*disableGlitch*/ ctx[10]);
+    			if (dirty[0] & /*disableGlitch*/ 2048) {
+    				toggle_class(div, "disable", /*disableGlitch*/ ctx[11]);
     			}
     		},
     		d: function destroy(detaching) {
@@ -3619,21 +3909,21 @@ var app = (function () {
     		block,
     		id: create_if_block_4.name,
     		type: "if",
-    		source: "(213:12) {#if glitchAnimation}",
+    		source: "(210:12) {#if glitchAnimation}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (220:12) {#if page.subtitle}
+    // (217:12) {#if page.subtitle}
     function create_if_block_3(ctx) {
     	let div;
-    	let t0_value = /*page*/ ctx[35].subtitle + "";
+    	let t0_value = /*page*/ ctx[42].subtitle + "";
     	let t0;
     	let t1;
     	let span;
-    	let t2_value = /*page*/ ctx[35].subtitle_red + "";
+    	let t2_value = /*page*/ ctx[42].subtitle_red + "";
     	let t2;
 
     	const block = {
@@ -3643,10 +3933,10 @@ var app = (function () {
     			t1 = space();
     			span = element("span");
     			t2 = text(t2_value);
-    			attr_dev(span, "class", "text__subtitle_red svelte-18lz0m9");
-    			add_location(span, file$7, 222, 16, 5483);
-    			attr_dev(div, "class", "text__subtitle svelte-18lz0m9");
-    			add_location(div, file$7, 220, 14, 5406);
+    			attr_dev(span, "class", "text__subtitle_red svelte-1eib5ud");
+    			add_location(span, file$8, 219, 16, 5472);
+    			attr_dev(div, "class", "text__subtitle svelte-1eib5ud");
+    			add_location(div, file$8, 217, 14, 5395);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -3656,8 +3946,8 @@ var app = (function () {
     			append_dev(span, t2);
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty[0] & /*pages*/ 1 && t0_value !== (t0_value = /*page*/ ctx[35].subtitle + "")) set_data_dev(t0, t0_value);
-    			if (dirty[0] & /*pages*/ 1 && t2_value !== (t2_value = /*page*/ ctx[35].subtitle_red + "")) set_data_dev(t2, t2_value);
+    			if (dirty[0] & /*pages*/ 1 && t0_value !== (t0_value = /*page*/ ctx[42].subtitle + "")) set_data_dev(t0, t0_value);
+    			if (dirty[0] & /*pages*/ 1 && t2_value !== (t2_value = /*page*/ ctx[42].subtitle_red + "")) set_data_dev(t2, t2_value);
     		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(div);
@@ -3668,17 +3958,17 @@ var app = (function () {
     		block,
     		id: create_if_block_3.name,
     		type: "if",
-    		source: "(220:12) {#if page.subtitle}",
+    		source: "(217:12) {#if page.subtitle}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (227:10) {#if page.info}
+    // (224:10) {#if page.info}
     function create_if_block_2(ctx) {
     	let div;
-    	let each_value_1 = /*page*/ ctx[35].info;
+    	let each_value_1 = /*page*/ ctx[42].info;
     	validate_each_argument(each_value_1);
     	let each_blocks = [];
 
@@ -3694,8 +3984,8 @@ var app = (function () {
     				each_blocks[i].c();
     			}
 
-    			attr_dev(div, "class", "info svelte-18lz0m9");
-    			add_location(div, file$7, 227, 12, 5637);
+    			attr_dev(div, "class", "info svelte-1eib5ud");
+    			add_location(div, file$8, 224, 12, 5626);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -3706,7 +3996,7 @@ var app = (function () {
     		},
     		p: function update(ctx, dirty) {
     			if (dirty[0] & /*pages*/ 1) {
-    				each_value_1 = /*page*/ ctx[35].info;
+    				each_value_1 = /*page*/ ctx[42].info;
     				validate_each_argument(each_value_1);
     				let i;
 
@@ -3739,18 +4029,18 @@ var app = (function () {
     		block,
     		id: create_if_block_2.name,
     		type: "if",
-    		source: "(227:10) {#if page.info}",
+    		source: "(224:10) {#if page.info}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (229:14) {#each page.info as infoItem}
+    // (226:14) {#each page.info as infoItem}
     function create_each_block_1(ctx) {
     	let p;
     	let html_tag;
-    	let raw_value = /*infoItem*/ ctx[38] + "";
+    	let raw_value = /*infoItem*/ ctx[45] + "";
     	let t;
 
     	const block = {
@@ -3758,7 +4048,7 @@ var app = (function () {
     			p = element("p");
     			t = space();
     			html_tag = new HtmlTag(t);
-    			add_location(p, file$7, 229, 16, 5716);
+    			add_location(p, file$8, 226, 16, 5705);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, p, anchor);
@@ -3766,7 +4056,7 @@ var app = (function () {
     			append_dev(p, t);
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty[0] & /*pages*/ 1 && raw_value !== (raw_value = /*infoItem*/ ctx[38] + "")) html_tag.p(raw_value);
+    			if (dirty[0] & /*pages*/ 1 && raw_value !== (raw_value = /*infoItem*/ ctx[45] + "")) html_tag.p(raw_value);
     		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(p);
@@ -3777,14 +4067,14 @@ var app = (function () {
     		block,
     		id: create_each_block_1.name,
     		type: "each",
-    		source: "(229:14) {#each page.info as infoItem}",
+    		source: "(226:14) {#each page.info as infoItem}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (201:6) {#each pages as page, index}
+    // (198:6) {#each pages as page, index}
     function create_each_block$1(ctx) {
     	let section;
     	let t0;
@@ -3800,9 +4090,9 @@ var app = (function () {
     		each_blocks[i] = create_each_block_2(get_each_context_2(ctx, each_value_2, i));
     	}
 
-    	let if_block0 = /*glitchAnimation*/ ctx[9] && create_if_block_4(ctx);
-    	let if_block1 = /*page*/ ctx[35].subtitle && create_if_block_3(ctx);
-    	let if_block2 = /*page*/ ctx[35].info && create_if_block_2(ctx);
+    	let if_block0 = /*glitchAnimation*/ ctx[10] && create_if_block_4(ctx);
+    	let if_block1 = /*page*/ ctx[42].subtitle && create_if_block_3(ctx);
+    	let if_block2 = /*page*/ ctx[42].info && create_if_block_2(ctx);
 
     	const block = {
     		c: function create() {
@@ -3820,11 +4110,11 @@ var app = (function () {
     			t2 = space();
     			if (if_block2) if_block2.c();
     			t3 = space();
-    			attr_dev(div, "class", "text svelte-18lz0m9");
-    			add_location(div, file$7, 211, 10, 5041);
-    			attr_dev(section, "class", "svelte-18lz0m9");
-    			toggle_class(section, "active", /*current*/ ctx[2] === /*index*/ ctx[37]);
-    			add_location(section, file$7, 201, 8, 4639);
+    			attr_dev(div, "class", "text svelte-1eib5ud");
+    			add_location(div, file$8, 208, 10, 5030);
+    			attr_dev(section, "class", "svelte-1eib5ud");
+    			toggle_class(section, "active", /*current*/ ctx[3] === /*index*/ ctx[44]);
+    			add_location(section, file$8, 198, 8, 4628);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, section, anchor);
@@ -3843,7 +4133,7 @@ var app = (function () {
     			append_dev(section, t3);
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty[0] & /*emptySquareBorder, disabledBlocks, inVisibleBlocks, hover*/ 41096) {
+    			if (dirty[0] & /*emptySquareBorder, disabledBlocks, inVisibleBlocks, hover*/ 327952) {
     				each_value_2 = [...Array(32)];
     				validate_each_argument(each_value_2);
     				let i;
@@ -3867,7 +4157,7 @@ var app = (function () {
     				each_blocks.length = each_value_2.length;
     			}
 
-    			if (/*glitchAnimation*/ ctx[9]) {
+    			if (/*glitchAnimation*/ ctx[10]) {
     				if (if_block0) {
     					if_block0.p(ctx, dirty);
     				} else {
@@ -3880,7 +4170,7 @@ var app = (function () {
     				if_block0 = null;
     			}
 
-    			if (/*page*/ ctx[35].subtitle) {
+    			if (/*page*/ ctx[42].subtitle) {
     				if (if_block1) {
     					if_block1.p(ctx, dirty);
     				} else {
@@ -3893,7 +4183,7 @@ var app = (function () {
     				if_block1 = null;
     			}
 
-    			if (/*page*/ ctx[35].info) {
+    			if (/*page*/ ctx[42].info) {
     				if (if_block2) {
     					if_block2.p(ctx, dirty);
     				} else {
@@ -3906,8 +4196,8 @@ var app = (function () {
     				if_block2 = null;
     			}
 
-    			if (dirty[0] & /*current*/ 4) {
-    				toggle_class(section, "active", /*current*/ ctx[2] === /*index*/ ctx[37]);
+    			if (dirty[0] & /*current*/ 8) {
+    				toggle_class(section, "active", /*current*/ ctx[3] === /*index*/ ctx[44]);
     			}
     		},
     		d: function destroy(detaching) {
@@ -3923,14 +4213,14 @@ var app = (function () {
     		block,
     		id: create_each_block$1.name,
     		type: "each",
-    		source: "(201:6) {#each pages as page, index}",
+    		source: "(198:6) {#each pages as page, index}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (266:6) {#if current === 0}
+    // (260:6) {#if current === 0}
     function create_if_block_1$1(ctx) {
     	let button;
     	let current;
@@ -3940,7 +4230,7 @@ var app = (function () {
     			$$inline: true
     		});
 
-    	button.$on("click", /*click_handler*/ ctx[23]);
+    	button.$on("click", /*click_handler*/ ctx[27]);
 
     	const block = {
     		c: function create() {
@@ -3969,26 +4259,26 @@ var app = (function () {
     		block,
     		id: create_if_block_1$1.name,
     		type: "if",
-    		source: "(266:6) {#if current === 0}",
+    		source: "(260:6) {#if current === 0}",
     		ctx
     	});
 
     	return block;
     }
 
-    function create_fragment$7(ctx) {
+    function create_fragment$8(ctx) {
     	let main;
     	let current_block_type_index;
     	let if_block;
     	let current;
     	let mounted;
     	let dispose;
-    	add_render_callback(/*onwindowresize*/ ctx[18]);
+    	add_render_callback(/*onwindowresize*/ ctx[22]);
     	const if_block_creators = [create_if_block$2, create_else_block];
     	const if_blocks = [];
 
     	function select_block_type(ctx, dirty) {
-    		if (!/*isMobile*/ ctx[12]) return 0;
+    		if (!/*isMobile*/ ctx[15]) return 0;
     		return 1;
     	}
 
@@ -3999,8 +4289,8 @@ var app = (function () {
     		c: function create() {
     			main = element("main");
     			if_block.c();
-    			attr_dev(main, "class", "svelte-18lz0m9");
-    			add_location(main, file$7, 191, 0, 4317);
+    			attr_dev(main, "class", "svelte-1eib5ud");
+    			add_location(main, file$8, 188, 0, 4306);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -4012,8 +4302,8 @@ var app = (function () {
 
     			if (!mounted) {
     				dispose = [
-    					listen_dev(window_1, "mousewheel", /*scroll*/ ctx[14], false, false, false),
-    					listen_dev(window_1, "resize", /*onwindowresize*/ ctx[18])
+    					listen_dev(window_1, "mousewheel", /*scroll*/ ctx[17], false, false, false),
+    					listen_dev(window_1, "resize", /*onwindowresize*/ ctx[22])
     				];
 
     				mounted = true;
@@ -4065,7 +4355,7 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_fragment$7.name,
+    		id: create_fragment$8.name,
     		type: "component",
     		source: "",
     		ctx
@@ -4075,14 +4365,13 @@ var app = (function () {
     }
 
     const animationTime = 1000;
-    const animationTimeM = 1000;
 
     function randomInteger(min, max) {
     	let rand = min + Math.random() * (max + 1 - min);
     	return Math.floor(rand);
     }
 
-    function instance$7($$self, $$props, $$invalidate) {
+    function instance$8($$self, $$props, $$invalidate) {
     	let { $$slots: slots = {}, $$scope } = $$props;
     	validate_slots("App", slots, []);
     	let { pages } = $$props;
@@ -4100,7 +4389,9 @@ var app = (function () {
     	let glitchAnimation = false;
     	let disableGlitch = false;
     	let disabledBlocks = [];
-    	let beta, gamma;
+    	let flyPos;
+    	let topFireFly;
+    	let leftFireFly;
     	const userAgent = window.navigator.userAgent;
 
     	onMount(() => {
@@ -4111,52 +4402,28 @@ var app = (function () {
     		});
 
     		window.addEventListener("touchmove", scroll);
-
-    		window.addEventListener(
-    			"deviceorientation",
-    			function (event) {
-    				let timeNowM = new Date().getTime(), quietPeriodM = 300;
-
-    				// Cancel scroll if currently animating or within quiet period
-    				if (timeNowM - lastAnimationM < quietPeriodM + animationTimeM) {
-    					e.preventDefault();
-    					return;
-    				}
-
-    				if (event.beta < -15) {
-    					hover(2);
-    				}
-
-    				if (event.beta > 15) {
-    					hover(62);
-    					hover(50);
-    				}
-
-    				if (event.gamma > 15) {
-    					hover(34);
-    					hover(30);
-    				}
-
-    				if (event.gamma < -15) {
-    					hover(26);
-    					hover(20);
-    				}
-
-    				beta = event.beta;
-    				gamma = event.gamma;
-    				hover(Math.floor((gamma + beta) / 4));
-    				lastAnimationM = timeNowM;
-    			},
-    			false
-    		);
     	});
 
     	function hover(index) {
-    		$$invalidate(7, inVisibleBlocks = []);
-    		$$invalidate(7, inVisibleBlocks = inVisibleBlocks.concat([index]));
-    		inVisibleBlocks.push(randomInteger(index, index + 5));
-    		inVisibleBlocks.push(randomInteger(index, index - 5));
-    		$$invalidate(7, inVisibleBlocks = [...inVisibleBlocks]);
+    		if (inVisibleBlocks.length > 30) {
+    			$$invalidate(8, inVisibleBlocks = []);
+    			return;
+    		}
+
+    		inVisibleBlocks.push(index);
+
+    		if (!isMobile) {
+    			$$invalidate(8, inVisibleBlocks = []);
+    			inVisibleBlocks.push(index);
+    			inVisibleBlocks.push(randomInteger(index, index + 2));
+    			inVisibleBlocks.push(randomInteger(index, index - 2));
+    			inVisibleBlocks.push(index + 8);
+    			inVisibleBlocks.push(index + 9);
+    		} else {
+    			inVisibleBlocks.push(index + 1);
+    		}
+
+    		$$invalidate(8, inVisibleBlocks = [...inVisibleBlocks]);
     	}
 
     	function scroll(e) {
@@ -4182,9 +4449,9 @@ var app = (function () {
     		}
 
     		if (deltaOfInterest < 0) {
-    			current < pagesLength - 1 && $$invalidate(2, current++, current);
+    			current < pagesLength - 1 && $$invalidate(3, current++, current);
     		} else {
-    			current > 0 && $$invalidate(2, current--, current);
+    			current > 0 && $$invalidate(3, current--, current);
     		}
 
     		lastAnimation = timeNow;
@@ -4222,11 +4489,16 @@ var app = (function () {
     	}
 
     	function clickJoin(e) {
-    		setTimeout(() => $$invalidate(8, showBecomeVolunterBlock = true));
+    		$$invalidate(9, showBecomeVolunterBlock = true);
     	}
 
     	function glitch(node) {
-    		setTimeout(() => $$invalidate(10, disableGlitch = true), 2000);
+    		setTimeout(() => $$invalidate(11, disableGlitch = true), 2000);
+    	}
+
+    	function setFireFliesCoords(i) {
+    		$$invalidate(12, topFireFly = Math.floor(i / 6));
+    		$$invalidate(13, leftFireFly = i % 6);
     	}
 
     	const writable_props = ["pages"];
@@ -4244,39 +4516,62 @@ var app = (function () {
     	function div0_elementresize_handler() {
     		containerWidth = this.offsetWidth;
     		containerHeight = this.offsetHeight;
-    		$$invalidate(4, containerWidth);
-    		$$invalidate(5, containerHeight);
+    		$$invalidate(6, containerWidth);
+    		$$invalidate(7, containerHeight);
     	}
 
     	function div0_binding($$value) {
     		binding_callbacks[$$value ? "unshift" : "push"](() => {
     			container = $$value;
-    			$$invalidate(6, container);
+    			$$invalidate(2, container);
     		});
     	}
 
     	function slider_current_binding(value) {
     		current = value;
-    		$$invalidate(2, current);
+    		$$invalidate(3, current);
     	}
 
-    	const click_handler = () => $$invalidate(2, current = 1);
+    	const click_handler = () => $$invalidate(3, current = 1);
+    	const click_handler_1 = i => setFireFliesCoords(i);
 
     	function div0_elementresize_handler_1() {
     		containerHeight = this.offsetHeight;
-    		$$invalidate(5, containerHeight);
+    		$$invalidate(7, containerHeight);
+    	}
+
+    	function div0_binding_1($$value) {
+    		binding_callbacks[$$value ? "unshift" : "push"](() => {
+    			container = $$value;
+    			$$invalidate(2, container);
+    		});
     	}
 
     	function slider_current_binding_1(value) {
     		current = value;
-    		$$invalidate(2, current);
+    		$$invalidate(3, current);
     	}
 
-    	const click_handler_1 = () => $$invalidate(2, current = 1);
+    	const click_handler_2 = () => $$invalidate(3, current = 1);
+
+    	function fireflies_flyPos_binding(value) {
+    		flyPos = value;
+    		$$invalidate(5, flyPos);
+    	}
+
+    	function fireflies_topFireFly_binding(value) {
+    		topFireFly = value;
+    		$$invalidate(12, topFireFly);
+    	}
+
+    	function fireflies_leftFireFly_binding(value) {
+    		leftFireFly = value;
+    		$$invalidate(13, leftFireFly);
+    	}
 
     	function becomevolunteer_show_binding(value) {
     		showBecomeVolunterBlock = value;
-    		$$invalidate(8, showBecomeVolunterBlock);
+    		$$invalidate(9, showBecomeVolunterBlock);
     	}
 
     	$$self.$$set = $$props => {
@@ -4287,13 +4582,13 @@ var app = (function () {
     		onMount,
     		fly,
     		Join,
-    		Logo,
     		Button,
     		Slider,
     		Socials,
     		BecomeVolunteer,
     		VideoBackground,
     		FireFlies,
+    		CompanyData,
     		pages,
     		outerWidth,
     		containerWidth,
@@ -4309,10 +4604,10 @@ var app = (function () {
     		glitchAnimation,
     		disableGlitch,
     		animationTime,
-    		animationTimeM,
     		disabledBlocks,
-    		beta,
-    		gamma,
+    		flyPos,
+    		topFireFly,
+    		leftFireFly,
     		userAgent,
     		hover,
     		randomInteger,
@@ -4320,6 +4615,7 @@ var app = (function () {
     		emptySquareBorder,
     		clickJoin,
     		glitch,
+    		setFireFliesCoords,
     		pagesLength,
     		isMobile
     	});
@@ -4327,23 +4623,24 @@ var app = (function () {
     	$$self.$inject_state = $$props => {
     		if ("pages" in $$props) $$invalidate(0, pages = $$props.pages);
     		if ("outerWidth" in $$props) $$invalidate(1, outerWidth = $$props.outerWidth);
-    		if ("containerWidth" in $$props) $$invalidate(4, containerWidth = $$props.containerWidth);
-    		if ("containerHeight" in $$props) $$invalidate(5, containerHeight = $$props.containerHeight);
-    		if ("container" in $$props) $$invalidate(6, container = $$props.container);
+    		if ("containerWidth" in $$props) $$invalidate(6, containerWidth = $$props.containerWidth);
+    		if ("containerHeight" in $$props) $$invalidate(7, containerHeight = $$props.containerHeight);
+    		if ("container" in $$props) $$invalidate(2, container = $$props.container);
     		if ("touchstart" in $$props) touchstart = $$props.touchstart;
     		if ("touchend" in $$props) touchend = $$props.touchend;
-    		if ("current" in $$props) $$invalidate(2, current = $$props.current);
+    		if ("current" in $$props) $$invalidate(3, current = $$props.current);
     		if ("lastAnimation" in $$props) lastAnimation = $$props.lastAnimation;
     		if ("lastAnimationM" in $$props) lastAnimationM = $$props.lastAnimationM;
-    		if ("inVisibleBlocks" in $$props) $$invalidate(7, inVisibleBlocks = $$props.inVisibleBlocks);
-    		if ("showBecomeVolunterBlock" in $$props) $$invalidate(8, showBecomeVolunterBlock = $$props.showBecomeVolunterBlock);
-    		if ("glitchAnimation" in $$props) $$invalidate(9, glitchAnimation = $$props.glitchAnimation);
-    		if ("disableGlitch" in $$props) $$invalidate(10, disableGlitch = $$props.disableGlitch);
-    		if ("disabledBlocks" in $$props) $$invalidate(3, disabledBlocks = $$props.disabledBlocks);
-    		if ("beta" in $$props) beta = $$props.beta;
-    		if ("gamma" in $$props) gamma = $$props.gamma;
-    		if ("pagesLength" in $$props) $$invalidate(11, pagesLength = $$props.pagesLength);
-    		if ("isMobile" in $$props) $$invalidate(12, isMobile = $$props.isMobile);
+    		if ("inVisibleBlocks" in $$props) $$invalidate(8, inVisibleBlocks = $$props.inVisibleBlocks);
+    		if ("showBecomeVolunterBlock" in $$props) $$invalidate(9, showBecomeVolunterBlock = $$props.showBecomeVolunterBlock);
+    		if ("glitchAnimation" in $$props) $$invalidate(10, glitchAnimation = $$props.glitchAnimation);
+    		if ("disableGlitch" in $$props) $$invalidate(11, disableGlitch = $$props.disableGlitch);
+    		if ("disabledBlocks" in $$props) $$invalidate(4, disabledBlocks = $$props.disabledBlocks);
+    		if ("flyPos" in $$props) $$invalidate(5, flyPos = $$props.flyPos);
+    		if ("topFireFly" in $$props) $$invalidate(12, topFireFly = $$props.topFireFly);
+    		if ("leftFireFly" in $$props) $$invalidate(13, leftFireFly = $$props.leftFireFly);
+    		if ("pagesLength" in $$props) $$invalidate(14, pagesLength = $$props.pagesLength);
+    		if ("isMobile" in $$props) $$invalidate(15, isMobile = $$props.isMobile);
     	};
 
     	let pagesLength;
@@ -4355,29 +4652,48 @@ var app = (function () {
 
     	$$self.$$.update = () => {
     		if ($$self.$$.dirty[0] & /*pages*/ 1) {
-    			 $$invalidate(11, pagesLength = pages.length);
+    			 $$invalidate(14, pagesLength = pages.length);
     		}
 
     		if ($$self.$$.dirty[0] & /*outerWidth*/ 2) {
-    			 $$invalidate(12, isMobile = outerWidth < 800 || userAgent.match(/iPad/i) || userAgent.match(/iPhone/i));
+    			 $$invalidate(15, isMobile = outerWidth < 800 || userAgent.match(/iPad/i) || userAgent.match(/iPhone/i));
     		}
 
-    		if ($$self.$$.dirty[0] & /*current*/ 4) {
+    		if ($$self.$$.dirty[0] & /*current*/ 8) {
     			 {
     				if (current || current == 0) {
-    					$$invalidate(9, glitchAnimation = false);
+    					$$invalidate(10, glitchAnimation = false);
     				}
 
-    				setTimeout(() => $$invalidate(9, glitchAnimation = true));
+    				setTimeout(() => $$invalidate(10, glitchAnimation = true));
+    				$$invalidate(8, inVisibleBlocks = []);
     			}
     		}
 
-    		if ($$self.$$.dirty[0] & /*current, disabledBlocks*/ 12) {
+    		if ($$self.$$.dirty[0] & /*current, disabledBlocks*/ 24) {
     			 {
-    				$$invalidate(3, disabledBlocks = [15, 23, 24, 25]);
+    				$$invalidate(4, disabledBlocks = [15, 23, 24, 25]);
 
     				if (current > 0 && current < 5) {
-    					$$invalidate(3, disabledBlocks = disabledBlocks.concat([6, 7]));
+    					$$invalidate(4, disabledBlocks = disabledBlocks.concat([6, 7]));
+    				}
+    			}
+    		}
+
+    		if ($$self.$$.dirty[0] & /*container, flyPos, current*/ 44) {
+    			 {
+    				if (container && flyPos) {
+    					let pagesElms = container.children[current].getElementsByClassName("empty-square");
+
+    					Array.from(pagesElms).forEach((p, i) => {
+    						const { left, right, top, bottom } = p.getBoundingClientRect();
+
+    						flyPos.forEach(f => {
+    							if (f && left < f.x && right > f.x && top < f.y && bottom > f.y) {
+    								hover(i);
+    							}
+    						});
+    					});
     				}
     			}
     		}
@@ -4386,15 +4702,18 @@ var app = (function () {
     	return [
     		pages,
     		outerWidth,
+    		container,
     		current,
     		disabledBlocks,
+    		flyPos,
     		containerWidth,
     		containerHeight,
-    		container,
     		inVisibleBlocks,
     		showBecomeVolunterBlock,
     		glitchAnimation,
     		disableGlitch,
+    		topFireFly,
+    		leftFireFly,
     		pagesLength,
     		isMobile,
     		hover,
@@ -4402,15 +4721,21 @@ var app = (function () {
     		emptySquareBorder,
     		clickJoin,
     		glitch,
+    		setFireFliesCoords,
     		onwindowresize,
     		mouseenter_handler,
     		div0_elementresize_handler,
     		div0_binding,
     		slider_current_binding,
     		click_handler,
-    		div0_elementresize_handler_1,
-    		slider_current_binding_1,
     		click_handler_1,
+    		div0_elementresize_handler_1,
+    		div0_binding_1,
+    		slider_current_binding_1,
+    		click_handler_2,
+    		fireflies_flyPos_binding,
+    		fireflies_topFireFly_binding,
+    		fireflies_leftFireFly_binding,
     		becomevolunteer_show_binding
     	];
     }
@@ -4418,13 +4743,13 @@ var app = (function () {
     class App extends SvelteComponentDev {
     	constructor(options) {
     		super(options);
-    		init(this, options, instance$7, create_fragment$7, safe_not_equal, { pages: 0 }, [-1, -1]);
+    		init(this, options, instance$8, create_fragment$8, safe_not_equal, { pages: 0 }, [-1, -1]);
 
     		dispatch_dev("SvelteRegisterComponent", {
     			component: this,
     			tagName: "App",
     			options,
-    			id: create_fragment$7.name
+    			id: create_fragment$8.name
     		});
 
     		const { ctx } = this.$$;

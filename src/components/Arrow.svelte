@@ -39,6 +39,17 @@ function click() {
   }
   &.disabled {
     cursor: default;
+    &:hover {
+      path {
+        fill: #3f3f3f;
+      }
+    }
+  }
+
+  &:hover {
+    path {
+      fill: #ee2424;
+    }
   }
 }
 </style>

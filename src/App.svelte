@@ -3,7 +3,6 @@ import { onMount } from 'svelte'
 import { fly } from 'svelte/transition'
 
 import Join from './assets/join.svg'
-import Logo from './assets/logo.svg'
 
 import Button from './components/Button.svelte'
 import Slider from './components/Slider.svelte'
@@ -11,6 +10,7 @@ import Socials from './components/Socials/Socials.svelte'
 import BecomeVolunteer from './components/BecomeVolunteer.svelte'
 import VideoBackground from './components/VideoBackground.svelte'
 import FireFlies from './components/FireFlies.svelte'
+import CompanyData from './components/CompanyData.svelte'
 
 export let pages
 let outerWidth
@@ -27,10 +27,11 @@ let showBecomeVolunterBlock = false
 let glitchAnimation = false
 let disableGlitch = false
 const animationTime = 1000
-const animationTimeM = 1000
 let disabledBlocks = []
+let flyPos
+let topFireFly
+let leftFireFly
 
-let beta, gamma
 const userAgent = window.navigator.userAgent
 
 $: pagesLength = pages.length
@@ -43,6 +44,7 @@ $: {
     glitchAnimation = false
   }
   setTimeout(() => (glitchAnimation = true))
+  inVisibleBlocks = []
 }
 
 $: {
@@ -50,6 +52,22 @@ $: {
 
   if (current > 0 && current < 5) {
     disabledBlocks = disabledBlocks.concat([6, 7])
+  }
+}
+
+$: {
+  if (container && flyPos) {
+    let pagesElms = container.children[current].getElementsByClassName(
+      'empty-square'
+    )
+    Array.from(pagesElms).forEach((p, i) => {
+      const { left, right, top, bottom } = p.getBoundingClientRect()
+      flyPos.forEach((f) => {
+        if (f && left < f.x && right > f.x && top < f.y && bottom > f.y) {
+          hover(i)
+        }
+      })
+    })
   }
 }
 
@@ -62,52 +80,26 @@ onMount(() => {
   })
 
   window.addEventListener('touchmove', scroll)
-
-  window.addEventListener(
-    'deviceorientation',
-    function (event) {
-      let timeNowM = new Date().getTime(),
-        quietPeriodM = 300
-
-      // Cancel scroll if currently animating or within quiet period
-      if (timeNowM - lastAnimationM < quietPeriodM + animationTimeM) {
-        e.preventDefault()
-        return
-      }
-
-      if (event.beta < -15) {
-        hover(2)
-      }
-      if (event.beta > 15) {
-        hover(62)
-        hover(50)
-      }
-
-      if (event.gamma > 15) {
-        hover(34)
-        hover(30)
-      }
-
-      if (event.gamma < -15) {
-        hover(26)
-        hover(20)
-      }
-
-      beta = event.beta
-      gamma = event.gamma
-      hover(Math.floor((gamma + beta) / 4))
-
-      lastAnimationM = timeNowM
-    },
-    false
-  )
 })
 
 function hover(index) {
-  inVisibleBlocks = []
-  inVisibleBlocks = inVisibleBlocks.concat([index])
-  inVisibleBlocks.push(randomInteger(index, index + 5))
-  inVisibleBlocks.push(randomInteger(index, index - 5))
+  if (inVisibleBlocks.length > 30) {
+    inVisibleBlocks = []
+    return
+  }
+  inVisibleBlocks.push(index)
+
+  if (!isMobile) {
+    inVisibleBlocks = []
+    inVisibleBlocks.push(index)
+    inVisibleBlocks.push(randomInteger(index, index + 2))
+    inVisibleBlocks.push(randomInteger(index, index - 2))
+    inVisibleBlocks.push(index + 8)
+    inVisibleBlocks.push(index + 9)
+  } else {
+    inVisibleBlocks.push(index + 1)
+  }
+
   inVisibleBlocks = [...inVisibleBlocks]
 }
 
@@ -179,11 +171,16 @@ function emptySquareBorder(i, p) {
   return i > 25 && i < 31 ? borderMap[25] : borderMap[i]
 }
 function clickJoin(e) {
-  setTimeout(() => (showBecomeVolunterBlock = true))
+  showBecomeVolunterBlock = true
 }
 
 function glitch(node) {
   setTimeout(() => (disableGlitch = true), 2000)
+}
+
+function setFireFliesCoords(i) {
+  topFireFly = Math.floor(i / 6)
+  leftFireFly = i % 6
 }
 </script>
 
@@ -248,10 +245,7 @@ function glitch(node) {
     </div>
     <div class="company">
       <Socials />
-      <div class="company-data">
-        <div class="text_logo">Lisa Alert</div>
-        {@html Logo}
-      </div>
+      <CompanyData />
     </div>
     <div
       class="buttons"
@@ -275,6 +269,7 @@ function glitch(node) {
     <div
       class="container"
       bind:offsetHeight={containerHeight}
+      bind:this={container}
       style="transform: translate3d(0px, -{current * 100}%, 0px); transition: transform 500ms ease 0s;"
     >
       {#each pages as page, index}
@@ -282,9 +277,10 @@ function glitch(node) {
           {#each [...Array(66)] as emptySquare, i}
             <div
               class="empty-square"
-              class:disabled={[0, 1, 2, 23, 29, 35, 41, 46, 60, 61, 65, 64, current > 0 && current < 5 ? 6 : 100].includes(i)}
+              class:disabled={[0, 1, 2, 23, 29, 35, 41, 47, 60, 61, 65, 64, current > 0 && current < 5 ? 6 : 100].includes(i)}
               class:invisible={inVisibleBlocks.includes(i)}
               style={emptySquareBorder(i, index)}
+              on:click={() => setFireFliesCoords(i)}
             />
           {/each}
           <div class="text">
@@ -318,12 +314,6 @@ function glitch(node) {
     <VideoBackground height={containerHeight} />
 
     <div class="logo"><span class="logo_red">ОДЕТЬ</span> НАДЕЖДУ</div>
-    {#if current > 0 && current < 5}
-      <div class="join" on:click={clickJoin} transition:fly={{ y: -200 }}>
-        {@html Join}
-      </div>
-    {/if}
-
     <div
       class="slider-wrapper"
       style="margin-top: {(current > 0 && current < 5 && '0px') || '2px'};"
@@ -331,10 +321,7 @@ function glitch(node) {
       <Slider pages={pagesLength} bind:current isMobile={isMobile} />
     </div>
     <div class="company">
-      <div class="company-data">
-        <div class="text_logo">Lisa Alert</div>
-        {@html Logo}
-      </div>
+      <CompanyData />
     </div>
     <div class="socials">
       <Socials />
@@ -359,7 +346,14 @@ function glitch(node) {
         />
       {/if}
     </div>
-    <FireFlies />
+    <FireFlies bind:flyPos bind:topFireFly bind:leftFireFly />
+
+    {#if current > 0 && current < 5}
+      <div class="join" on:mousedown={clickJoin} transition:fly={{ y: -200 }}>
+        {@html Join}
+      </div>
+    {/if}
+
     {#if showBecomeVolunterBlock}
       <div class="become-volunter-wrapper" transition:fly={{ y: -200 }}>
         <BecomeVolunteer bind:show={showBecomeVolunterBlock} />
@@ -381,6 +375,7 @@ main {
   margin-top: 7%;
   margin-left: 8%;
   position: relative;
+
   @media (max-width: 800px) {
     height: 90%;
   }
@@ -406,7 +401,7 @@ main {
       z-index: 2;
       border-top: 2px solid #3f3f3f;
       border-left: 2px solid #3f3f3f;
-      transition: opacity 1.5s;
+      transition: opacity 3s;
       color: $white;
       &.invisible {
         opacity: 0;
@@ -710,37 +705,6 @@ section.active .info {
     top: 90.9%;
     height: 9.1%;
     width: 32.6%;
-  }
-
-  .company-data {
-    position: absolute;
-    bottom: 0;
-    display: flex;
-    align-items: flex-end;
-
-    @media (max-width: 800px) {
-      align-items: flex-start;
-      flex-direction: column;
-    }
-
-    .text_logo {
-      color: $white;
-      line-height: 0.8rem;
-      font-size: 1rem;
-      font-weight: 600;
-      margin-right: 1rem;
-
-      @media (max-width: 800px) {
-        margin-bottom: 0.5rem;
-        font-size: 0.9rem;
-      }
-    }
-
-    :global(svg.articul-media) {
-      @media (max-width: 800px) {
-        width: 6rem;
-      }
-    }
   }
 }
 

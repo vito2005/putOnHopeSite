@@ -58,5 +58,10 @@ function dec() {
   &.current {
     background-color: #ee2424;
   }
+  @media (min-width: 800px) {
+    &:hover {
+      background-color: #f87373;
+    }
+  }
 }
 </style>
