@@ -8,6 +8,7 @@ import Slider from './components/Slider.svelte'
 import Socials from './components/Socials/Socials.svelte'
 import BecomeVolunteer from './components/BecomeVolunteer.svelte'
 import { fly } from 'svelte/transition'
+import VideoBackground from './components/VideoBackground.svelte'
 
 export let pages
 let outerWidth
@@ -233,18 +234,7 @@ function glitch(node) {
         </section>
       {/each}
     </div>
-
-    <div class="video-box">
-      <video
-        autoplay
-        loop
-        muted
-        controls=""
-        style="width: {containerWidth + 200}px;"
-      >
-        <source src="./previewcity.mp4" type="video/mp4" />
-      </video>
-    </div>
+    <VideoBackground width={containerWidth + 200} />
 
     <div class="logo"><span class="logo_red">ОДЕТЬ</span> НАДЕЖДУ</div>
 
@@ -293,9 +283,7 @@ function glitch(node) {
               class:disabled={[0, 1, 2, 23, 29, 35, 41, 46, 60, 61, 65, 64, current > 0 && current < 5 ? 6 : 100].includes(i)}
               class:invisible={inVisibleBlocks.includes(i)}
               style={emptySquareBorder(i, index)}
-            >
-              <!-- {i} -->
-            </div>
+            />
           {/each}
           <div class="text">
             {#if glitchAnimation}
@@ -325,17 +313,7 @@ function glitch(node) {
       {/each}
     </div>
 
-    <div class="video-box">
-      <video
-        autoplay
-        loop
-        muted
-        controls=""
-        style="height: {containerHeight}px;"
-      >
-        <source src="./previewcity.mp4" type="video/mp4" />
-      </video>
-    </div>
+    <VideoBackground height={containerHeight} />
 
     <div class="logo"><span class="logo_red">ОДЕТЬ</span> НАДЕЖДУ</div>
     {#if current > 0 && current < 5}
@@ -775,20 +753,6 @@ section.active .info {
     left: 69.4%;
     height: 9.1%;
     width: 32.6%;
-  }
-}
-
-.video-box {
-  position: absolute;
-  z-index: 1;
-  overflow: hidden;
-  top: 0;
-  &::before {
-    content: '';
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    background-color: rgba(54, 54, 47, 0.637);
   }
 }
 </style>
