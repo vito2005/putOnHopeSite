@@ -2021,7 +2021,7 @@ var app = (function () {
     			t12 = space();
     			if (if_block2) if_block2.c();
     			if_block2_anchor = empty();
-    			attr_dev(div0, "class", "container svelte-6n801x");
+    			attr_dev(div0, "class", "container svelte-1jtjvi");
     			set_style(div0, "transform", "translate3d(0px, -" + /*current*/ ctx[2] * 100 + "%, 0px)");
     			set_style(div0, "transition", "transform 500ms ease 0s");
     			add_render_callback(() => /*div0_elementresize_handler_1*/ ctx[24].call(div0));
@@ -2035,25 +2035,25 @@ var app = (function () {
     			video.controls = "";
     			set_style(video, "height", /*containerHeight*/ ctx[5] + "px");
     			add_location(video, file$5, 328, 6, 8638);
-    			attr_dev(div1, "class", "video-box svelte-6n801x");
+    			attr_dev(div1, "class", "video-box svelte-1jtjvi");
     			add_location(div1, file$5, 327, 4, 8608);
-    			attr_dev(span, "class", "logo_red svelte-6n801x");
+    			attr_dev(span, "class", "logo_red svelte-1jtjvi");
     			add_location(span, file$5, 339, 22, 8871);
-    			attr_dev(div2, "class", "logo svelte-6n801x");
+    			attr_dev(div2, "class", "logo svelte-1jtjvi");
     			add_location(div2, file$5, 339, 4, 8853);
-    			attr_dev(div3, "class", "slider-wrapper svelte-6n801x");
+    			attr_dev(div3, "class", "slider-wrapper svelte-1jtjvi");
     			set_style(div3, "margin-top", /*current*/ ctx[2] > 0 && /*current*/ ctx[2] < 5 && "0px" || "2px");
     			add_location(div3, file$5, 346, 4, 9082);
-    			attr_dev(div4, "class", "text_logo svelte-6n801x");
+    			attr_dev(div4, "class", "text_logo svelte-1jtjvi");
     			add_location(div4, file$5, 354, 8, 9346);
     			html_tag = new HtmlTag(null);
-    			attr_dev(div5, "class", "company-data svelte-6n801x");
+    			attr_dev(div5, "class", "company-data svelte-1jtjvi");
     			add_location(div5, file$5, 353, 6, 9311);
-    			attr_dev(div6, "class", "company svelte-6n801x");
+    			attr_dev(div6, "class", "company svelte-1jtjvi");
     			add_location(div6, file$5, 352, 4, 9283);
-    			attr_dev(div7, "class", "socials svelte-6n801x");
+    			attr_dev(div7, "class", "socials svelte-1jtjvi");
     			add_location(div7, file$5, 358, 4, 9435);
-    			attr_dev(div8, "class", "buttons svelte-6n801x");
+    			attr_dev(div8, "class", "buttons svelte-1jtjvi");
     			set_style(div8, "margin-left", /*current*/ ctx[2] > 0 && /*current*/ ctx[2] < 5 && "3px");
     			set_style(div8, "background", /*current*/ ctx[2] > 0 && /*current*/ ctx[2] < 5 && "#2d3031" || "");
 
@@ -2416,7 +2416,7 @@ var app = (function () {
     			create_component(button.$$.fragment);
     			t10 = space();
     			if (if_block) if_block.c();
-    			attr_dev(div0, "class", "container svelte-6n801x");
+    			attr_dev(div0, "class", "container svelte-1jtjvi");
     			set_style(div0, "transform", "translate3d(0px, -" + /*current*/ ctx[2] * 100 + "%, 0px)");
     			set_style(div0, "transition", "transform 1000ms ease 0s");
     			add_render_callback(() => /*div0_elementresize_handler*/ ctx[20].call(div0));
@@ -2430,23 +2430,23 @@ var app = (function () {
     			video.controls = "";
     			set_style(video, "width", /*containerWidth*/ ctx[4] + 200 + "px");
     			add_location(video, file$5, 237, 6, 5791);
-    			attr_dev(div1, "class", "video-box svelte-6n801x");
+    			attr_dev(div1, "class", "video-box svelte-1jtjvi");
     			add_location(div1, file$5, 236, 4, 5761);
-    			attr_dev(span, "class", "logo_red svelte-6n801x");
+    			attr_dev(span, "class", "logo_red svelte-1jtjvi");
     			add_location(span, file$5, 248, 22, 6028);
-    			attr_dev(div2, "class", "logo svelte-6n801x");
+    			attr_dev(div2, "class", "logo svelte-1jtjvi");
     			add_location(div2, file$5, 248, 4, 6010);
-    			attr_dev(div3, "class", "slider-wrapper svelte-6n801x");
+    			attr_dev(div3, "class", "slider-wrapper svelte-1jtjvi");
     			set_style(div3, "margin-top", /*current*/ ctx[2] > 0 && /*current*/ ctx[2] < 5 && "0px" || "2px");
     			add_location(div3, file$5, 250, 4, 6083);
-    			attr_dev(div4, "class", "text_logo svelte-6n801x");
+    			attr_dev(div4, "class", "text_logo svelte-1jtjvi");
     			add_location(div4, file$5, 259, 8, 6345);
     			html_tag = new HtmlTag(null);
-    			attr_dev(div5, "class", "company-data svelte-6n801x");
+    			attr_dev(div5, "class", "company-data svelte-1jtjvi");
     			add_location(div5, file$5, 258, 6, 6310);
-    			attr_dev(div6, "class", "company svelte-6n801x");
+    			attr_dev(div6, "class", "company svelte-1jtjvi");
     			add_location(div6, file$5, 256, 4, 6264);
-    			attr_dev(div7, "class", "buttons svelte-6n801x");
+    			attr_dev(div7, "class", "buttons svelte-1jtjvi");
     			set_style(div7, "margin-left", /*current*/ ctx[2] > 0 && /*current*/ ctx[2] < 5 && "3px");
 
     			set_style(div7, "top", (/*current*/ ctx[2] === 0 || /*current*/ ctx[2] === 5
@@ -2653,7 +2653,7 @@ var app = (function () {
     	const block = {
     		c: function create() {
     			div = element("div");
-    			attr_dev(div, "class", "empty-square svelte-6n801x");
+    			attr_dev(div, "class", "empty-square svelte-1jtjvi");
     			attr_dev(div, "style", div_style_value = /*emptySquareBorder*/ ctx[15](/*i*/ ctx[43], /*index*/ ctx[37]));
 
     			toggle_class(div, "disabled", [
@@ -2749,12 +2749,12 @@ var app = (function () {
     			span1 = element("span");
     			t4 = text(t4_value);
     			attr_dev(span0, "aria-hidden", "true");
-    			attr_dev(span0, "class", "svelte-6n801x");
+    			attr_dev(span0, "class", "svelte-1jtjvi");
     			add_location(span0, file$5, 302, 16, 7918);
     			attr_dev(span1, "aria-hidden", "true");
-    			attr_dev(span1, "class", "svelte-6n801x");
+    			attr_dev(span1, "class", "svelte-1jtjvi");
     			add_location(span1, file$5, 304, 16, 8008);
-    			attr_dev(div, "class", "glitch svelte-6n801x");
+    			attr_dev(div, "class", "glitch svelte-1jtjvi");
     			toggle_class(div, "disable", /*disableGlitch*/ ctx[10]);
     			add_location(div, file$5, 301, 14, 7840);
     		},
@@ -2817,9 +2817,9 @@ var app = (function () {
     			t1 = space();
     			span = element("span");
     			t2 = text(t2_value);
-    			attr_dev(span, "class", "text__subtitle_red svelte-6n801x");
+    			attr_dev(span, "class", "text__subtitle_red svelte-1jtjvi");
     			add_location(span, file$5, 311, 14, 8224);
-    			attr_dev(div, "class", "text__subtitle svelte-6n801x");
+    			attr_dev(div, "class", "text__subtitle svelte-1jtjvi");
     			add_location(div, file$5, 309, 12, 8151);
     		},
     		m: function mount(target, anchor) {
@@ -2868,7 +2868,7 @@ var app = (function () {
     				each_blocks[i].c();
     			}
 
-    			attr_dev(div, "class", "info svelte-6n801x");
+    			attr_dev(div, "class", "info svelte-1jtjvi");
     			add_location(div, file$5, 315, 12, 8357);
     		},
     		m: function mount(target, anchor) {
@@ -2994,9 +2994,9 @@ var app = (function () {
     			t2 = space();
     			if (if_block2) if_block2.c();
     			t3 = space();
-    			attr_dev(div, "class", "text svelte-6n801x");
+    			attr_dev(div, "class", "text svelte-1jtjvi");
     			add_location(div, file$5, 299, 10, 7773);
-    			attr_dev(section, "class", "svelte-6n801x");
+    			attr_dev(section, "class", "svelte-1jtjvi");
     			toggle_class(section, "active", /*current*/ ctx[2] === /*index*/ ctx[37]);
     			add_location(section, file$5, 288, 8, 7302);
     		},
@@ -3115,7 +3115,7 @@ var app = (function () {
     	const block = {
     		c: function create() {
     			div = element("div");
-    			attr_dev(div, "class", "join svelte-6n801x");
+    			attr_dev(div, "class", "join svelte-1jtjvi");
     			add_location(div, file$5, 341, 6, 8964);
     		},
     		m: function mount(target, anchor) {
@@ -3238,7 +3238,7 @@ var app = (function () {
     		c: function create() {
     			div = element("div");
     			create_component(becomevolunteer.$$.fragment);
-    			attr_dev(div, "class", "become-volunter-wrapper svelte-6n801x");
+    			attr_dev(div, "class", "become-volunter-wrapper svelte-1jtjvi");
     			add_location(div, file$5, 382, 6, 10293);
     		},
     		m: function mount(target, anchor) {
@@ -3306,7 +3306,7 @@ var app = (function () {
     	const block = {
     		c: function create() {
     			div = element("div");
-    			attr_dev(div, "class", "empty-square svelte-6n801x");
+    			attr_dev(div, "class", "empty-square svelte-1jtjvi");
     			attr_dev(div, "style", div_style_value = /*emptySquareBorder*/ ctx[15](/*i*/ ctx[43], /*index*/ ctx[37]));
     			toggle_class(div, "disabled", /*disabledBlocks*/ ctx[3].includes(/*i*/ ctx[43]));
     			toggle_class(div, "invisible", /*inVisibleBlocks*/ ctx[7].includes(/*i*/ ctx[43]));
@@ -3377,12 +3377,12 @@ var app = (function () {
     			span1 = element("span");
     			t4 = text(t4_value);
     			attr_dev(span0, "aria-hidden", "true");
-    			attr_dev(span0, "class", "svelte-6n801x");
+    			attr_dev(span0, "class", "svelte-1jtjvi");
     			add_location(span0, file$5, 211, 16, 5065);
     			attr_dev(span1, "aria-hidden", "true");
-    			attr_dev(span1, "class", "svelte-6n801x");
+    			attr_dev(span1, "class", "svelte-1jtjvi");
     			add_location(span1, file$5, 213, 16, 5155);
-    			attr_dev(div, "class", "glitch svelte-6n801x");
+    			attr_dev(div, "class", "glitch svelte-1jtjvi");
     			toggle_class(div, "disable", /*disableGlitch*/ ctx[10]);
     			add_location(div, file$5, 210, 14, 4987);
     		},
@@ -3445,9 +3445,9 @@ var app = (function () {
     			t1 = space();
     			span = element("span");
     			t2 = text(t2_value);
-    			attr_dev(span, "class", "text__subtitle_red svelte-6n801x");
+    			attr_dev(span, "class", "text__subtitle_red svelte-1jtjvi");
     			add_location(span, file$5, 219, 16, 5362);
-    			attr_dev(div, "class", "text__subtitle svelte-6n801x");
+    			attr_dev(div, "class", "text__subtitle svelte-1jtjvi");
     			add_location(div, file$5, 217, 14, 5285);
     		},
     		m: function mount(target, anchor) {
@@ -3496,7 +3496,7 @@ var app = (function () {
     				each_blocks[i].c();
     			}
 
-    			attr_dev(div, "class", "info svelte-6n801x");
+    			attr_dev(div, "class", "info svelte-1jtjvi");
     			add_location(div, file$5, 224, 12, 5516);
     		},
     		m: function mount(target, anchor) {
@@ -3622,9 +3622,9 @@ var app = (function () {
     			t2 = space();
     			if (if_block2) if_block2.c();
     			t3 = space();
-    			attr_dev(div, "class", "text svelte-6n801x");
+    			attr_dev(div, "class", "text svelte-1jtjvi");
     			add_location(div, file$5, 208, 10, 4920);
-    			attr_dev(section, "class", "svelte-6n801x");
+    			attr_dev(section, "class", "svelte-1jtjvi");
     			toggle_class(section, "active", /*current*/ ctx[2] === /*index*/ ctx[37]);
     			add_location(section, file$5, 198, 8, 4518);
     		},
@@ -3801,7 +3801,7 @@ var app = (function () {
     		c: function create() {
     			main = element("main");
     			if_block.c();
-    			attr_dev(main, "class", "svelte-6n801x");
+    			attr_dev(main, "class", "svelte-1jtjvi");
     			add_location(main, file$5, 188, 0, 4196);
     		},
     		l: function claim(nodes) {

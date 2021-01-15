@@ -788,7 +788,7 @@ section.active .info {
     width: 100%;
     height: 100%;
     position: absolute;
-    background-color: rgba(54, 54, 47, 0.5);
+    background-color: rgba(54, 54, 47, 0.637);
   }
 }
 </style>
