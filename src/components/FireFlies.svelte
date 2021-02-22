@@ -6,7 +6,6 @@ export let leftFireFly
 
 let fireFly
 let fireFlyBox
-let fireFly2
 
 $: if (topFireFly || topFireFly === 0) {
   fireFlyBox.style.animationName = 'none'
@@ -28,10 +27,7 @@ onMount(() => {
 })
 
 function updateFlyPos() {
-  flyPos = [
-    fireFly && fireFly.getBoundingClientRect(),
-    //fireFly2 && fireFly2.getBoundingClientRect(),
-  ]
+  flyPos = [fireFly && fireFly.getBoundingClientRect()]
   const { left, top } = fireFly.getBoundingClientRect()
   if (left < 60) {
     fireFly.style.animationName = 'none'
@@ -45,19 +41,12 @@ function updateFlyPos() {
     fireFlyBox.style.top = 0 + '%'
   }
 }
-
-function linear(timeFraction) {
-  return timeFraction
-}
 </script>
 
 <div id="box" bind:this={fireFlyBox}>
   <div bind:this={fireFly} />
 </div>
 
-<!-- <div id="box2">
-  <div bind:this={fireFly2} />
-</div> -->
 <style lang="scss">
 #box,
 #box2 {

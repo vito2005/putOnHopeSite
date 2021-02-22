@@ -21,7 +21,6 @@ let touchstart = 0
 let touchend = 0
 let current = 0
 let lastAnimation = 0
-let lastAnimationM = 0
 let inVisibleBlocks = []
 let showBecomeVolunterBlock = false
 let glitchAnimation = false
