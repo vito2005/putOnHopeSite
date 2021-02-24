@@ -141,6 +141,8 @@ function scroll(e) {
 function emptySquareBorder(i, p) {
   const br = 'border-right: 2px solid #3f3f3f;'
   const bb = 'border-bottom: 2px solid #3f3f3f;'
+  const blblack = 'border-left: 2px solid #2d3031;'
+  const btblack = 'border-top: 2px solid #2d3031;'
 
   let borderMap = {
     6:
@@ -158,14 +160,22 @@ function emptySquareBorder(i, p) {
 
   if (isMobile) {
     borderMap = {
-      5: br,
+      0: blblack + btblack,
+      1: blblack + btblack,
+      2: blblack + btblack,
+      5: br + (p > 0 && p < 5 ? btblack : ''),
       11: br,
       17: br,
+      29: btblack,
+      35: btblack,
+      41: btblack,
+      47: btblack,
       53: br,
       59: br,
       62: bb,
       63: bb,
     }
+    return borderMap[i]
   }
   return i > 25 && i < 31 ? borderMap[25] : borderMap[i]
 }
@@ -276,7 +286,7 @@ function setFireFliesCoords(i) {
           {#each [...Array(66)] as emptySquare, i}
             <div
               class="empty-square"
-              class:disabled={[0, 1, 2, 23, 29, 35, 41, 47, 60, 61, 65, 64, current > 0 && current < 5 ? 6 : 100].includes(i)}
+              class:disabled={[0, 1, 2, 23, 29, 35, 41, 47, 60, 61, 65, 64, current > 0 && current < 5 ? 5 : 100].includes(i)}
               class:invisible={inVisibleBlocks.includes(i)}
               style={emptySquareBorder(i, index)}
               on:click={() => setFireFliesCoords(i)}
@@ -353,11 +363,7 @@ function setFireFliesCoords(i) {
       </div>
     {/if}
 
-    {#if showBecomeVolunterBlock}
-      <div class="become-volunter-wrapper" transition:fly={{ y: -200 }}>
-        <BecomeVolunteer bind:show={showBecomeVolunterBlock} />
-      </div>
-    {/if}
+    <BecomeVolunteer bind:show={showBecomeVolunterBlock} />
   {/if}
 </main>
 
@@ -530,7 +536,7 @@ main {
     left: 12%;
     top: 0%;
     transform: none;
-    top: 50%;
+    top: 55%;
     transform: translate(0, -50%);
   }
 
@@ -592,7 +598,7 @@ main {
     top: 0;
     right: 0;
     z-index: 2;
-    width: 16.6%;
+    width: 16%;
     height: 9.1%;
     display: flex;
     justify-content: center;
@@ -611,18 +617,6 @@ main {
       transform: scale(0);
       animation: pulse 0.2s ease-in-out;
     }
-  }
-
-  .become-volunter-wrapper {
-    position: fixed;
-    margin-left: -8%;
-    width: 100%;
-    z-index: 4;
-    top: 0;
-    height: 26%;
-    border-bottom-left-radius: 12px;
-    border-bottom-right-radius: 12px;
-    background: $gray;
   }
 }
 
@@ -681,9 +675,9 @@ section.active .info {
   margin-right: -2px;
 
   @media (max-width: 800px) {
-    top: 27.3%;
+    top: 28.3%;
     width: 18%;
-    height: 45.2%;
+    height: 44.2%;
     margin-right: -8px;
   }
 }

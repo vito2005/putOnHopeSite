@@ -29,8 +29,10 @@ a {
   border: 2px solid;
   padding: 1rem;
   font-size: 1rem;
+  line-height: 1rem;
   text-decoration: none;
   text-align: center;
+  font-weight: 600;
   @media (max-width: 800px) {
     min-width: 10.5rem;
     padding: 0.7rem;
