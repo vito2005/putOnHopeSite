@@ -28,7 +28,7 @@ onMount(() => {
 
 function updateFlyPos() {
   flyPos = [fireFly && fireFly.getBoundingClientRect()]
-  const { left, top } = fireFly.getBoundingClientRect()
+  const { left, top } = (fireFly && fireFly.getBoundingClientRect()) || {}
   if (left < 60) {
     fireFly.style.animationName = 'none'
 

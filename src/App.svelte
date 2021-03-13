@@ -13,7 +13,6 @@ import FireFlies from './components/FireFlies.svelte'
 import CompanyData from './components/CompanyData.svelte'
 
 export let pages
-let outerWidth
 let containerWidth
 let containerHeight
 let container
@@ -30,13 +29,17 @@ let disabledBlocks = []
 let flyPos
 let topFireFly
 let leftFireFly
+let isMobile
+let innerWidth
 
 const userAgent = window.navigator.userAgent
 
 $: pagesLength = pages.length
 
-$: isMobile =
-  outerWidth < 800 || userAgent.match(/iPad/i) || userAgent.match(/iPhone/i)
+$: {
+  isMobile =
+    innerWidth < 800 || userAgent.match(/iPad/i) || userAgent.match(/iPhone/i)
+}
 
 $: {
   if (current || current == 0) {
@@ -79,6 +82,17 @@ onMount(() => {
   })
 
   window.addEventListener('touchmove', scroll)
+
+  const lang = (window.navigator
+    ? window.navigator.language ||
+      window.navigator.systemLanguage ||
+      window.navigator.userLanguage
+    : 'ru'
+  )
+    .substr(0, 2)
+    .toLowerCase()
+
+  document.documentElement.setAttribute('lang', lang)
 })
 
 function hover(index) {
@@ -191,9 +205,14 @@ function setFireFliesCoords(i) {
   topFireFly = Math.floor(i / 6)
   leftFireFly = i % 6
 }
+
+function resize() {
+  isMobile =
+    innerWidth < 800 || userAgent.match(/iPad/i) || userAgent.match(/iPhone/i)
+}
 </script>
 
-<svelte:window on:mousewheel={scroll} bind:outerWidth />
+<svelte:window on:mousewheel={scroll} on:resize={resize} bind:innerWidth />
 
 <main>
   {#if !isMobile}
@@ -340,7 +359,7 @@ function setFireFliesCoords(i) {
       style="
       margin-left: {current > 0 && current < 5 && '3px'};
       background: {(current > 0 && current < 5 && '#2d3031') || ''};
-      top: {current === 0 || current === 5 ? 56.5 : 0}%;
+      top: {current === 0 ? 56.5 : current === 5 ? 65.5 : 0}%;
       left: {current === 0 || current === 5 ? 7.5 : 200}%;
       align-items: {(current > 0 && current < 5 && 'flex-start') || 'center'};
       justify-content: {current === 0 ? 'space-between' : current === 5 ? 'center' : 'flex-end'};
