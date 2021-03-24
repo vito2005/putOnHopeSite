@@ -31,7 +31,7 @@
     />
   </svg>
 </a>
-<a href="/" class="social__item">
+<a href="https://t.me/odetnadezhdu_bot" class="social__item">
   <svg
     class="tg"
     width="21"

@@ -58,7 +58,11 @@ function handleTouchEnd(e) {
       </div>
       И помогай находить пропавших без вести людей
     </div>
-    <Button color="red" text="Стать добровольцем" />
+    <Button
+      color="red"
+      text="Стать добровольцем"
+      href="https://t.me/odetnadezhdu_bot"
+    />
     <div class="become-volunteer__line" />
   </div>
 </div>

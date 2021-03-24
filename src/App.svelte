@@ -284,7 +284,11 @@ function resize() {
       align-items: {(current > 0 && current < 5 && 'flex-start') || 'center'};
       justify-content: {current === 0 ? 'flex-start' : current === 5 ? 'center' : 'flex-end'};"
     >
-      <Button color="red" text="Стать добровольцем" />
+      <Button
+        color="red"
+        text="Стать добровольцем"
+        href="https://t.me/odetnadezhdu_bot"
+      />
       {#if current === 0}
         <Button
           text="Как это работает"
@@ -365,7 +369,11 @@ function resize() {
       justify-content: {current === 0 ? 'space-between' : current === 5 ? 'center' : 'flex-end'};
       height: {current === 5 && '13%' && current === 0 && '16%'};"
     >
-      <Button color="red" text="Стать добровольцем" />
+      <Button
+        color="red"
+        text="Стать добровольцем"
+        href="https://t.me/odetnadezhdu_bot"
+      />
       {#if current === 0}
         <Button
           text="Как это работает"

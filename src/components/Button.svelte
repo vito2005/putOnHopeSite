@@ -10,11 +10,14 @@ export let href = ''
 export let arrow
 
 function click(e) {
-  dispatch('click')
+  if (!href) {
+    e.preventDefault()
+    dispatch('click')
+  }
 }
 </script>
 
-<a href={href} class={color} on:click|preventDefault={click}>{text}
+<a href={href} class={color} on:click={click}>{text}
   {#if arrow}
     <span class="arrow-right">{@html arrowRight}</span>
   {/if}
