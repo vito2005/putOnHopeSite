@@ -11,8 +11,16 @@ import BecomeVolunteer from './components/BecomeVolunteer.svelte'
 import VideoBackground from './components/VideoBackground.svelte'
 import FireFlies from './components/FireFlies.svelte'
 import CompanyData from './components/CompanyData.svelte'
+import LangSwitcher from './components/LangSwitcher.svelte'
 
-export let pages
+export let eng, rus
+
+let lang
+let pages
+let buttons
+let logo
+let becomeVolunteer
+
 let containerWidth
 let containerHeight
 let container
@@ -33,6 +41,10 @@ let isMobile
 let innerWidth
 
 const userAgent = window.navigator.userAgent
+
+$: {
+  setData(lang === 'rus' ? eng : rus)
+}
 
 $: pagesLength = pages.length
 
@@ -83,17 +95,32 @@ onMount(() => {
 
   window.addEventListener('touchmove', scroll)
 
-  const lang = (window.navigator
-    ? window.navigator.language ||
+  const windowLang =
+    window.navigator &&
+    (
+      window.navigator.language ||
       window.navigator.systemLanguage ||
-      window.navigator.userLanguage
-    : 'ru'
-  )
-    .substr(0, 2)
-    .toLowerCase()
+      window.navigator.userLanguage ||
+      ''
+    )
+      .substr(0, 2)
+      .toLowerCase()
 
-  document.documentElement.setAttribute('lang', lang)
+  lang = windowLang === 'en' ? 'rus' : 'eng'
+
+  if (/.xn--p1ai/.test(location.host)) {
+    lang = 'eng'
+  }
+
+  document.documentElement.setAttribute('lang', lang === 'rus' ? 'en' : 'ru')
 })
+
+function setData(data) {
+  pages = data.pages
+  buttons = data.buttons
+  logo = data.logo
+  becomeVolunteer = data.becomeVolunteer
+}
 
 function hover(index) {
   if (inVisibleBlocks.length > 30) {
@@ -234,19 +261,26 @@ function resize() {
               style={emptySquareBorder(i, index)}
             />
           {/each}
-          <div class="text">
+          <div class="text" style="top: {(current === 0 && 15) || 22}%">
             {#if glitchAnimation}
               <div class="glitch" class:disable={disableGlitch} use:glitch>
                 <span aria-hidden="true">{page.title}</span>
                 {page.title}
+                {#if page.title_add}
+                  <div class="text__title_add">
+                    {page.title_add}
+                    {#if page.title_red}
+                      <div class="text__title_red">{page.title_red}</div>
+                    {/if}
+                  </div>
+                {:else if page.title_red}
+                  <div class="text__title_red">{page.title_red}</div>
+                {/if}
                 <span aria-hidden="true">{page.title}</span>
               </div>
             {/if}
             {#if page.subtitle}
-              <div class="text__subtitle">
-                {page.subtitle}
-                <span class="text__subtitle_red">{page.subtitle_red}</span>
-              </div>
+              <div class="text__subtitle">{page.subtitle}</div>
             {/if}
           </div>
           {#if page.info}
@@ -263,7 +297,11 @@ function resize() {
     </div>
     <VideoBackground width={containerWidth + 200} />
 
-    <div class="logo"><span class="logo_red">ОДЕТЬ</span> НАДЕЖДУ</div>
+    <div class="logo">
+      <span class="logo_red">{logo.red}</span>
+      {logo.white}
+    </div>
+    <LangSwitcher bind:lang />
 
     <div
       class="slider-wrapper"
@@ -286,12 +324,12 @@ function resize() {
     >
       <Button
         color="red"
-        text="Стать добровольцем"
+        text={buttons.becomeVolunteer}
         href="https://t.me/odetnadezhdu_bot"
       />
       {#if current === 0}
         <Button
-          text="Как это работает"
+          text={buttons.howItWorks}
           arrow={true}
           on:click={() => (current = 1)}
         />
@@ -315,37 +353,71 @@ function resize() {
               on:click={() => setFireFliesCoords(i)}
             />
           {/each}
-          <div class="text">
-            {#if glitchAnimation}
-              <div class="glitch" class:disable={disableGlitch} use:glitch>
-                <span aria-hidden="true">{page.title}</span>
-                {page.title}
-                <span aria-hidden="true">{page.title}</span>
+          <div class="content">
+            <div class="text">
+              {#if glitchAnimation}
+                <div class="glitch" class:disable={disableGlitch} use:glitch>
+                  <span aria-hidden="true">{page.title}</span>
+
+                  {page.title}
+                  {#if page.title_add}
+                    <div class="text__title_add">
+                      {page.title_add}
+                      {#if page.title_red}
+                        <div class="text__title_red">{page.title_red}</div>
+                      {/if}
+                    </div>
+                  {:else if page.title_red}
+                    <div class="text__title_red">{page.title_red}</div>
+                  {/if}
+                  <span aria-hidden="true">{page.title}</span>
+                </div>
+              {/if}
+            </div>
+            {#if page.subtitle}
+              <div class="text__subtitle">{page.subtitle}</div>
+            {/if}
+            {#if page.info}
+              <div class="info">
+                {#each page.info as infoItem}
+                  <span>
+                    {@html infoItem}
+                  </span>
+                {/each}
               </div>
             {/if}
+            <div
+              class="buttons"
+              style="
+            margin-left: {current > 0 && current < 5 && '3px'};
+            background: {(current > 0 && current < 5 && '#2d3031') || ''};
+            justify-content: {current === 0 ? 'space-between' : current === 5 ? 'center' : 'flex-end'};
+            display: {(current > 0 && current < 5 && 'none') || 'flex'}"
+            >
+              <Button
+                color="red"
+                text={buttons.becomeVolunteer}
+                href="https://t.me/odetnadezhdu_bot"
+              />
+              {#if current === 0}
+                <Button
+                  text={buttons.howItWorks}
+                  arrow={true}
+                  on:click={() => (current = 1)}
+                />
+              {/if}
+            </div>
           </div>
-          {#if page.subtitle}
-            <div class="text__subtitle">
-              {page.subtitle}
-              <span class="text__subtitle_red">{page.subtitle_red}</span>
-            </div>
-          {/if}
-          {#if page.info}
-            <div class="info">
-              {#each page.info as infoItem}
-                <span>
-                  {@html infoItem}
-                </span>
-              {/each}
-            </div>
-          {/if}
         </section>
       {/each}
     </div>
 
     <VideoBackground height={containerHeight} />
 
-    <div class="logo"><span class="logo_red">ОДЕТЬ</span> НАДЕЖДУ</div>
+    <div class="logo">
+      <span class="logo_red">{logo.red}</span>
+      {logo.white}
+    </div>
     <div
       class="slider-wrapper"
       style="margin-top: {(current > 0 && current < 5 && '0px') || '2px'};"
@@ -358,31 +430,8 @@ function resize() {
     <div class="socials">
       <Socials />
     </div>
-    <div
-      class="buttons"
-      style="
-      margin-left: {current > 0 && current < 5 && '3px'};
-      background: {(current > 0 && current < 5 && '#2d3031') || ''};
-      top: {current === 0 ? 56.5 : current === 5 ? 65.5 : 0}%;
-      left: {current === 0 || current === 5 ? 7.5 : 200}%;
-      align-items: {(current > 0 && current < 5 && 'flex-start') || 'center'};
-      justify-content: {current === 0 ? 'space-between' : current === 5 ? 'center' : 'flex-end'};
-      height: {current === 5 && '13%' && current === 0 && '16%'};"
-    >
-      <Button
-        color="red"
-        text="Стать добровольцем"
-        href="https://t.me/odetnadezhdu_bot"
-      />
-      {#if current === 0}
-        <Button
-          text="Как это работает"
-          arrow={true}
-          on:click={() => (current = 1)}
-        />
-      {/if}
-    </div>
     <FireFlies bind:flyPos bind:topFireFly bind:leftFireFly />
+    <LangSwitcher bind:lang />
 
     {#if current > 0 && current < 5}
       <div class="join" on:mousedown={clickJoin} transition:fly={{ y: -200 }}>
@@ -390,7 +439,10 @@ function resize() {
       </div>
     {/if}
 
-    <BecomeVolunteer bind:show={showBecomeVolunterBlock} />
+    <BecomeVolunteer
+      bind:show={showBecomeVolunterBlock}
+      data={{ becomeVolunteerButton: buttons.becomeVolunteer, header: becomeVolunteer.header, text: becomeVolunteer.text }}
+    />
   {/if}
 </main>
 
@@ -492,9 +544,9 @@ main {
 
 .text {
   grid-column-start: 2;
-  grid-column-end: 3;
+  grid-column-end: 7;
   grid-row-start: 2;
-  grid-row-end: 3;
+  grid-row-end: 4;
 
   z-index: 2;
 
@@ -507,10 +559,17 @@ main {
   overflow: hidden;
 
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(0, -50%);
+  left: 9.75%;
+  top: 25%;
   text-transform: uppercase;
+
+  &__title_add {
+    display: inline;
+  }
+  &__title_red {
+    display: inline;
+    color: $red;
+  }
 
   .glitch {
     position: relative;
@@ -550,72 +609,33 @@ main {
     }
   }
 
-  @media (max-width: 800px) {
-    grid-column-start: 1;
-    grid-column-end: 5;
-    grid-row-start: 4;
-    grid-row-end: 5;
-    background-color: transparent;
-
-    font-size: 1.3rem;
-    line-height: 1.7rem;
-    white-space: normal;
-    left: 12%;
-    top: 0%;
-    transform: none;
-    top: 55%;
-    transform: translate(0, -50%);
-  }
-
   &__subtitle {
-    margin-top: 1rem;
+    margin-top: 0.5rem;
     font-weight: normal;
-    font-size: 1.3rem;
+    font-size: 1.5rem;
     text-transform: none;
+    white-space: normal;
     &_red {
       font-weight: normal;
       color: $red;
+    }
+
+    @media (max-height: 800px) {
+      font-size: 1rem;
+      line-height: 1.5rem;
     }
   }
 
   &:hover {
     background: transparent;
   }
+
+  @media (max-height: 800px) {
+    font-size: 1.7rem;
+  }
 }
 
 @media (max-width: 800px) {
-  .text__subtitle {
-    grid-column-start: 1;
-    grid-column-end: 5;
-    grid-row-start: 5;
-    grid-row-end: 7;
-
-    background-color: transparent;
-    z-index: 2;
-
-    color: $white;
-    text-transform: none;
-    font-weight: normal;
-    font-size: 1rem;
-    line-height: 1.7rem;
-    white-space: normal;
-
-    position: absolute;
-    transform: none;
-    top: 10%;
-    transform: translate(0, -20%);
-    left: -1000%;
-    transition: left 400ms ease 0.5s;
-    &_red {
-      font-weight: normal;
-      color: $red;
-    }
-
-    &:hover {
-      background: transparent;
-    }
-  }
-
   section.active .text__subtitle {
     left: 12%;
   }
@@ -645,6 +665,69 @@ main {
       animation: pulse 0.2s ease-in-out;
     }
   }
+
+  .content {
+    position: absolute;
+    left: 8%;
+    display: flex;
+    flex-direction: column;
+    z-index: 2;
+    justify-content: center;
+    height: 100%;
+    .text {
+      position: static;
+      white-space: normal;
+      font-size: 1.1rem;
+      transform: none;
+      &__title_add {
+        display: block;
+      }
+      &__title_red {
+        color: $red;
+        position: absolute;
+        display: inline;
+        margin-left: 0.4rem;
+      }
+      &__subtitle {
+        position: static;
+        background-color: transparent;
+        z-index: 2;
+        width: 75%;
+
+        color: $white;
+        text-transform: none;
+        font-weight: normal;
+        font-size: 1rem;
+        line-height: 1.7rem;
+        white-space: normal;
+
+        left: -1000%;
+        transition: left 400ms ease 0.5s;
+        &_red {
+          font-weight: normal;
+          color: $red;
+        }
+
+        &:hover {
+          background: transparent;
+        }
+      }
+    }
+
+    .info {
+      position: static;
+      transform: none;
+      width: 75%;
+      line-height: 1.7;
+      margin-top: 1rem;
+    }
+    .buttons {
+      position: static;
+      align-items: flex-start;
+      margin-top: 2rem;
+      height: auto;
+    }
+  }
 }
 
 .info {
@@ -657,8 +740,8 @@ main {
 
   color: #fff;
   font-weight: normal;
-  font-size: 1.2rem;
-  line-height: 1.2rem;
+  font-size: 1.1rem;
+  line-height: 0.9rem;
   overflow: hidden;
 
   position: absolute;
@@ -682,6 +765,9 @@ main {
     top: 20%;
     transform: translate(0, -20%);
   }
+}
+:global(.info_red) {
+  color: $red;
 }
 section.active .info {
   left: 50%;

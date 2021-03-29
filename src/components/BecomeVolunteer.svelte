@@ -4,6 +4,7 @@ import { afterUpdate } from 'svelte'
 import Button from './Button.svelte'
 
 export let show
+export let data
 let becomeVolunteer
 
 afterUpdate(async () => {
@@ -53,14 +54,12 @@ function handleTouchEnd(e) {
 >
   <div class="become-volunteer">
     <div class="become-volunteer__text">
-      <div class="become-volunteer__text_header">
-        Стань диджитал добровольцем!
-      </div>
-      И помогай находить пропавших без вести людей
+      <div class="become-volunteer__text_header">{data.header}</div>
+      {data.text}
     </div>
     <Button
       color="red"
-      text="Стать добровольцем"
+      text={data.becomeVolunteerButton}
       href="https://t.me/odetnadezhdu_bot"
     />
     <div class="become-volunteer__line" />
