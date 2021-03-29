@@ -39,6 +39,7 @@ a {
   @media (max-width: 800px) {
     min-width: 10.5rem;
     padding: 0.7rem;
+    margin-bottom: 1rem;
   }
 
   .arrow-right {
