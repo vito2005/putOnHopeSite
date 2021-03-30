@@ -48,8 +48,7 @@ function updateFlyPos() {
 </div>
 
 <style lang="scss">
-#box,
-#box2 {
+#box {
   z-index: 4;
   position: absolute;
   top: 0%;
@@ -60,12 +59,7 @@ function updateFlyPos() {
   animation: boxAnimation 30s ease-out infinite;
   transition: top;
 }
-#box2 {
-  animation: boxAnimation 30s ease-in infinite;
-  transform: matrix(-1, 0, 0, 1, 0, 0);
-}
-#box div,
-#box2 div {
+#box div {
   content: '';
   position: absolute;
   top: 10;

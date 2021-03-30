@@ -117,7 +117,7 @@ export const eng = {
   people go missing in Russia. We are short of help.`,
         'We need your help. Your involvement can play a crucial role',
         '<p></p>',
-        'role in finding a missing person and even save someone’s life',
+        'in finding a missing person and even save someone’s life',
       ],
     },
   ],
