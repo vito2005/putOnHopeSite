@@ -1,4 +1,4 @@
-<a href="/" class="social__item vk">
+<a href="https://vk.com/lizaalert_real" class="social__item vk">
   <svg
     width="21"
     height="13"
@@ -14,7 +14,7 @@
     />
   </svg>
 </a>
-<a href="/" class="social__item fb">
+<a href="https://www.facebook.com/hopetowear/" class="social__item fb">
   <svg
     class="fb"
     width="11"

@@ -12,7 +12,7 @@ export const rus = {
     {
       title: 'есть проблема',
       info: [
-        `В ориентировке пропавший изображен в одной одежде,а в графе «во что
+        `В ориентировке пропавший изображен в одной одежде, а в графе «во что
     одет»`,
         `описана совсем другая. Люди исчезают неожиданно, и снимкам`,
         `в актуальной одежде взяться неоткуда`,
@@ -46,7 +46,7 @@ export const rus = {
       title: 'Присоединяйся! ',
       info: [
         `          Каждый год в России пропадает около
-  <span class="info_red">7О ООО</span>
+  <span class="info_red">120 ООО</span>
   человек`,
         'и нам просто не хватает рук. Нужна твоя помощь!',
         '<p></p>',
@@ -113,7 +113,7 @@ export const eng = {
       title: 'JOIN US ',
       info: [
         `          Every year 
-  <span class="info_red">7О ООО</span>
+  <span class="info_red">120 ООО</span>
   people go missing in Russia. We are short of help.`,
         'We need your help. Your involvement can play a crucial role',
         '<p></p>',
