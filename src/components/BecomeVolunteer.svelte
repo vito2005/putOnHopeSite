@@ -88,7 +88,6 @@ function handleTouchEnd(e) {
     justify-content: center;
     align-items: center;
     color: $white;
-    padding-top: 1rem;
     &__text {
       text-align: center;
       margin: 1.2rem 0;
@@ -98,7 +97,7 @@ function handleTouchEnd(e) {
       }
     }
     &__line {
-      margin: 7% 0;
+      margin: 3% 0;
       width: 20%;
       height: 3%;
       border-radius: 2px;
