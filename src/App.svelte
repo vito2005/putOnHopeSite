@@ -271,11 +271,11 @@ function resize() {
                   <div class="text__title_add">
                     {page.title_add}
                     {#if page.title_red}
-                      <div class="text__title_red">{page.title_red}</div>
+                      <div class="text__title_red text__title_red--disable-tt">{page.title_red}</div>
                     {/if}
                   </div>
                 {:else if page.title_red}
-                  <div class="text__title_red">{page.title_red}</div>
+                  <div class="text__title_red text__title_red--disable-tt">{page.title_red}</div>
                 {/if}
                 <span aria-hidden="true">{page.title}</span>
               </div>
@@ -365,11 +365,11 @@ function resize() {
                     <div class="text__title_add">
                       {page.title_add}
                       {#if page.title_red}
-                        <div class="text__title_red">{page.title_red}</div>
+                        <div class="text__title_red text__title_red--disable-tt">{page.title_red}</div>
                       {/if}
                     </div>
                   {:else if page.title_red}
-                    <div class="text__title_red">{page.title_red}</div>
+                    <div class="text__title_red text__title_red--disable-tt">{page.title_red}</div>
                   {/if}
                   <span aria-hidden="true">{page.title}</span>
                 </div>
@@ -570,6 +570,10 @@ main {
   &__title_red {
     display: inline;
     color: $red;
+
+    &--disable-tt {
+      text-transform: none;
+    }
   }
 
   .glitch {
