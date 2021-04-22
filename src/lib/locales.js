@@ -3,7 +3,7 @@ export const rus = {
     {
       title: 'СТАНЬ digital-добровольцем',
       title_add: 'c',
-      title_red: ' LIZA ALERT',
+      title_red: 'LizaAlert',
       subtitle: `Помогай «переодевать» фотографии пропавших без вести людей в одежду,
     в которой они пропали!
     Это поможет создать более точную ориентировку,
@@ -46,7 +46,7 @@ export const rus = {
       title: 'Присоединяйся! ',
       info: [
         `          Каждый год в России пропадает около
-  <span class="info_red">120 ООО</span>
+  <span class="info_red">180 ООО</span>
   человек`,
         'и нам просто не хватает рук. Нужна твоя помощь!',
         '<p></p>',
@@ -75,7 +75,7 @@ export const eng = {
     {
       title: 'BECOME A DIGITAL VOLUNTEER',
       title_add: 'WITH',
-      title_red: ' LIZA ALERT',
+      title_red: 'LizaAlert',
       subtitle: `Help us edit clothes in missing people’s pictures. We “change” missing people to whatever clothes they were last seen in. It facilitates the creation of a more accurate bulletin which can help find a missing person quicker`,
     },
     {
@@ -113,7 +113,7 @@ export const eng = {
       title: 'JOIN US ',
       info: [
         `          Every year 
-  <span class="info_red">120 ООО</span>
+  <span class="info_red">180 ООО</span>
   people go missing in Russia. We are short of help.`,
         'We need your help. Your involvement can play a crucial role',
         '<p></p>',
